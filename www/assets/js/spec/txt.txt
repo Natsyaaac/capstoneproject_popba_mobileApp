@@ -1,0 +1,425 @@
+// function returnAljabarQuestionArray(optionArray, qno) {
+//     let aqArray = []; // tempat menampung soal dan jawaban
+//     let i;
+//     let questionType = optionArray[0]; // ambil jenis soal dari pilihan tombol
+
+//     for (i = 0; i < qno; i++) {
+//         let question;
+//         let answer;
+
+//         if (questionType == "Isi Kotak Kosong") {
+//             // Contoh: 3 + □ = 7
+//             let a = Math.floor(Math.random() * 5) + 1;
+//             let b = Math.floor(Math.random() * 5) + a;
+//             question = `${a} + □ = ${b}`;
+//             answer = b - a;
+//         }
+
+//        else if (questionType == "Nilai Variabel") {
+//     // Contoh sederhana: Jika x = 5, maka x + 3 = ?
+//             let x = Math.floor(Math.random() * 5) + 1;  // x antara 1 sampai 5
+//             let b = Math.floor(Math.random() * 5) + 1;  // angka tambahan antara 1 sampai 5
+//             let operator = Math.random() < 0.5 ? '+' : '-'; // pilih antara tambah atau kurang
+
+//         if (operator === '+') {
+//             question = `Jika x = ${x}, maka x + ${b} = ?`;
+//             answer = x + b;
+//         } else {
+//             question = `Jika x = ${x}, maka x - ${b} = ?`;
+//             answer = x - b;
+//         }
+//     }
+
+
+//         else if (questionType == "Persamaan Sederhana") {
+//             // Contoh: x + 3 = 7 → x = ?
+//             let a = Math.floor(Math.random() * 5) + 1;
+//             let b = Math.floor(Math.random() * 5) + a;
+//             question = `x + ${a} = ${b}. Nilai x = ?`;
+//             answer = b - a;
+//         }
+
+//         else if (questionType == "Pola Bilangan") {
+//             // Contoh: 2, 4, 6, 8, ...
+//             let start = Math.floor(Math.random() * 3) + 1;
+//             let step = Math.floor(Math.random() * 3) + 1;
+//             let seq = `${start}, ${start + step}, ${start + 2 * step}, ${start + 3 * step}, ...`;
+//             question = `Tentukan bilangan berikutnya dari pola: ${seq}`;
+//             answer = start + 4 * step;
+//         }   
+
+//         aqArray.push([question, answer]);
+//     }
+
+//     return aqArray;
+// }
+
+
+
+// function returnMeasurementQuestionArray(optionArray, qno) {
+//     let mqArray = [];
+//     let i;
+
+//     for (i = 0; i < qno; i++) {
+//         let questionType = optionArray[0];
+//         let question = "";
+//         let answer = "";
+
+//         if (questionType == "Pengukuran luas") {
+//             // Luas persegi sederhana
+//             let sisi = Math.floor(Math.random() * 5) + 2; // 2 - 6 cm
+//             question = `Sebuah persegi memiliki sisi ${sisi} cm. Berapakah luasnya?`;
+//             answer = sisi * sisi + " cm²";
+//         } else if (questionType == "Pengukuran volume") {
+//             // Volume kubus sederhana
+//             let sisi = Math.floor(Math.random() * 5) + 2;
+//             question = `Sebuah kubus memiliki sisi ${sisi} cm. Berapakah volumenya?`;
+//             answer = sisi * sisi * sisi + " cm³";
+//         } else if (questionType == "Pengukuran panjang") {
+//             // Konversi meter ke cm
+//             let meter = Math.floor(Math.random() * 5) + 1;
+//             question = `${meter} meter sama dengan berapa cm?`;
+//             answer = meter * 100 + " cm";
+//         } else if (questionType == "Pengukuran waktu") {
+//             // Konversi jam ke menit
+//             let jam = Math.floor(Math.random() * 5) + 1;
+//             question = `${jam} jam sama dengan berapa menit?`;
+//             answer = jam * 60 + " menit";
+//         }
+
+//     }
+
+//     return mqArray;
+// }
+
+
+// function returnFractionQuestionArray(optionArray, qno) {
+//     let fqArray = [];
+//     let i;
+
+//     for (i = 0; i < qno; i++) {
+//         let questionType = optionArray[0];
+//         let question = "";
+//         let answer = "";
+
+//         if (questionType == "Pecahan dengan Pembilang Satu") {
+//             // Contoh: 1/2 dari 10
+//             let penyebut = [2, 4, 5][Math.floor(Math.random() * 3)];
+//             let bilangan = Math.floor(Math.random() * 10) + 5;
+//             question = `Berapakah 1/${penyebut} dari ${bilangan}?`;
+//             answer = bilangan / penyebut;
+//         } else if (questionType == "Pecahan dengan Penyebut Sama") {
+//             // Contoh: 1/4 + 2/4
+//             let penyebut = [2, 3, 4, 5][Math.floor(Math.random() * 4)];
+//             let p1 = Math.floor(Math.random() * (penyebut - 1)) + 1;
+//             let p2 = Math.floor(Math.random() * (penyebut - p1)) + 1;
+//             question = `${p1}/${penyebut} + ${p2}/${penyebut} = ...`;
+//             answer = `${p1 + p2}/${penyebut}`;
+//         } else if (questionType == "Pecahan Senilai") {
+//             // Contoh: pecahan senilai dengan 1/2 adalah ...
+//             let pembilang = 1;
+//             let penyebut = 2;
+//             let faktor = Math.floor(Math.random() * 3) + 2;
+//             question = `Pecahan senilai dengan ${pembilang}/${penyebut} adalah ...`;
+//             answer = `${pembilang * faktor}/${penyebut * faktor}`;
+//         } else if (questionType == "Pecahan Desimal Persepuluhan") {
+//             // Contoh: 3/10 = ...
+//             let pembilang = Math.floor(Math.random() * 9) + 1;
+//             question = `${pembilang}/10 sama dengan ... dalam bentuk desimal`;
+//             answer = (pembilang / 10).toFixed(1);
+//         }
+
+//     }
+
+//     return fqArray;
+// }
+
+
+
+// function returnMeasurementQuestionArray(optionArray, qno) {
+//     let mqrArray = [];
+//     let questionType = optionArray[0];
+
+//     for (let i = 0; i < qno; i++) {
+//         let question = "", answer = "";
+//         let attempts = 0;
+
+//         do {
+//             attempts++;
+
+//             if (questionType == "Pengukuran luas") {
+//                 let sisi = Math.floor(Math.random() * 5) + 2;
+//                 question = `Sebuah persegi memiliki sisi ${sisi} cm. Berapakah luasnya?`;
+//                 answer = sisi * sisi + " cm²";
+//             }
+
+//             else if (questionType == "Pengukuran volume") {
+//                 let sisi = Math.floor(Math.random() * 5) + 2;
+//                 question = `Sebuah kubus memiliki sisi ${sisi} cm. Berapakah volumenya?`;
+//                 answer = sisi * sisi * sisi + " cm³";
+//             }
+
+//             else if (questionType == "Pengukuran panjang") {
+//                 let meter = Math.floor(Math.random() * 5) + 1;
+//                 question = `${meter} meter sama dengan berapa cm?`;
+//                 answer = meter * 100 + " cm";
+//             }
+
+//             else if (questionType == "Pengukuran waktu") {
+//                 let jam = Math.floor(Math.random() * 5) + 1;
+//                 question = `${jam} jam sama dengan berapa menit?`;
+//                 answer = jam * 60 + " menit";
+//             }
+
+//             // Hindari infinite loop
+//             if (attempts > 20) break;
+
+//         } while (!question || !answer || checkQuestionArray([question, answer], mqrArray));
+
+//         mqrArray.push([question, answer]);
+//     }
+
+//     return mqrArray;
+// }
+
+
+// /* ============================================================
+//    ==========  GENERATOR SOAL PECAHAN  ========================
+//    ============================================================ */
+// function returnFractionQuestionArray(optionArray, qno) {
+//     let fqArray = [];
+//     let questionType = optionArray[0];
+
+//     for (let i = 0; i < qno; i++) {
+//         let question = "", answer = "";
+//         let attempts = 0;
+
+//         do {
+//             attempts++;
+
+//             if (questionType == "Pecahan dengan Pembilang Satu") {
+//                 let penyebut = [2, 4, 5][Math.floor(Math.random() * 3)];
+//                 let bilangan = Math.floor(Math.random() * 10) + 5;
+//                 question = `Berapakah 1/${penyebut} dari ${bilangan}?`;
+//                 answer = bilangan / penyebut;
+//             }
+
+//             else if (questionType == "Pecahan dengan Penyebut Sama") {
+//                 let penyebut = [2, 3, 4, 5][Math.floor(Math.random() * 4)];
+//                 let p1 = Math.floor(Math.random() * (penyebut - 1)) + 1;
+//                 let p2 = Math.floor(Math.random() * (penyebut - p1)) + 1;
+//                 question = `${p1}/${penyebut} + ${p2}/${penyebut} = ...`;
+//                 answer = `${p1 + p2}/${penyebut}`;
+//             }
+
+//             else if (questionType == "Pecahan Senilai") {
+//                 let pembilang = 1;
+//                 let penyebut = 2;
+//                 let faktor = Math.floor(Math.random() * 3) + 2;
+//                 question = `Pecahan senilai dengan ${pembilang}/${penyebut} adalah ...`;
+//                 answer = `${pembilang * faktor}/${penyebut * faktor}`;
+//             }
+
+//             else if (questionType == "Pecahan Desimal Persepuluhan") {
+//                 let pembilang = Math.floor(Math.random() * 9) + 1;
+//                 question = `${pembilang}/10 sama dengan ... dalam bentuk desimal`;
+//                 answer = (pembilang / 10).toFixed(1);
+//             }
+
+//             // Hindari infinite loop
+//             if (attempts > 20) break;
+
+//         } while (!question || !answer || checkQuestionArray([question, answer], fqArray));
+
+//         fqArray.push([question, answer]);
+//     }
+
+//     return fqArray;
+// }
+
+
+// function checkQuestionArray(nq, qArray) {
+//     let i = 0;
+//     let qCheck = false;
+//     while ((qCheck == false) && (i < qArray.length)) {
+//         if (qArray[i][0] == nq[0]) {
+//             qCheck = true;
+//         }
+//         i++;
+//     }
+//     return(qCheck);
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function returnAljabarQuestionArray(optionArray, qno) {
+//     let aqArray = []; // tempat menampung soal dan jawaban
+//     let i;
+//     let questionType = optionArray[0]; // ambil jenis soal dari pilihan tombol
+
+//     for (i = 0; i < qno; i++) {
+//         let question;
+//         let answer;
+
+//         if (questionType == "Isi Kotak Kosong") {
+//             // Contoh: 3 + □ = 7
+//             let a = Math.floor(Math.random() * 5) + 1;
+//             let b = Math.floor(Math.random() * 5) + a;
+//             question = `${a} + □ = ${b}`;
+//             answer = b - a;
+//         }
+
+//        else if (questionType == "Nilai Variabel") {
+//     // Contoh sederhana: Jika x = 5, maka x + 3 = ?
+//             let x = Math.floor(Math.random() * 5) + 1;  // x antara 1 sampai 5
+//             let b = Math.floor(Math.random() * 5) + 1;  // angka tambahan antara 1 sampai 5
+//             let operator = Math.random() < 0.5 ? '+' : '-'; // pilih antara tambah atau kurang
+
+//         if (operator === '+') {
+//             question = `Jika x = ${x}, maka x + ${b} = ?`;
+//             answer = x + b;
+//         } else {
+//             question = `Jika x = ${x}, maka x - ${b} = ?`;
+//             answer = x - b;
+//         }
+//     }
+
+
+//         else if (questionType == "Persamaan Sederhana") {
+//             // Contoh: x + 3 = 7 → x = ?
+//             let a = Math.floor(Math.random() * 5) + 1;
+//             let b = Math.floor(Math.random() * 5) + a;
+//             question = `x + ${a} = ${b}. Nilai x = ?`;
+//             answer = b - a;
+//         }
+
+//         else if (questionType == "Pola Bilangan") {
+//             // Contoh: 2, 4, 6, 8, ...
+//             let start = Math.floor(Math.random() * 3) + 1;
+//             let step = Math.floor(Math.random() * 3) + 1;
+//             let seq = `${start}, ${start + step}, ${start + 2 * step}, ${start + 3 * step}, ...`;
+//             question = `Tentukan bilangan berikutnya dari pola: ${seq}`;
+//             answer = start + 4 * step;
+//         }   
+
+//         aqArray.push([question, answer]);
+//     }
+
+//     return aqArray;
+// }
+
+
+
+// function returnMeasurementQuestionArray(optionArray, qno) {
+//     let mqArray = [];
+//     let i;
+
+//     for (i = 0; i < qno; i++) {
+//         let questionType = optionArray[0];
+//         let question = "";
+//         let answer = "";
+
+//         if (questionType == "Pengukuran luas") {
+//             // Luas persegi sederhana
+//             let sisi = Math.floor(Math.random() * 5) + 2; // 2 - 6 cm
+//             question = `Sebuah persegi memiliki sisi ${sisi} cm. Berapakah luasnya?`;
+//             answer = sisi * sisi + " cm²";
+//         } else if (questionType == "Pengukuran volume") {
+//             // Volume kubus sederhana
+//             let sisi = Math.floor(Math.random() * 5) + 2;
+//             question = `Sebuah kubus memiliki sisi ${sisi} cm. Berapakah volumenya?`;
+//             answer = sisi * sisi * sisi + " cm³";
+//         } else if (questionType == "Pengukuran panjang") {
+//             // Konversi meter ke cm
+//             let meter = Math.floor(Math.random() * 5) + 1;
+//             question = `${meter} meter sama dengan berapa cm?`;
+//             answer = meter * 100 + " cm";
+//         } else if (questionType == "Pengukuran waktu") {
+//             // Konversi jam ke menit
+//             let jam = Math.floor(Math.random() * 5) + 1;
+//             question = `${jam} jam sama dengan berapa menit?`;
+//             answer = jam * 60 + " menit";
+//         }
+
+//     }
+
+//     return mqArray;
+// }
+
+
+// function returnFractionQuestionArray(optionArray, qno) {
+//     let fqArray = [];
+//     let i;
+
+//     for (i = 0; i < qno; i++) {
+//         let questionType = optionArray[0];
+//         let question = "";
+//         let answer = "";
+
+//         if (questionType == "Pecahan dengan Pembilang Satu") {
+//             // Contoh: 1/2 dari 10
+//             let penyebut = [2, 4, 5][Math.floor(Math.random() * 3)];
+//             let bilangan = Math.floor(Math.random() * 10) + 5;
+//             question = `Berapakah 1/${penyebut} dari ${bilangan}?`;
+//             answer = bilangan / penyebut;
+//         } else if (questionType == "Pecahan dengan Penyebut Sama") {
+//             // Contoh: 1/4 + 2/4
+//             let penyebut = [2, 3, 4, 5][Math.floor(Math.random() * 4)];
+//             let p1 = Math.floor(Math.random() * (penyebut - 1)) + 1;
+//             let p2 = Math.floor(Math.random() * (penyebut - p1)) + 1;
+//             question = `${p1}/${penyebut} + ${p2}/${penyebut} = ...`;
+//             answer = `${p1 + p2}/${penyebut}`;
+//         } else if (questionType == "Pecahan Senilai") {
+//             // Contoh: pecahan senilai dengan 1/2 adalah ...
+//             let pembilang = 1;
+//             let penyebut = 2;
+//             let faktor = Math.floor(Math.random() * 3) + 2;
+//             question = `Pecahan senilai dengan ${pembilang}/${penyebut} adalah ...`;
+//             answer = `${pembilang * faktor}/${penyebut * faktor}`;
+//         } else if (questionType == "Pecahan Desimal Persepuluhan") {
+//             // Contoh: 3/10 = ...
+//             let pembilang = Math.floor(Math.random() * 9) + 1;
+//             question = `${pembilang}/10 sama dengan ... dalam bentuk desimal`;
+//             answer = (pembilang / 10).toFixed(1);
+//         }
+
+//     }
+
+//     return fqArray;
+// }
+
+
+// function checkQuestionArray(nq, qArray) {
+//     let i = 0;
+//     let qCheck = false;
+//     while ((qCheck == false) && (i < qArray.length)) {
+//         if (qArray[i][0] == nq[0]) {
+//             qCheck = true;
+//         }
+//         i++;
+//     }
+//     return(qCheck);
+// }

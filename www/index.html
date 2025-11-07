@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- X-UA-Compatible meta tag, to render web pages in older versions of Internet Explorer-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Balloon Pop Maths - a fun, interactive maths game.">
+    <meta name="keywords" content="Maths, Game, Interactive">
+    <meta name="author" content="Richard Ash">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Link to Balloon Favicon -->
+    <link rel="shortcut icon" href="assets/images/balloon-favicon.ico" type="image/x-icon">
+    <!-- Link to Bootstrap 4.4.1 CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Link to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- Link to Nunito font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Link to Font Awesome Kit -->
+    <script src="https://kit.fontawesome.com/7863bec69d.js" crossorigin="anonymous"></script>
+    <!-- Link to Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style_cloud.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
+    <!-- Link to Email JS -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
+    <title>Balloon Pop Maths</title>
+</head>
+
+<body>
+
+    <!-- Balloon Pop Maths Home Page, Menu -->
+    <section id="heading-section" class="container-sm">
+        <audio id="bg-music" loop>
+            <source src="assets/sounds/music_background.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- Balloon Pop Maths Heading -->
+        <div class="row">
+            <!-- Screens smaller than md -->
+            <div class="col-12 d-md-none container-heading-main text-center">
+                <a href="index.html">
+                    <h1 class="heading-main">Balloon</h1>
+                    <h1 class="heading-main">Pop
+                        <img src="assets/images/balloon-purple-cropped.png" alt="Purple balloon popping" />
+                    </h1>
+                    <h1 class="heading-main">Maths</h1>
+                </a>
+            </div>
+            <!-- Screens larger than md -->
+            <div class="col-12 d-none d-md-block container-heading-main-large text-center">
+                <a href="index.html">
+                    <h1 class="heading-main">Balloon Pop<img src="assets/images/balloon-purple-cropped.png"
+                            alt="Purple balloon popping"> Maths</h1>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Options -->
+    <section id="options-section" class="container-sm" aria-label="Options Section">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <!-- Game Mode Options -->
+                <div class="btn-group btn-group-toggle  w-100 container-button-group grid-tem" data-toggle="buttons">
+                    <label id="aljabar" class="btn btn-xl w-100 btn-info btn-text">
+                        <input type="radio" aria-label="Aljabar" name="game-mode"> Aljabar
+                    </label>
+                    <label id="time" class="btn btn-xl w-100 btn-info btn-text">
+                        <input type="radio" aria-label="Time" name="game-mode"> Waktu
+                    </label>
+                    <label id="heavy" class="btn btn-xl w-100 btn-info btn-text">
+                        <input type="radio" aria-label="Fraction" name="game-mode"> massa
+                    </label>
+                    <label id="volume" class="btn btn-xl w-100 btn-info btn-text">
+                        <input type="radio" aria-label="Fraction" name="game-mode"> Volume
+                    </label>
+                    <label id="up" class="btn btn-xl w-100 btn-info btn-text">
+                        <input type="radio" aria-label="Fraction" name="game-mode"> Bangunan
+                    </label>
+                    <label id="operator" class="btn btn-xl w-100 btn-info btn-text">
+                        <input type="radio" aria-label="Fraction" name="game-mode"> operasi
+                    </label>
+                    <label id="exam" class="btn btn-xl w-100 btn-info btn-text grid-7">
+                        <input type="radio" aria-label="Fraction" name="game-mode"> Ujian
+                    </label>
+                </div>
+                <!-- High Score -->
+                <div class="container-button-group d-flex w-100">
+                    <span id="highscore" class="btn-xl-nofill w-100 btn-text-score">High Score: 0 / 10</span>
+                </div>
+                <!-- Play Button, hidden until window has finished loading -->
+                <div class="container-button-group d-flex w-100 hover">
+                    <button id="play" type="button" class="btn btn-xxl w-100 btn-info btn-text btn-play">PLAY</button>
+                </div>
+                <!-- Audio Controls -->
+                <div class="btn-group btn-group-toggle d-flex w-100 container-button-group" data-toggle="buttons">
+                    <label id="audio-on" class="btn btn-xl w-100 btn-info btn-text active ">
+                        <input type="radio" aria-label="Audio On" name="audio-on" checked>
+                        <i class="fas fa-volume-up"></i>
+                    </label>
+                    <label id="audio-off" class="btn btn-xl w-100 btn-info btn-text ">
+                        <input type="radio" aria-label="Audio Off" name="audio-off">
+                        <i class="fas fa-volume-mute"></i>
+                    </label>
+                </div>
+                <!-- Options Button -->
+                <div class="container-button-group d-flex w-100 hover">
+                    <button type="button" data-toggle="collapse" data-target="#options" aria-expanded="false"
+                        aria-controls="options" class="btn btn-xl w-100 btn-info btn-text">Pilihan</button>
+                </div>
+                <div class="container-button-group d-flex w-100 hover">
+                    <button type="button" id="btn-input-soal" class="btn btn-xl w-100 btn-info btn-text">Input Soal</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="modal">
+            <div class="modal-inner">
+                <p>
+                    Silahkan pilh mode soal terlebih dahulu sebelum menekan tombol Play.
+                </p>
+                <button id="closeModal">Close</button>
+            </div>
+        </div>
+        <!-- Collapsing Options -->
+        <div class="row collapse options" id="options">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <!-- Options applicable to all games -->
+                <div class="btn-group btn-group-toggle d-flex w-100 container-button-group" data-toggle="buttons">
+                    <label id="10q" class="btn btn-xl w-100 btn-info btn-text active">
+                        <input type="radio" name="questions" checked> 10 Questions
+                    </label>
+                    <label id="20q" class="btn btn-xl w-100 btn-info btn-text">
+                        <input type="radio" name="questions"> 20 Questions
+                    </label>
+                </div>
+                <div class="btn-group btn-group-toggle d-flex w-100 container-button-group" data-toggle="buttons">
+                    <label id="easy" class="btn btn-xl w-100 btn-info btn-text active">
+                        <input type="radio" name="difficulty" checked> Easy
+                    </label>
+                    <label id="medium" class="btn btn-xl w-100 btn-info btn-text">
+                        <input type="radio" name="difficulty"> Medium
+                    </label>
+                    <label id="hard" class="btn btn-xl w-100 btn-info btn-text">
+                        <input type="radio" name="difficulty"> Hard
+                    </label>
+                </div>
+
+                <div id="options-add-aljabar">
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-aljabar-1" type="button" data-toggle="button" aria-pressed="true"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-aljabar-toggle active">Isi
+                                Kotak Kosong</button>
+                            <span class="container-button"></span>
+                            <button id="btn-aljabar-2" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-aljabar-toggle">Nilai
+                                Variabel</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-aljabar-3" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-aljabar-toggle">Persamaan
+                                Sederhana</button>
+                            <span class="container-button"></span>
+                            <button id="btn-aljabar-4" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-aljabar-toggle">Pola
+                                Bilangan</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="options-add-time">
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-time-1" type="button" data-toggle="button" aria-pressed="true"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-time-toggle active">Baca
+                                Jam</button>
+                            <span class="container-button"></span>
+                            <button id="btn-time-2" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-time-toggle">Tambah &
+                                Kurang Waktu</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-time-3" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-time-toggle">Konversi
+                                Waktu</button>
+                            <span class="container-button"></span>
+                            <button id="btn-time-4" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-time-toggle">Selisih
+                                Waktu</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="options-add-heavy">
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-heavy-1" type="button" data-toggle="button" aria-pressed="true"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-heavy-toggle active">Konversi
+                                Berat</button>
+                            <span class="container-button"></span>
+                            <button id="btn-heavy-2" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-heavy-toggle">Tambah &
+                                Kurang Berat</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-heavy-3" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-heavy-toggle">Bandingkan
+                                Berat</button>
+                            <span class="container-button"></span>
+                            <button id="btn-heavy-4" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-heavy-toggle">Selisih
+                                Berat</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="options-add-volume">
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-volume-1" type="button" data-toggle="button" aria-pressed="true"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-volume-toggle active">Volume</button>
+                            <span class="container-button"></span>
+                            <button id="btn-volume-2" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-volume-toggle">Tambah
+                                Volume</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-volume-3" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-volume-toggle">Selisih
+                                Volume</button>
+                            <span class="container-button"></span>
+                            <button id="btn-volume-4" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-volume-toggle">Perkiraan
+                                Volume</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="options-add-up">
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-up-1" type="button" data-toggle="button" aria-pressed="true"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-up-toggle active">Keliling
+                                Bangun Datar</button>
+                            <span class="container-button"></span>
+                            <button id="btn-up-2" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-up-toggle">Volume Bangun
+                                Ruang</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-up-3" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-up-toggle">Luas
+                                Permukaan Bangun Ruang</button>
+                            <span class="container-button"></span>
+                            <button id="btn-up-4" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-up-toggle">Perbandingan
+                                Bangun</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-up-5" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-up-toggle">Perkiraan
+                                Volume</button>
+                            <span class="container-button"></span>
+                            <button id="btn-up-6" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-up-toggle">Bangun
+                                Campuran</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-up-7" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-up-toggle">Hubungan Luas
+                                dan Volume</button>
+                            <span class="container-button"></span>
+                            <button id="btn-up-8" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-up-toggle">Keliling
+                                Bangun Datar</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="options-add-operator">
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-operator-1" type="button" data-toggle="button" aria-pressed="true"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-operator-toggle active">Kurang</button>
+                            <span class="container-button"></span>
+                            <button id="btn-operator-2" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-operator-toggle">Tambah</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-operator-3" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-operator-toggle">Bagi</button>
+                            <span class="container-button"></span>
+                            <button id="btn-operator-4" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-operator-toggle">Kali</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="options-add-exam">
+                    <div class="row">
+                        <div class="col d-flex w-100 container-button">
+                            <span class="container-button"></span>
+                            <button id="btn-exam-1" type="button" data-toggle="button" aria-pressed="true"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-exam-toggle active">Essay</button>
+                            <span class="container-button"></span>
+                            <button id="btn-exam-2" type="button" data-toggle="button"
+                                class="btn btn-xl w-100 btn-info btn-text btn-xl-focus-none btn-exam-toggle">Pilihan Ganda</button>
+                            <span class="container-button"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </section>
+    <!-- Information -->
+    <section id="information-section" class="container-sm" aria-label="Information Section">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="container-button-group d-flex w-100 hover">
+                    <button type="button" id="information" class="btn btn-xl w-100 btn-info btn-text">
+                        Bagaimana Cara Bermain?
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay / Collapse -->
+        <div class="row_collapse" id="infoBox">
+            <div class="container-text-information information-text">
+                <p class="text-center">
+                    Balloon Pop Maths adalah permainan seru untuk belajar berhitung sambil bermain! 🎈
+                    Pilih jenis soal yang kamu mau — tambah, kurang, kali, atau bagi.
+                    Lalu tekan Play dan pecahkan balon dengan jawaban yang benar.
+                    Kumpulkan skor tertinggi dan jadilah juara berhitung! 💪✨
+                </p>
+                <button id="closeModalInfo">Close</button>
+            </div>
+        </div>
+    </section>
+    <!-- Game Section -->
+    <section id="game-section" class="container-xl d-none" aria-label="Game Section">
+
+        <!-- Home Button -->
+        <div id="game-section-home" class="row container-button-game">
+            <div class="col text-left pr-0">
+                <button id="btn-game-section-home" type="button" data-toggle="button"
+                    class="btn btn-xl btn-info btn-text btn-xl-focus-none">Home
+                </button>
+            </div>
+            <div class="col text-right pl-0">
+                <div id="score" class="btn btn-xl-nofill btn-text-score d-none">Score: 0 / 20</div>
+            </div>
+        </div>
+        <!-- Game Loader, shown until window has completed loading -->
+        <div id="game-loader" class="container-xl text-center">
+            <div class="container-loader"></div>
+            <div class="lds-grid">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="container-loader"></div>
+        </div>
+        <!-- Game Div, hidden until window has completed loading -->
+        <div id="game-canvas-controls" class="d-none">
+            <!-- Game Canvas, 2 panels - stacked on medium and small devices -->
+            <div class="row game-section-balloons p-0 m-0">
+                <div class="col-lg-6 p-0 m-0">
+                    <div class="row canvas-balloon p-0 m-0">
+                        <div class="col d-flex justify-content-center p-0 m-0">
+                            <canvas id="canvas-balloon-left-1"></canvas>
+                            <div id="balloon-answer-text-left-1" class="balloon-answer-text balloon-answer-text-top">8
+                            </div>
+                        </div>
+                        <div class="col d-flex justify-content-center p-0 m-0">
+                            <canvas id="canvas-balloon-left-2"></canvas>
+                            <div id="balloon-answer-text-left-2" class="balloon-answer-text balloon-answer-text-bottom">
+                                10</div>
+                        </div>
+                    </div>
+                    <div class="row canvas-balloon p-0 m-0">
+                        <div class="col d-flex justify-content-center p-0 m-0">
+                            <canvas id="canvas-balloon-left-3"></canvas>
+                            <div id="balloon-answer-text-left-3" class="balloon-answer-text balloon-answer-text-top">12
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 p-0 m-0">
+                    <div class="row canvas-balloon p-0 m-0">
+                        <div class="col d-flex justify-content-center p-0 m-0">
+                            <canvas id="canvas-balloon-right-1"></canvas>
+                            <div id="balloon-answer-text-right-1" class="balloon-answer-text balloon-answer-text-top">18
+                            </div>
+                        </div>
+                        <div class="col d-flex justify-content-center p-0 m-0">
+                            <canvas id="canvas-balloon-right-2"></canvas>
+                            <div id="balloon-answer-text-right-2"
+                                class="balloon-answer-text balloon-answer-text-bottom">18</div>
+                        </div>
+                    </div>
+                    <div class="row canvas-balloon p-0 m-0">
+                        <div class="col d-flex justify-content-center p-0 m-0">
+                            <canvas id="canvas-balloon-right-3"></canvas>
+                            <div id="balloon-answer-text-right-3" class="balloon-answer-text balloon-answer-text-top">18
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Game Controls - Responsif untuk semua device -->
+            <div class="row game-section-controls p-0 m-0">
+                <!-- Health dan Audio - Centered di tengah -->
+                <div class="col-12 d-flex justify-content-center">
+                    <div class="h" id="health-section">
+                        <div id="audio-controls">
+                            <i id="mute" class="fas fa-volume-up"></i>
+                        </div>
+                        <div id="health">
+                            <i id="heart1" class="fas fa-heart"></i>
+                            <i id="heart2" class="fas fa-heart"></i>
+                            <i id="heart3" class="fas fa-heart"></i>
+                            <i id="heart4" class="fas fa-heart"></i>
+                            <i id="heart5" class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- Question Box - Full width untuk soal panjang -->
+                <div class="col-12">
+                    <div id="question">10 x 10</div>
+                </div>
+                <!-- Multiple Choice Box - Khusus untuk mode Pilihan Ganda -->
+                <div class="col-12 d-none" id="multiple-choice-container">
+                    <div class="multiple-choice-options">
+                        <div class="choice-option" id="choice-a" data-choice="A">
+                            <span class="choice-letter">A.</span>
+                            <span class="choice-text"></span>
+                        </div>
+                        <div class="choice-option" id="choice-b" data-choice="B">
+                            <span class="choice-letter">B.</span>
+                            <span class="choice-text"></span>
+                        </div>
+                        <div class="choice-option" id="choice-c" data-choice="C">
+                            <span class="choice-letter">C.</span>
+                            <span class="choice-text"></span>
+                        </div>
+                        <div class="choice-option" id="choice-d" data-choice="D">
+                            <span class="choice-letter">D.</span>
+                            <span class="choice-text"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Input Soal Section -->
+    <section id="input-soal-section" class="container-sm d-none" aria-label="Input Soal Section">
+        <!-- Home Button -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="container-button-group d-flex w-100">
+                    <button id="btn-input-soal-home" type="button" class="btn btn-xl w-100 btn-info btn-text">
+                        <i class="fas fa-home"></i> Kembali ke Menu
+                    </button>
+                </div>
+                
+                <!-- Buttons to Add New Questions -->
+                <div class="container-button-group d-flex w-100 hover">
+                    <button id="btn-tambah-essay" type="button" class="btn btn-xl w-100 btn-info btn-text btn-tambah-soal-custom" style="margin-right: 10px;">
+                        <i class="fas fa-plus"></i> Tambah Soal Essay
+                    </button>
+                    <button id="btn-tambah-pilgan" type="button" class="btn btn-xl w-100 btn-info btn-text btn-tambah-soal-custom">
+                        <i class="fas fa-plus"></i> Tambah Soal Pilihan Ganda
+                    </button>
+                </div>
+
+                <!-- Essay Question List -->
+                <div id="essay-list-container" class="container-button-group">
+                    <div class="btn-xl-nofill w-100 btn-text-score text-center mb-3">
+                        <h4 style="color: #A2529A;">📝 Daftar Soal Essay</h4>
+                    </div>
+                    <div id="essay-list" class="question-list essay-section">
+                        <!-- Essay questions will be dynamically added here -->
+                    </div>
+                    <div id="no-essay-message" class="text-center" style="color: #A2529A; margin-top: 20px;">
+                        <p>Belum ada soal essay. Klik "Tambah Soal Essay" untuk menambahkan.</p>
+                    </div>
+                </div>
+
+                <!-- Multiple Choice Question List -->
+                <div id="pilgan-list-container" class="container-button-group">
+                    <div class="btn-xl-nofill w-100 btn-text-score text-center mb-3">
+                        <h4 style="color: #A2529A;">📋 Daftar Soal Pilihan Ganda</h4>
+                    </div>
+                    <div id="pilgan-list" class="question-list pilgan-section">
+                        <!-- Multiple choice questions will be dynamically added here -->
+                    </div>
+                    <div id="no-pilgan-message" class="text-center" style="color: #A2529A; margin-top: 20px;">
+                        <p>Belum ada soal pilihan ganda. Klik "Tambah Soal Pilihan Ganda" untuk menambahkan.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </section>
+
+    <!-- Modal for Adding Essay Questions -->
+    <div class="modal" id="modal-tambah-essay" style="display: none;">
+        <div class="modal-inner" style="max-width: 600px;">
+            <h3 style="color: #A2529A; text-align: center; margin-bottom: 20px;">📝 Tambah Soal Essay</h3>
+            
+            <form id="form-tambah-essay">
+                <div class="form-group">
+                    <label for="input-pertanyaan-essay" style="color: #A2529A; font-weight: bold;">Pertanyaan:</label>
+                    <textarea id="input-pertanyaan-essay" class="form-control" rows="3" placeholder="Masukkan pertanyaan essay..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="input-jawaban-essay" style="color: #A2529A; font-weight: bold;">Jawaban yang Benar:</label>
+                    <textarea id="input-jawaban-essay" class="form-control" rows="3" placeholder="Masukkan jawaban essay yang benar..." required></textarea>
+                </div>
+
+                <div class="d-flex justify-content-between" style="margin-top: 20px;">
+                    <button type="button" id="btn-batal-essay" class="btn btn-lg btn-secondary" style="width: 48%;">Batal</button>
+                    <button type="submit" class="btn btn-lg btn-info" style="width: 48%;">Kirim</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Multiple Choice Questions -->
+    <div class="modal" id="modal-tambah-pilgan" style="display: none;">
+        <div class="modal-inner" style="max-width: 600px;">
+            <h3 style="color: #A2529A; text-align: center; margin-bottom: 20px;">📋 Tambah Soal Pilihan Ganda</h3>
+            
+            <form id="form-tambah-pilgan">
+                <div class="form-group">
+                    <label for="input-pertanyaan-pilgan" style="color: #A2529A; font-weight: bold;">Pertanyaan:</label>
+                    <textarea id="input-pertanyaan-pilgan" class="form-control" rows="3" placeholder="Masukkan pertanyaan pilihan ganda..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="input-jawaban-pilgan" style="color: #A2529A; font-weight: bold;">Jawaban yang Benar:</label>
+                    <input type="text" id="input-jawaban-pilgan" class="form-control" placeholder="Masukkan jawaban yang benar (A, B, C, atau D)..." required>
+                </div>
+
+                <div class="form-group">
+                    <label style="color: #A2529A; font-weight: bold;">Pilihan Jawaban:</label>
+                    <input type="text" id="input-pilihan-1" class="form-control mb-2" placeholder="Pilihan A" required>
+                    <input type="text" id="input-pilihan-2" class="form-control mb-2" placeholder="Pilihan B" required>
+                    <input type="text" id="input-pilihan-3" class="form-control mb-2" placeholder="Pilihan C" required>
+                    <input type="text" id="input-pilihan-4" class="form-control mb-2" placeholder="Pilihan D" required>
+                </div>
+
+                <div class="d-flex justify-content-between" style="margin-top: 20px;">
+                    <button type="button" id="btn-batal-pilgan" class="btn btn-lg btn-secondary" style="width: 48%;">Batal</button>
+                    <button type="submit" class="btn btn-lg btn-info" style="width: 48%;">Kirim</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Modal (untuk mengganti alert) -->
+    <div class="row_collapse" id="notification-modal">
+        <div class="container-text-information information-text">
+            <p id="notification-message" class="text-center">
+            </p>
+            <button id="btn-close-notification">Close</button>
+        </div>
+    </div>
+    <div id="wrapper" ontouchstart="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 600" preserveAspectRatio="xMaxYMin meet">
+            <defs>
+                <linearGradient id="gradient_melt2" x1="50%" y1="0%" x2="50%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgb(255, 255, 255);stop-opacity:0" />
+                    <stop offset="20%" style="stop-color:rgb(255, 255, 255);stop-opacity:0.3" />
+                    <stop offset="40%" style="stop-color:rgb(255, 255, 255);stop-opacity:1" />
+                </linearGradient>
+
+                <filter id="filter_sunBlur" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
+                </filter>
+
+                <linearGradient id="gradient_cloud1" x1="658.39" y1="-55.99" x2="646.49" y2="574.71"
+                    gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#fff4ff" />
+                    <stop offset="0.2" stop-color="#fbf3fe" />
+                    <stop offset="0.38" stop-color="#f0f0fc" />
+                    <stop offset="0.56" stop-color="#ddecf7" />
+                    <stop offset="0.73" stop-color="#c3e5f2" />
+                    <stop offset="0.91" stop-color="#a1ddea" />
+                    <stop offset="1" stop-color="#8bd7e5" />
+                </linearGradient>
+
+                <linearGradient id="gradient_cloud2" x1="623.27" y1="84.56" x2="628.08" y2="789.71"
+                    xlink:href="#gradient_cloud1" />
+
+                <linearGradient id="gradient_cloud3" x1="624.83" y1="567.32" x2="624.83" y2="818.88"
+                    gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#fff4ff" />
+                    <stop offset="1" stop-color="#ded7e5" />
+                </linearGradient>
+
+                <path id="cloud"
+                    d="M1429.3,399.4a98.2,98.2,0,0,0-97.1-98.2,42.6,42.6,0,0,0-81.6,17,43.7,43.7,0,0,0,4.5,19.1,97.8,97.8,0,0,0-22.1,62.1,92.3,92.3,0,0,0,.7,11.8,98.2,98.2,0,0,0-82,59.1,41.8,41.8,0,0,0-16.6-3.4,42.6,42.6,0,0,0-42.6,42.6,40.7,40.7,0,0,0,2.3,13.5,76,76,0,0,0-69,57,44,44,0,0,0-8.3-.9A39.5,39.5,0,0,0,987,593.5a113.1,113.1,0,0,0-81.7-34.8h-4.1a42.4,42.4,0,0,0-74.8-5.9,39.3,39.3,0,0,0-45.1,6.4,98.2,98.2,0,0,0-167.4-49.2A75.8,75.8,0,0,0,559,534.7a94,94,0,0,0-16.9-1.5A97.5,97.5,0,0,0,471.8,563a39.5,39.5,0,0,0-68,12.5,116.8,116.8,0,0,0-28.2-12.4c.3-2.2,8.4-50.1-42-49.4a43,43,0,0,0-40.8,30.5,96.3,96.3,0,0,0-10.8-.7,87.8,87.8,0,0,0-40.9,10.1,87.8,87.8,0,0,0-138-68A98.3,98.3,0,0,0,16,411.2a115,115,0,0,0,.7-11.8A98.1,98.1,0,0,0-45,308.2V591.8c.6.4,0,63.2,0,63.2H1314.5a113.3,113.3,0,0,0-21.5-62.1c28.2-17.3,46.8-91.8,46.3-95.7A98.2,98.2,0,0,0,1429.3,399.4Z" />
+            </defs>
+
+            <use xlink:href="#cloud" id="cloud1" fill="url(#gradient_cloud1)" x="-40" y="-100" />
+            <use xlink:href="#cloud" id="cloud2" fill="url(#gradient_cloud2)" x="40" y="-60" />
+            <use xlink:href="#cloud" id="cloud3" fill="url(#gradient_cloud3)" x="0" y="0" />
+
+            <g id="sun" transform="translate(-90, 110)">
+                <circle id="shine" filter="url(#filter_sunBlur)" fill="rgba(255,206,44,0.6)" cx="332" cy="32" r="183" />
+                <path id="s5" fill="#ff952c"
+                    d="M500.7-59.8c-14.1-12-34.2-8.5-50.8-12.7s-29.8-14.2-41.7-27c-25-27.3-47.1-70.1-89.9-42.5-16.4,10.5-28,27-44.5,37.8s-33.1,16-51.1,21.8c-16.3,5.3-37.7,11.1-46.8,27.3-10.6,18.8,3.3,37.2,4.6,56.3,2.6,37.5-37.9,65.9-30.2,103.8,7,34.4,59.2,37.6,81.2,60.2,27,27.7,37.4,66.5,83.7,48.7,16.8-6.4,30.7-18.7,47.8-24.4,23.1-7.8,47.2-3.8,71-6.2,54.8-5.4,45.5-63.3,52.2-104.4,4.2-25.9,11.7-50.4,19.7-75.4C512.4-16.4,519.4-43.7,500.7-59.8Z" />
+                <circle id="s4" fill="#ffcb4a" cx="332.4" cy="36.3" r="135.8" />
+                <path id="s3" fill="#ffdc82"
+                    d="M426.8-27c-19.4-43.1-64.1-63.7-109.6-58-47.7,5.8-88,34.1-100.9,82.8-6.3,23.8,5.1,47.8,22.6,63.8,8.7,8,19.2,13,28.8,19.6s16.8,16,24.2,26.1c25.7,35.3,75.5,33.7,108,8.6C441,84.2,447.2,18.3,426.8-27Z" />
+                <path id="s2" fill="#ffe6a6"
+                    d="M416.5-8.3c-4.4-40-37.6-62.6-74.9-66.7-15.7-1.8-34.8-2.1-48.5,6.6C274.4-56.5,276.2-37.8,278.2-19s-5,39.8,11.6,53.4c12.8,10.5,37,19.3,52.7,23.4C385.6,69.1,421.1,34.7,416.5-8.3Z" />
+                <path id="s1" fill="#ffeec2"
+                    d="M375.3,23.5c-5.1,16.7-28,24.5-51,17.4s-37.7-26.3-32.5-43,27.9-24.6,51-17.5S380.4,6.7,375.3,23.5Z" />
+            </g>
+
+
+            <animateTransform xlink:href="#s4" attributeName="transform" type="translate" dur="4s" begin="0"
+                repeatCount="indefinite" values="0 0 ; 0 -15 ; 0 0" />
+            <animate xlink:href="#s3" attributeName="d" dur="4s" begin="0" fill="freeze" repeatCount="indefinite"
+                values="M426.8-27c-19.4-43.1-64.1-63.7-109.6-58-47.7,5.8-88,34.1-100.9,82.8-6.3,23.8,5.1,47.8,22.6,63.8,8.7,8,45.6,35.6,53,45.7,25.7,35.3,75.5,33.7,108,8.6C441,84.2,447.2,18.3,426.8-27Z
+            ; 
+            M426.8-27c-19.4-43.1-64.1-63.7-109.6-58C269.5-79.2,241.9-49.7,229-1c-6.3,23.8-1.5,36,16,52,8.7,7.9,3,9,46.5,38.5,36.2,24.5,75.5,32.5,99,0C420.9,47.4,447.2,18.3,426.8-27Z
+            ;
+            M426.8-27c-19.4-43.1-64.1-63.7-109.6-58-47.7,5.8-88,34.1-100.9,82.8-6.3,23.8,5.1,47.8,22.6,63.8,8.7,8,45.6,35.6,53,45.7,25.7,35.3,75.5,33.7,108,8.6C441,84.2,447.2,18.3,426.8-27Z" />
+
+
+            <animateTransform title="cloud" xlink:href="#cloud1" attributeName="transform" type="translate" dur="9s"
+                begin="0" repeatCount="indefinite" values="0 0 ; 35 25 ; 0 0" />
+
+            <animateTransform xlink:href="#cloud2" attributeName="transform" type="translate" dur="4s" begin="2"
+                repeatCount="indefinite" values="0 0 ; 25 15 ; 0 0" />
+
+            <animateTransform xlink:href="#cloud3" attributeName="transform" type="translate" dur="5s" begin="0.6"
+                repeatCount="indefinite" values="0 0 ; -15 -5 ; 0 0" />
+        </svg>
+
+    </div>
+    <!-- JavaScript links -->
+    <!-- Cordova JS (akan di-inject otomatis saat build Cordova) -->
+    <script src="cordova.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.js"
+        integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    
+    <!-- Cordova Audio Wrapper - HARUS dimuat sebelum initialisation.js -->
+    <script src="assets/js/cordova-audio-wrapper.js"></script>
+    <script src="assets/js/initialisation.js"></script>
+    <script src="assets/js/audio.js"></script>
+    <script src="assets/js/animation.js"></script>
+
+    <script src="assets/js/display.js"></script>
+    <script src="assets/js/input-soal.js"></script>
+    <script src="assets/js/game-logic.js"></script>
+    <script src="assets/js/mail.js"></script>
+    <script src="assets/js/maths.js"></script>
+    <script src="assets/js/events.js"></script>
+    <!-- <script src="assets/js/storyMode.js"></script> -->
+    <script src="assets/js/background.js"></script>
+</body>
+
+</html>

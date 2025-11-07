@@ -1,0 +1,18 @@
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="com.example.myapp" version="1.0.0">
+<name>MyApp</name>
+<description>Aplikasi Cordova Android</description>
+<author email="dev@example.com">Developer</author>
+<platform name="android">
+<!--  Icon  -->
+<icon src="www/assets/images/icon.png"/>
+<!--  Splash API baru  -->
+<preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/assets/images/splash.png"/>
+<preference name="AndroidWindowSplashScreenBackground" value="#ffffff"/>
+<preference name="AndroidPersistentFileLocation" value="Compatibility" />
+</platform>
+<!--  Global preferences  -->
+<preference name="SplashMaintainAspectRatio" value="true"/>
+<preference name="ShowSplashScreen" value="true"/>
+<preference name="ShowSplashScreenSpinner" value="false"/>
+<preference name="SplashScreenDelay" value="0"/>
+</widget>

@@ -1,0 +1,49 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#wrapper {
+  position: fixed;        /* sebelumnya relative */
+  bottom: 0;              /* tempel di bawah layar */
+  left: 0;
+  width: 100%;
+  height: 105vh;           /* cukup sebagian bawah layar, bisa 50vh kalau mau */
+  background: #fbf0fc;
+  overflow: hidden;
+  z-index: -100;
+  pointer-events: none;   /* biar tidak ganggu tombol di atasnya */
+}
+
+
+/* === SVG === */
+svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: radial-gradient(ellipse at 30% 30%, rgba(144, 221, 236, 1) 0%, rgba(89, 177, 213, 1) 50%);
+  z-index: -1000;
+}
+
+
+
+/* horizontal flip */
+svg #cloud2 {
+  transform: scale(-1, 1);
+  transform-origin: 50% 50%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* === ANIMATIONS === */

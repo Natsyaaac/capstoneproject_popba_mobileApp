@@ -1,0 +1,1224 @@
+     @import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
+
+     @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
+
+     /*-- Global Variable Declarations--*/
+     :root {
+         /*-- Fonts--*/
+         --titlefont: "Whale I Tried", sans-serif;
+         --bodyfont: 'Nunito', sans-serif;
+         /*-- Colour Palette--*/
+         --purplelight: #908CD9;
+         --purplemed: #9C70BD;
+         --purpledark: #A2529A;
+         --bluemed: #3E8BC6;
+         --bluevlight: #EEFBFF;
+         --redlight: #DC7774;
+         --medgrey: #a9a9a9;
+         /*-- Canvas Size--*/
+         --canvassize: calc((100vh - 22.6rem) / 4);
+         --balloontextsize: calc((100vh - 22.6rem) / 14);
+         --balloontextlineheight: calc((100vh - 22.6rem) / 4.4);
+     }
+
+     /*-- Custom Fonts--*/
+     @font-face {
+         font-family: 'Whale I Tried';
+         src: url('../fonts/whale-i-tried.eot');
+         src: url('../fonts/whale-i-tried.eot?#iefix') format('embedded-opentype'),
+             url('../fonts/whale-i-tried.woff2') format('woff2'),
+             url('../fonts/whale-i-tried.woff') format('woff'),
+             url('../fonts/whale-i-tried.ttf') format('truetype'),
+             url('../fonts/whale-i-tried.svg#Whale I Tried') format('svg');
+     }
+
+     /*-- HTML--*/
+     html {
+         font-size: 62.5%;
+     }
+
+     /*-- Body--*/
+     body {
+         font-family: var(--bodyfont);
+         font-size: 8.6rem;
+         min-height: 100vh;
+         z-index: 0;
+     }
+
+     /*-- Containers --*/
+     .container-heading-main {
+         padding-top: 1.0rem;
+         padding-bottom: 0.5rem;
+     }
+
+     .container-heading-main-large {
+         padding-top: 3.0rem;
+         padding-bottom: 3.0rem;
+     }
+
+     .container-button {
+         padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+     }
+
+     .container-button-group {
+         padding-top: 0.5rem;
+         padding-bottom: 0.5rem;
+     }
+
+     .container-button-game {
+         padding-top: 1.5rem;
+         padding-bottom: 1.0rem;
+     }
+
+     .container-loader {
+         padding-top: 9.8rem;
+         padding-bottom: 9.8rem;
+     }
+
+     .container-footer {
+         padding-top: 1rem;
+         padding-bottom: 1rem;
+         text-align: center;
+     }
+
+     .container-text-information {
+         padding-top: 0.5rem;
+         padding-bottom: 0.5rem;
+     }
+
+     .container-404 {
+         padding-top: 20rem;
+     }
+
+     /*-- Headings --*/
+     h1 {
+         font-family: "Chewy", system-ui;
+         font-weight: 400;
+         font-style: normal;
+         font-size: 5rem;
+         text-align: center;
+         color: #FFCC33;
+         /* pink cerah */
+         text-shadow: 2px 2px 0 #FFD3E2;
+
+     }
+
+     /*-- Heading Image --*/
+     .container-heading-main img,
+     .container-heading-main-large img {
+         width: 8rem;
+         height: 8rem;
+         position: absolute;
+         z-index: -1;
+         left: 50%;
+         margin-left: -40px;
+     }
+
+     /*-- Buttons --*/
+     .btn-text {
+         color: var(--bluevlight);
+     }
+
+     .btn-text-score {
+         color: var(--purpledark);
+         text-align: center;
+         white-space: nowrap;
+     }
+
+     .btn-xl {
+         padding: 0.7rem 0.7rem;
+         font-size: 1.7rem;
+         font-weight: 600;
+         border-radius: 1.0rem;
+         background-color: var(--purplelight);
+         border-color: var(--bluemed);
+     }
+
+     .btn-xl-nofill {
+         padding: 0.7rem 0.7rem;
+         font-size: 1.7rem;
+         font-weight: 600;
+         border: 2px solid var(--purplelight);
+         border-radius: 1.0rem;
+     }
+
+     .btn-xxl {
+         padding: 3.35rem 5rem;
+         font-size: 5rem;
+         font-weight: 700;
+         border-radius: 1.0rem;
+         background-color: var(--purplelight);
+         border-color: var(--bluemed);
+     }
+
+     /*-- Button Hover Styling --*/
+     .btn-text-score:hover {
+         color: var(--purpledark);
+         cursor: auto;
+     }
+
+     /*-- Button Pseudo Class Styling --*/
+     .btn-xl-focus-none:focus,
+     .btn-xl-focus-none:visited {
+         background-color: var(--purplelight);
+         box-shadow: none;
+         border-color: var(--bluemed);
+     }
+
+     /*-- Information Text --*/
+     .text-information {
+         font-size: 1.7rem;
+         padding: 1.0rem 1.0rem 1.0rem 1.0rem;
+         color: var(--purpledark);
+         border: 2px solid var(--purplelight);
+         border-radius: 0.5rem;
+     }
+
+     /*-- 404 Error Heading Styling --*/
+     .text-404 h4 {
+         font-size: 2.2rem;
+         color: var(--purplemed);
+         font-weight: 700;
+     }
+
+     /*-- 404 Error Signpost Icon Styling --*/
+     .container-404 i {
+         padding-top: 0.5rem;
+         color: var(--purplemed);
+     }
+
+     /*-- Game Elements --*/
+
+     /*-- Game Loader --*/
+     /*-- Many thanks to loading.io https://loading.io/css/ --*/
+     .lds-grid {
+         display: inline-block;
+         position: relative;
+         width: 80px;
+         height: 80px;
+     }
+
+     .lds-grid div {
+         position: absolute;
+         width: 16px;
+         height: 16px;
+         border-radius: 50%;
+         background: #fff;
+         animation: lds-grid 1.2s linear infinite;
+     }
+
+     .lds-grid div:nth-child(1) {
+         top: 8px;
+         left: 8px;
+         animation-delay: 0s;
+     }
+
+     .lds-grid div:nth-child(2) {
+         top: 8px;
+         left: 32px;
+         animation-delay: -0.4s;
+     }
+
+     .lds-grid div:nth-child(3) {
+         top: 8px;
+         left: 56px;
+         animation-delay: -0.8s;
+     }
+
+     .lds-grid div:nth-child(4) {
+         top: 32px;
+         left: 8px;
+         animation-delay: -0.4s;
+     }
+
+     .lds-grid div:nth-child(5) {
+         top: 32px;
+         left: 32px;
+         animation-delay: -0.8s;
+     }
+
+     .lds-grid div:nth-child(6) {
+         top: 32px;
+         left: 56px;
+         animation-delay: -1.2s;
+     }
+
+     .lds-grid div:nth-child(7) {
+         top: 56px;
+         left: 8px;
+         animation-delay: -0.8s;
+     }
+
+     .lds-grid div:nth-child(8) {
+         top: 56px;
+         left: 32px;
+         animation-delay: -1.2s;
+     }
+
+     .lds-grid div:nth-child(9) {
+         top: 56px;
+         left: 56px;
+         animation-delay: -1.6s;
+     }
+
+     @keyframes lds-grid {
+
+         0%,
+         100% {
+             opacity: 1;
+         }
+
+         50% {
+             opacity: 0.5;
+         }
+     }
+
+     /*-- Set row height for balloon canvas elements --*/
+     /*-- Row height calculated using viewport height --*/
+     .canvas-balloon {
+         height: var(--canvassize);
+     }
+
+     /*-- Game Canvas --*/
+     /*-- Width and height calculated using viewport height --*/
+     .canvas-balloon canvas {
+         position: absolute;
+         width: var(--canvassize);
+         height: var(--canvassize);
+         z-index: -1;
+     }
+
+     /*-- Game Answer Balloon Text --*/
+     /*-- Font size, line height, width and height calculated using viewport height --*/
+     .balloon-answer-text {
+         position: absolute;
+         color: var(--bluevlight);
+         text-align: center;
+         font-size: var(--balloontextsize);
+         font-weight: 700;
+         line-height: var(--balloontextlineheight);
+         width: var(--canvassize);
+         height: var(--canvassize);
+         z-index: 1;
+         text-shadow: 1px 1px 2px var(--medgrey);
+     }
+
+     /*-- Game Answer Balloon Text Hover Styling --*/
+     .balloon-answer-text:hover {
+         cursor: url('../images/pin.svg'), crosshair;
+     }
+
+     /* Kotak soal - responsive untuk semua panjang soal */
+     .game-section-controls #question {
+         color: var(--bluevlight);
+         text-align: center;
+         font-size: clamp(2.5rem, 5vw, 5rem);
+         font-weight: 700;
+         border-radius: 1.0rem;
+         background-color: var(--purplelight);
+         border: 2px solid var(--bluemed);
+         padding: 1.5rem 2rem;
+         min-height: 8rem;
+         display: block;
+         word-wrap: break-word;
+         overflow-wrap: break-word;
+         line-height: 1.3;
+         max-width: 100%;
+         margin: 0 auto;
+     }
+
+     /* Styling untuk Multiple Choice Question */
+     .mc-question-text {
+         font-size: clamp(2rem, 4vw, 3.5rem);
+         font-weight: 700;
+         margin-bottom: 1.5rem;
+         color: var(--bluevlight);
+         text-align: center;
+     }
+
+     .mc-choices-list {
+         text-align: left;
+         width: 100%;
+         max-width: 800px;
+         margin: 0 auto;
+     }
+
+     .mc-choice-item {
+         font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+         font-weight: 600;
+         margin: 0.8rem 0;
+         padding: 0.5rem 1rem;
+         color: var(--bluevlight);
+         line-height: 1.4;
+     }
+
+     .mc-choice-item strong {
+         color: #FFCC33;
+         margin-right: 0.5rem;
+         font-size: clamp(2rem, 4vw, 3.2rem);
+         max-width: 100%;
+         margin: 0 auto;
+     }
+
+     /*-- Game Audio Controls --*/
+     #audio-controls i {
+         padding: 0.5rem 1.0rem 0.5rem 1.0rem;
+         font-size: 2rem;
+         text-align: center;
+         color: var(--purplemed);
+     }
+
+     #audio-controls i:hover {
+         color: var(--purpledark);
+     }
+
+     /*-- Game Health --*/
+     .game-section-controls #health {
+         color: var(--redlight);
+         text-align: center;
+         padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+     }
+
+     .game-section-controls #health i {
+         font-size: 2rem;
+     }
+
+     /*-- Game Score --*/
+     .score {
+         padding-top: 0.5rem;
+         padding-bottom: 0.5rem;
+         color: var(--purplemed);
+         text-align: right;
+     }
+
+     /*-- Generic Feedback Modal --*/
+     .modal-dialog h2,
+     .modal-dialog span {
+         font-size: 2rem;
+         font-weight: 600;
+         color: var(--purpledark);
+     }
+
+     .modal-dialog p,
+     .modal-dialog input,
+     .modal-dialog textarea {
+         font-size: 1.6rem;
+         font-weight: 400;
+         color: var(--purpledark);
+     }
+
+     /*--Footer--*/
+     .container-footer a {
+         padding-left: 0.5rem;
+         padding-right: 0.5rem;
+         text-align: center;
+         font-size: 1.8rem;
+         font-weight: 700;
+         color: var(--purplemed);
+     }
+
+     .container-footer i {
+         color: var(--purplemed);
+     }
+
+     /*--Navigation Links--*/
+     .container-heading-main a:active,
+     .container-heading-main-large a:active {
+         color: var(--bluevlight);
+         text-decoration: none;
+     }
+
+     .container-heading-main a:hover,
+     .container-heading-main-large a:hover {
+         color: var(--bluevlight);
+         text-decoration: none;
+     }
+
+     .container-heading-main a:visited,
+     .container-heading-main-large a:visited {
+         color: var(--bluevlight);
+         text-decoration: none;
+     }
+
+     .text-information a:link,
+     .container-footer a:link,
+     .container-footer i:link {
+         color: var(--purplemed);
+         text-decoration: none;
+     }
+
+     .container-404 i:visited,
+     .text-information a:visited,
+     .container-footer a:visited,
+     .container-footer i:visited {
+         color: var(--purplemed);
+         text-decoration: none;
+     }
+
+     .container-404 i:hover,
+     .text-information a:hover,
+     .container-footer a:hover,
+     .container-footer i:hover {
+         color: var(--purpledark);
+         text-decoration: none;
+     }
+
+     .container-404 i:active,
+     .text-information a:active,
+     .container-footer a:active,
+     .container-footer i:active {
+         color: var(--purpledark);
+         text-decoration: none;
+     }
+
+     /*-- Bootstrap Class Overrides --*/
+     /*-- Bootstrap Button Class Overrides --*/
+     .btn-lg {
+         font-size: 1.6rem;
+     }
+
+     /*--Bootstrap Button Pseudo Class Overrides--*/
+     .btn-info:active {
+         background-color: var(--purpledark);
+     }
+
+     .btn-info:not(:disabled):not(.disabled).active,
+     .btn-info:not(:disabled):not(.disabled):active {
+         background-color: var(--purpledark);
+     }
+
+     .btn-info:focus {
+         background-color: var(--purplemed);
+     }
+
+     .btn-info:hover {
+         background-color: var(--purplemed);
+     }
+
+     /*-- Bootstrap Modal Class Overrides --*/
+     .modal-content {
+         border: 1px solid var(--purplemed);
+         border-radius: 1.5rem;
+     }
+
+     .modal-header {
+         border-bottom: 1px solid var(--purplemed);
+         background-color: var(--bluevlight);
+         border-top-left-radius: 1.5rem;
+         border-top-right-radius: 1.5rem;
+         padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+     }
+
+     .modal-body {
+         background-color: var(--bluevlight);
+         border-radius: 1.5rem;
+         padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+     }
+
+     /* Container untuk health dan audio - centered */
+     .h {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: center;
+         gap: 20px;
+         background-color: var(--bluevlight);
+         padding: 1rem 2rem;
+         border-radius: 1.5rem;
+         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+         margin-bottom: 1.5rem;
+         width: fit-content;
+         max-width: 90%;
+     }
+
+     #audio-controls {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+     }
+
+     #health {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         justify-content: center;
+         gap: 10px;
+     }
+
+     /* Game Section Controls */
+     .game-section-controls {
+         padding-top: 1rem;
+     }
+
+
+
+     /* === Grid Layout untuk Tombol Mode === */
+     .grid-tem {
+         display: grid !important;
+         grid-template-columns: repeat(3, 1fr);
+         gap: 0.7rem;
+         width: 100%;
+         max-width: 700px;
+         margin: 0 auto;
+     }
+
+     /* Posisi khusus untuk tombol Ujian agar di tengah - row 3 sendiri */
+     .grid-tem .grid-7 {
+         grid-column: 2 / 3;
+         grid-row: 3 / 4;
+     }
+
+     /* === Tombol Mode === */
+     .grid-tem .btn {
+         background-color: var(--purplelight);
+         color: var(--bluevlight);
+         font-weight: 700;
+         font-size: 1.6rem;
+         border: 2px solid var(--bluemed);
+         border-radius: 0.8rem !important;
+         text-align: center;
+         width: 100%;
+         padding: 0.8rem 0;
+         transition: all 0.2s ease-in-out;
+         box-sizing: border-box;
+     }
+
+     .hover button {
+         transition: all 0.2s ease-in-out;
+     }
+
+     .hover button:hover {
+         transition: all 0.2s ease-in-out;
+         transform: scale(1.05);
+         background-color: var(--purpledark);
+     }
+
+     .grid-tem .btn:hover {
+         background-color: var(--purplemed);
+         transform: scale(1.05);
+     }
+
+     /* === Aktif === */
+     .grid-tem .btn.active {
+         background-color: var(--purpledark);
+         color: #fff;
+     }
+
+     /*-- Media Queries --*/
+
+     /*-- Media query to re-size heading, reposition heading image and re-size Play button for screen sizes under 680px high --*/
+     @media (max-height: 680px) {
+         .heading-main {
+             font-size: 5rem;
+         }
+
+         .container-heading-main img,
+         .container-heading-main-large img {
+             margin-top: -0.6rem;
+         }
+
+         .btn-xxl {
+             padding: 0.5rem 0.5rem;
+             font-size: 4.0rem;
+         }
+
+         .game-section-controls #question {
+             font-size: clamp(1.8rem, 4vw, 3rem);
+             padding: 1rem;
+             min-height: 5rem;
+         }
+     }
+
+     /*-- Media query untuk Tablet (601px - 991px) --*/
+     @media (min-width: 601px) and (max-width: 991px) {
+         .game-section-controls #question {
+             font-size: clamp(2.5rem, 4.5vw, 4rem);
+             padding: 1.5rem 2rem;
+             min-height: 7rem;
+             max-width: 95%;
+             margin: 0 auto;
+         }
+
+         .h {
+             padding: 1.2rem 2.5rem;
+             gap: 20px;
+             max-width: 95%;
+         }
+
+         #health {
+             gap: 10px;
+         }
+
+         #health i {
+             font-size: 2.2rem;
+         }
+
+         #audio-controls i {
+             font-size: 2.2rem;
+         }
+     }
+
+     /*-- Media query untuk Mobile --*/
+     @media (max-width: 600px) {
+         .h {
+             padding: 0.8rem 1.5rem;
+             gap: 15px;
+             max-width: 95%;
+             margin-bottom: 1.2rem;
+         }
+
+         #health {
+             gap: 8px;
+         }
+
+         #health i {
+             font-size: 1.8rem;
+         }
+
+         #audio-controls {
+             display: flex;
+             align-items: center;
+         }
+
+         #audio-controls i {
+             font-size: 1.8rem;
+         }
+
+         .game-section-controls #question {
+             font-size: clamp(2rem, 4.5vw, 3.5rem);
+             padding: 1.2rem 1.5rem;
+             min-height: 6rem;
+             max-width: 95%;
+             margin: 0 auto;
+         }
+
+     }
+
+     /*-- Media query untuk Mobile dengan tinggi layar besar --*/
+     @media (min-height: 926px) and (max-width: 600px) {
+         .balloon-answer-text {
+             font-size: 5rem;
+         }
+     }
+
+     /*-- Media query untuk Tablet Portrait (601px - 768px) --*/
+     @media (min-width: 601px) and (max-width: 768px) {
+         :root {
+             --canvassize: 16rem;
+             --balloontextsize: 4rem;
+             --balloontextlineheight: 14.5rem;
+         }
+
+         .canvas-balloon {
+             min-height: 16rem;
+         }
+
+         .canvas-balloon canvas {
+             width: 16rem;
+             height: 16rem;
+         }
+
+         .balloon-answer-text {
+             font-size: 4rem;
+             line-height: 14.5rem;
+             width: 16rem;
+             height: 16rem;
+         }
+     }
+
+     /*-- Media query untuk Tablet Landscape (769px - 991px) --*/
+     @media (min-width: 769px) and (max-width: 991px) {
+         :root {
+             --canvassize: 18rem;
+             --balloontextsize: 4.5rem;
+             --balloontextlineheight: 16.5rem;
+         }
+
+         .canvas-balloon {
+             min-height: 18rem;
+         }
+
+         .canvas-balloon canvas {
+             width: 18rem;
+             height: 18rem;
+         }
+
+         .balloon-answer-text {
+             font-size: 4.5rem;
+             line-height: 16.5rem;
+             width: 18rem;
+             height: 18rem;
+         }
+
+         .game-section-controls #question {
+             font-size: clamp(2.5rem, 4vw, 4rem);
+             padding: 1.5rem 2.5rem;
+             min-height: 8rem;
+             max-width: 90%;
+         }
+
+         .h {
+             padding: 1.3rem 2.5rem;
+             gap: 20px;
+         }
+     }
+
+     /*-- Media query untuk Desktop/Laptop (992px+) --*/
+     @media (min-width: 992px) {
+         :root {
+             --canvassize: 22rem;
+             --balloontextsize: 5rem;
+             --balloontextlineheight: 20rem;
+         }
+
+         .canvas-balloon {
+             min-height: 22rem;
+         }
+
+         .canvas-balloon canvas {
+             width: 22rem;
+             height: 22rem;
+         }
+
+         .balloon-answer-text {
+             font-size: 5rem;
+             line-height: 20rem;
+             width: 22rem;
+             height: 22rem;
+         }
+
+         .game-section-controls #question {
+             font-size: clamp(3rem, 5vw, 5rem);
+             padding: 2rem 3rem;
+             min-height: 10rem;
+             max-width: 90%;
+             margin: 0 auto;
+         }
+
+         .h {
+             padding: 1.5rem 3rem;
+             gap: 25px;
+             max-width: 600px;
+         }
+
+         #health {
+             gap: 12px;
+         }
+
+         #health i {
+             font-size: 2.5rem;
+         }
+
+         #audio-controls i {
+             font-size: 2.5rem;
+         }
+     }
+
+     /*-- Media query untuk Large Desktop (1400px+) --*/
+     @media (min-width: 1400px) {
+         :root {
+             --canvassize: 24rem;
+             --balloontextsize: 5.5rem;
+             --balloontextlineheight: 22rem;
+         }
+
+         .canvas-balloon {
+             min-height: 24rem;
+         }
+
+         .canvas-balloon canvas {
+             width: 24rem;
+             height: 24rem;
+         }
+
+         .balloon-answer-text {
+             font-size: 5.5rem;
+             line-height: 22rem;
+             width: 24rem;
+             height: 24rem;
+         }
+     }
+
+
+     .balon {
+         position: fixed;
+         bottom: -150px;
+         width: 60px;
+         height: 80px;
+         border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+         animation: naik 10s linear infinite;
+         z-index: -50;
+     }
+
+     /* Tali balon */
+     .balon::after {
+         content: "";
+         position: absolute;
+         bottom: -50px;
+         left: 50%;
+         width: 2px;
+         height: 50px;
+         background: #555;
+         transform: translateX(-30%);
+     }
+
+
+     @keyframes naik {
+         0% {
+             transform: translateY(0) rotate(0deg);
+             opacity: 1;
+         }
+
+         100% {
+             transform: translateY(-90vh) rotate(15deg);
+             opacity: 0;
+         }
+     }
+
+
+
+
+     .text-center {
+         line-height: 24px;
+         margin: 10px 0;
+         font-size: 20px;
+     }
+
+     .information-text {
+         background-color: var(--bluevlight);
+         border-radius: 5px;
+         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+         padding: 15px 25px;
+         text-align: justify;
+         text-justify: inter-word;
+         width: 450px;
+
+     }
+
+     .information-text p {
+         line-height: 1.6;
+         /* Jarak antar baris biar enak dibaca */
+     }
+
+     /* Overlay */
+     .row_collapse {
+         background-color: rgba(0, 0, 0, 0.3);
+         opacity: 0;
+         position: fixed;
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         transition: all 0.3s ease-in-out;
+         z-index: -1;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+     }
+
+     .row_collapse.show {
+         opacity: 1 !important;
+         z-index: 999 !important;
+         display: flex !important;
+     }
+
+     .information-text button {
+         background: linear-gradient(to right, #663399, #8853bd);
+         border-radius: 20px;
+         border: 0;
+         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+         color: #fff;
+         cursor: pointer;
+         padding: 10px 25px;
+         font-size: 20px;
+         display: block;
+         /* biar tombol terpisah dari paragraf */
+         margin: 20px auto;
+     }
+
+     .information-text button:active {
+         opacity: 0.8;
+     }
+
+
+     .modal-inner p {
+         line-height: 24px;
+         margin: 10px 0;
+         font-size: 20px;
+     }
+
+     .modal-inner {
+         background-color: var(--bluevlight);
+         border-radius: 5px;
+         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+         padding: 15px 25px;
+         text-align: center;
+         width: 380px;
+     }
+
+     .modal.modal_open {
+         opacity: 1 !important;
+         z-index: 999 !important;
+         display: flex !important;
+     }
+
+     .modal {
+         background-color: rgba(0, 0, 0, 0.3);
+         opacity: 0;
+         position: fixed;
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         transition: all 0.3s ease-in-out;
+         z-index: -1;
+
+         display: flex;
+         align-items: center;
+         justify-content: center;
+     }
+
+     .modal-inner button {
+         background-image: linear-gradient(to right, #663399, #8853bd);
+         border-radius: 20px;
+         border: 0;
+         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+         color: #fff;
+         cursor: pointer;
+         padding: 10px 25px;
+         font-size: 20px;
+     }
+
+     .modal-inner button:active {
+         opacity: 0.8;
+     }
+/* Question List Styles */
+.question-list {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 10px 0;
+}
+
+.question-item {
+    background: linear-gradient(135deg, var(--purplelight), var(--purplemed));
+    border: 3px solid var(--bluemed);
+    border-radius: 15px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.question-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.question-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.question-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--bluevlight);
+}
+
+.question-delete-btn {
+    background: var(--redlight);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 1.6rem;
+    transition: background 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-delete-btn:hover {
+    background: #c55552;
+    transform: scale(1.1);
+}
+
+.question-text {
+    color: var(--bluevlight);
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.question-answer {
+    color: #FFD700;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.question-choices {
+    color: var(--bluevlight);
+    font-size: 1.4rem;
+    margin-top: 8px;
+    padding-left: 10px;
+}
+
+.question-choices div {
+    margin: 3px 0;
+}
+
+/* Modal Form Styles */
+#modal-tambah-soal .form-control {
+    border: 2px solid var(--purplelight);
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    transition: border-color 0.3s;
+}
+
+#modal-tambah-soal .form-control:focus {
+    border-color: var(--purplemed);
+    box-shadow: 0 0 0 0.2rem rgba(156, 112, 189, 0.25);
+    outline: none;
+}
+
+#modal-tambah-soal .form-group {
+    margin-bottom: 15px;
+}
+
+#modal-tambah-soal label {
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Smaller font for question input buttons */
+.btn-tambah-soal-custom {
+    font-size: 1.8rem !important;
+    padding: 1.2rem 2rem !important;
+}
+
+/* Different backgrounds for Essay and Multiple Choice */
+.essay-item {
+    background: linear-gradient(135deg, #FFE5B4, #FFDAB9) !important;
+    border: 3px solid #FFA500 !important;
+}
+
+.essay-item .question-number {
+    color: #8B4513 !important;
+}
+
+.essay-item .question-text,
+.essay-item .question-answer {
+    color: #4A4A4A !important;
+}
+
+.essay-item .question-answer {
+    color: #FF6347 !important;
+}
+
+.pilgan-item {
+    background: linear-gradient(135deg, #E0F7FA, #B2EBF2) !important;
+    border: 3px solid #00BCD4 !important;
+}
+
+.pilgan-item .question-number {
+    color: #006064 !important;
+}
+
+.pilgan-item .question-text,
+.pilgan-item .question-choices {
+    color: #424242 !important;
+}
+
+.pilgan-item .question-answer {
+    color: #00796B !important;
+}
+
+/* Section backgrounds */
+.essay-section {
+    background: rgba(255, 248, 220, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.pilgan-section {
+    background: rgba(224, 247, 250, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+/* Modal Form Styles for Essay */
+#modal-tambah-essay .form-control {
+    border: 2px solid #FFA500;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    transition: border-color 0.3s;
+}
+
+#modal-tambah-essay .form-control:focus {
+    border-color: #FF8C00;
+    box-shadow: 0 0 0 0.2rem rgba(255, 165, 0, 0.25);
+    outline: none;
+}
+
+#modal-tambah-essay .form-group {
+    margin-bottom: 15px;
+}
+
+#modal-tambah-essay label {
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Modal Form Styles for Pilgan */
+#modal-tambah-pilgan .form-control {
+    border: 2px solid #00BCD4;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    transition: border-color 0.3s;
+}
+
+#modal-tambah-pilgan .form-control:focus {
+    border-color: #0097A7;
+    box-shadow: 0 0 0 0.2rem rgba(0, 188, 212, 0.25);
+    outline: none;
+}
+
+#modal-tambah-pilgan .form-group {
+    margin-bottom: 15px;
+}
+
+#modal-tambah-pilgan label {
+    font-size: 1.6rem;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Scrollbar Styles for Question List */
+.question-list::-webkit-scrollbar {
+    width: 10px;
+}
+
+.question-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.question-list::-webkit-scrollbar-thumb {
+    background: var(--purplemed);
+    border-radius: 10px;
+}
+
+.question-list::-webkit-scrollbar-thumb:hover {
+    background: var(--purpledark);
+}
