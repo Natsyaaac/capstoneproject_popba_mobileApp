@@ -1,7 +1,7 @@
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="com.example.myapp" version="1.0.0">
-<name>MyApp</name>
-<description>Aplikasi Cordova Android</description>
-<author email="dev@example.com">Developer</author>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="com.ummet.balloonpop" version="1.0.0">
+<name>Balloon Pop Maths</name>
+<description>Game matematika interaktif untuk anak SD - Belajar sambil bermain!</description>
+<author email="ilkom@ummetro.ac.id">Universitas Muhammadiyah Metro</author>
 <platform name="android">
 <!--  Icon  -->
 <icon src="www/assets/images/icon.png"/>

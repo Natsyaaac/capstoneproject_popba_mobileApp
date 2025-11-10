@@ -25,6 +25,14 @@ Balloon Pop Maths is an interactive educational math game built with HTML5, CSS,
     - Meningkatkan `cordova-audio-wrapper.js` dengan logging dan retry mechanism
     - Menambahkan global `cordovaReady` flag untuk sinkronisasi
     - Menambahkan dokumentasi lengkap di `www/AUDIO-FIX-README.md`
+  - **MUTE/UNMUTE FIX**: Memperbaiki tombol audio on/off
+    - Menambahkan method `setMuted()` dan `getMuted()` pada CordovaAudioWrapper
+    - Update fungsi `muteAudio()` dan `unMuteAudio()` untuk support Cordova
+    - Pause/resume background music saat mute/unmute
+  - **APP NAME FIX**: Update config.xml
+    - Nama aplikasi: "MyApp" → "Balloon Pop Maths"
+    - Package ID: com.ummet.balloonpop
+    - Author: Universitas Muhammadiyah Metro
 
 ## Project Architecture
 

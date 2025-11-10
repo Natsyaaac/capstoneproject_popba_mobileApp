@@ -215,6 +215,35 @@ class CordovaAudioWrapper {
     }
     
     /**
+     * Set muted state
+     */
+    setMuted(muted) {
+        console.log('[Audio] Setting muted to', muted, 'for', this.src);
+        this.muted = muted;
+        
+        if (!this.mediaObject) return;
+        
+        // Untuk Cordova, set volume ke 0 atau restore volume
+        if (this.isCordova && this.mediaObject.setVolume) {
+            this.mediaObject.setVolume(muted ? 0 : this.volume);
+        } else if (this.mediaObject.volume !== undefined) {
+            this.mediaObject.volume = muted ? 0 : this.volume;
+        }
+        
+        // Untuk HTML5 Audio
+        if (this.mediaObject.muted !== undefined) {
+            this.mediaObject.muted = muted;
+        }
+    }
+    
+    /**
+     * Get muted state
+     */
+    getMuted() {
+        return this.muted;
+    }
+    
+    /**
      * Release resources (penting untuk Cordova)
      */
     release() {
