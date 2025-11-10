@@ -1,0 +1,42 @@
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+The message received from the daemon indicates that the daemon has disappeared.
+Build request sent: Build{id=d30d2d46-db8a-4ef0-9793-b62d7b90aee2, currentDir=D:\Project\Capstone_projeck_balonMobileApp\platforms\android}
+Attempting to read last messages from the daemon log...
+Daemon pid: 17620
+  log file: C:\Users\us\.gradle\daemon\8.13\daemon-17620.out.log
+----- Last 20 lines from daemon log file - daemon-17620.out.log -----
+2025-11-10T23:03:21.813+0700 [INFO] [org.gradle.launcher.daemon.server.DefaultIncomingConnectionHandler] Received command: Build{id=d30d2d46-db8a-4ef0-9793-b62d7b90aee2, currentDir=D:\Project\Capstone_projeck_balonMobileApp\platforms\android}.
+2025-11-10T23:03:21.813+0700 [DEBUG] [org.gradle.launcher.daemon.server.DefaultIncomingConnectionHandler] Starting executing command: Build{id=d30d2d46-db8a-4ef0-9793-b62d7b90aee2, currentDir=D:\Project\Capstone_projeck_balonMobileApp\platforms\android} with connection: socket connection from /127.0.0.1:49675 to /127.0.0.1:60007.
+2025-11-10T23:03:21.813+0700 [DEBUG] [org.gradle.launcher.daemon.server.DaemonStateCoordinator] Command execution: started DaemonCommandExecution[command = Build{id=d30d2d46-db8a-4ef0-9793-b62d7b90aee2, currentDir=D:\Project\Capstone_projeck_balonMobileApp\platforms\android}, connection = DefaultDaemonConnection: socket connection from /127.0.0.1:49675 to /127.0.0.1:60007] after 0.5591166666666666 minutes of idle
+2025-11-10T23:03:21.814+0700 [INFO] [org.gradle.launcher.daemon.server.DaemonRegistryUpdater] Marking the daemon as busy, address: [c67afd0d-ed59-498d-9cee-eb2c5f8760d0 port:49675, addresses:[localhost/127.0.0.1]]
+2025-11-10T23:03:21.814+0700 [DEBUG] [org.gradle.launcher.daemon.registry.PersistentDaemonRegistry] Marking busy by address: [c67afd0d-ed59-498d-9cee-eb2c5f8760d0 port:49675, addresses:[localhost/127.0.0.1]]
+2025-11-10T23:03:21.815+0700 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Waiting to acquire exclusive lock on daemon addresses registry.
+2025-11-10T23:03:21.816+0700 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Lock acquired on daemon addresses registry.
+2025-11-10T23:03:21.818+0700 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Releasing lock on daemon addresses registry.
+2025-11-10T23:03:21.818+0700 [DEBUG] [org.gradle.launcher.daemon.server.DaemonStateCoordinator] resetting idle timer
+2025-11-10T23:03:21.819+0700 [DEBUG] [org.gradle.launcher.daemon.server.DaemonStateCoordinator] daemon is running. Sleeping until state changes.
+2025-11-10T23:03:21.819+0700 [INFO] [org.gradle.launcher.daemon.server.exec.StartBuildOrRespondWithBusy] Daemon is about to start building Build{id=d30d2d46-db8a-4ef0-9793-b62d7b90aee2, currentDir=D:\Project\Capstone_projeck_balonMobileApp\platforms\android}. Dispatching build started information...
+2025-11-10T23:03:21.819+0700 [DEBUG] [org.gradle.launcher.daemon.server.SynchronizedDispatchConnection] thread 37: dispatching org.gradle.launcher.daemon.protocol.BuildStarted@6e8b6f7f
+2025-11-10T23:03:21.820+0700 [DEBUG] [org.gradle.launcher.daemon.server.exec.EstablishBuildEnvironment] Configuring env variables: [USERDOMAIN_ROAMINGPROFILE, PROCESSOR_LEVEL, SESSIONNAME, ALLUSERSPROFILE, PROCESSOR_ARCHITECTURE, EFC_13952_1262719628, ANDROID_HOME, PSModulePath, SystemDrive, DIRNAME, USERNAME, PWD, ProgramFiles(x86), APP_HOME, DEFAULT_JVM_OPTS, PATHEXT, DriverData, ProgramData, ProgramW6432, HOMEPATH, PROCESSOR_IDENTIFIER, ProgramFiles, PUBLIC, windir, LOCALAPPDATA, USERDOMAIN, LOGONSERVER, EFC_13952_2775293581, JAVA_HOME, PROMPT, EFC_13952_2283032206, OneDrive, APPDATA, VBOX_HWVIRTEX_IGNORE_SVM_IN_USE, EFC_13952_1592913036, JAVA_EXE, CommonProgramFiles, Path, OS, COMPUTERNAME, PROCESSOR_REVISION, CommonProgramW6432, EFC_13952_3789132940, ComSpec, APP_BASE_NAME, =D:, SystemRoot, TEMP, HOMEDRIVE, USERPROFILE, TMP, CommonProgramFiles(x86), NUMBER_OF_PROCESSORS]
+2025-11-10T23:03:21.821+0700 [DEBUG] [org.gradle.launcher.daemon.server.exec.LogToClient] About to start relaying all logs to the client via the connection.
+2025-11-10T23:03:21.822+0700 [INFO] [org.gradle.launcher.daemon.server.exec.LogToClient] The client will now receive all logging from the daemon (pid: 17620). The daemon log file: C:\Users\us\.gradle\daemon\8.13\daemon-17620.out.log
+2025-11-10T23:03:21.823+0700 [INFO] [org.gradle.launcher.daemon.server.exec.LogAndCheckHealth] Starting 2nd build in daemon [uptime: 48.697 secs, performance: 99%, GC rate: 0.00/s, heap usage: 0% of 2 GiB]
+2025-11-10T23:03:21.823+0700 [DEBUG] [org.gradle.launcher.daemon.server.exec.ExecuteBuild] The daemon has started executing the build.
+2025-11-10T23:03:21.823+0700 [DEBUG] [org.gradle.launcher.daemon.server.exec.ExecuteBuild] Executing build with daemon context: DefaultDaemonContext[uid=5db21bb3-06d4-44e1-ab02-f94859c36b8f,javaHome=C:\Program Files\Java\jdk-21,javaVersion=21,javaVendor=Oracle Corporation,daemonRegistryDir=C:\Users\us\.gradle\daemon,pid=17620,idleTimeout=10800000,priority=NORMAL,applyInstrumentationAgent=true,nativeServicesMode=ENABLED,daemonOpts=-Xmx2048m,-Dfile.encoding=UTF-8,-Duser.country=ID,-Duser.language=en,-Duser.variant]
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.----- End of the daemon log -----
+
+JVM crash log found: file:///D:/Project/Capstone_projeck_balonMobileApp/platforms/android/hs_err_pid17620.log
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Gradle build daemon disappeared unexpectedly (it may have been killed or may have crashed)
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+Command failed with exit code 1: D:\Project\Capstone_projeck_balonMobileApp\platforms\android\tools\gradlew.bat cdvBuildDebug
