@@ -1,7 +1,7 @@
 /**
 * @fileOverview Cordova Audio Wrapper - Compatible dengan Web dan Cordova Apps
 * @author Modified for Cordova compatibility
-* @version 2.0.0
+* @version 2.1.0
 */
 /*jshint esversion: 6 */
 
@@ -18,11 +18,12 @@ class CordovaAudioWrapper {
         this.paused = true;
         this.mediaObject = null;
         this.isCordova = this.detectCordova();
+        this.isReady = false;
         
         // Initialize audio berdasarkan environment
         if (this.isCordova) {
             // Tunggu deviceready untuk Cordova
-            if (typeof device !== 'undefined') {
+            if (window.cordovaReady) {
                 this.initCordovaMedia();
             } else {
                 document.addEventListener('deviceready', () => {
@@ -33,6 +34,7 @@ class CordovaAudioWrapper {
             // Gunakan HTML5 Audio untuk web
             this.mediaObject = new Audio(src);
             this.mediaObject.volume = volume;
+            this.isReady = true;
         }
     }
     
@@ -47,26 +49,40 @@ class CordovaAudioWrapper {
      * Initialize Cordova Media Plugin
      */
     initCordovaMedia() {
+        console.log('[Audio] Initializing Cordova Media for:', this.src);
+        
         if (typeof Media === 'undefined') {
             console.warn('Cordova Media plugin tidak tersedia, fallback ke HTML5 Audio');
             this.mediaObject = new Audio(this.src);
             this.mediaObject.volume = this.volume;
             this.isCordova = false;
+            this.isReady = true;
             return;
         }
         
-        // Sesuaikan path untuk Android
+        // Sesuaikan path untuk platform
         let mediaSrc = this.src;
-        if (device && device.platform && device.platform.toLowerCase() === 'android') {
-            // Untuk Android, gunakan path /android_asset/www/
-            mediaSrc = '/android_asset/www/' + this.src;
+        if (typeof device !== 'undefined' && device.platform) {
+            const platform = device.platform.toLowerCase();
+            console.log('[Audio] Platform detected:', platform);
+            
+            if (platform === 'android') {
+                // Untuk Android, gunakan path /android_asset/www/
+                mediaSrc = '/android_asset/www/' + this.src;
+            } else if (platform === 'ios') {
+                // Untuk iOS, gunakan path relatif
+                mediaSrc = this.src;
+            }
         }
+        
+        console.log('[Audio] Media path:', mediaSrc);
         
         // Create Media object dengan callbacks
         this.mediaObject = new Media(
             mediaSrc,
             // Success callback
             () => {
+                console.log('[Audio] Playback finished:', this.src);
                 this.paused = true;
                 if (this.loop && !this.muted) {
                     // Replay jika loop enabled
@@ -77,11 +93,16 @@ class CordovaAudioWrapper {
             },
             // Error callback
             (err) => {
-                console.error('Media Error:', JSON.stringify(err));
+                console.error('[Audio] Media Error for', this.src, ':', JSON.stringify(err));
                 // Fallback ke HTML5 jika Cordova Media gagal
                 this.mediaObject = new Audio(this.src);
                 this.mediaObject.volume = this.volume;
                 this.isCordova = false;
+                this.isReady = true;
+            },
+            // Status callback
+            (status) => {
+                console.log('[Audio] Status for', this.src, ':', status);
             }
         );
         
@@ -89,18 +110,35 @@ class CordovaAudioWrapper {
         if (this.mediaObject.setVolume) {
             this.mediaObject.setVolume(this.volume);
         }
+        
+        this.isReady = true;
+        console.log('[Audio] Initialized successfully:', this.src);
     }
     
     /**
      * Play audio
      */
     play() {
-        if (!this.mediaObject) {
-            console.warn('Media object belum ready');
+        if (!this.isReady || !this.mediaObject) {
+            console.warn('[Audio] Media object belum ready untuk', this.src);
+            // Retry after delay if in Cordova and not ready
+            if (this.isCordova) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        if (this.isReady && this.mediaObject) {
+                            this.play().then(resolve);
+                        } else {
+                            console.error('[Audio] Timeout waiting for media ready');
+                            resolve();
+                        }
+                    }, 500);
+                });
+            }
             return Promise.reject('Media not ready');
         }
         
         if (this.muted) {
+            console.log('[Audio] Muted, skipping play:', this.src);
             return Promise.resolve();
         }
         
@@ -109,10 +147,11 @@ class CordovaAudioWrapper {
         if (this.isCordova && this.mediaObject.play) {
             // Cordova Media
             try {
+                console.log('[Audio] Playing Cordova media:', this.src);
                 this.mediaObject.play();
                 return Promise.resolve();
             } catch (e) {
-                console.error('Error playing Cordova media:', e);
+                console.error('[Audio] Error playing Cordova media:', e);
                 return Promise.reject(e);
             }
         } else if (this.mediaObject.play) {
@@ -120,7 +159,7 @@ class CordovaAudioWrapper {
             const playPromise = this.mediaObject.play();
             if (playPromise !== undefined) {
                 return playPromise.catch(err => {
-                    console.warn('Autoplay blocked:', err);
+                    console.warn('[Audio] Autoplay blocked:', err);
                 });
             }
             return Promise.resolve();

@@ -19,10 +19,15 @@
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-media": {}
+      "cordova-plugin-device": {},
+      "cordova-plugin-media": {},
+      "cordova-plugin-file": {}
     },
     "platforms": [
       "android"
     ]
+  },
+  "dependencies": {
+    "cordova-plugin-device": "^3.0.0"
   }
 }

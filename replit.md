@@ -16,10 +16,15 @@ Balloon Pop Maths is an interactive educational math game built with HTML5, CSS,
 **Audio**: Cordova Media Plugin with HTML5 Audio fallback
 
 ## Recent Changes
-- **2025-11-10**: Initial Replit setup
+- **2025-11-10**: Initial Replit setup & Cordova Audio Fix
   - Configured http-server to serve the `www` directory on port 5000
   - Added Replit-specific entries to .gitignore
   - Created documentation in replit.md
+  - **AUDIO FIX**: Memperbaiki masalah audio di Cordova mobile apps
+    - Menambahkan plugin `cordova-plugin-device` untuk deteksi platform
+    - Meningkatkan `cordova-audio-wrapper.js` dengan logging dan retry mechanism
+    - Menambahkan global `cordovaReady` flag untuk sinkronisasi
+    - Menambahkan dokumentasi lengkap di `www/AUDIO-FIX-README.md`
 
 ## Project Architecture
 
@@ -49,8 +54,9 @@ Balloon Pop Maths is an interactive educational math game built with HTML5, CSS,
 - **Font Awesome** - Icons
 - **Google Fonts** (Nunito, Rajdhani) - Typography
 - **EmailJS** - Contact functionality
-- **Cordova Plugins**:
-  - cordova-plugin-media (audio)
+- **Cordova Plugins** (untuk mobile app):
+  - cordova-plugin-device (platform detection) ⭐ PENTING untuk audio
+  - cordova-plugin-media (audio playback)
   - cordova-plugin-file (file access)
 
 ## Workflow Configuration
@@ -68,10 +74,21 @@ Balloon Pop Maths is an interactive educational math game built with HTML5, CSS,
 The application is served from the `www` directory as a static site. All HTML, CSS, JS, and assets are loaded from this folder.
 
 ### Audio System
-The game uses a dual-mode audio system:
-- **Web Mode**: HTML5 Audio API
-- **Cordova Mode**: Cordova Media Plugin
-The `cordova-audio-wrapper.js` automatically detects the environment and uses the appropriate method.
+The game uses a dual-mode audio system with **FULL CORDOVA SUPPORT**:
+- **Web Mode**: HTML5 Audio API (untuk browser)
+- **Cordova Mode**: Cordova Media Plugin (untuk Android/iOS apps)
+
+**Fitur Audio Wrapper v2.1**:
+- ✅ Auto-detect platform (Android/iOS)
+- ✅ Path adjustment otomatis (`/android_asset/www/` untuk Android)
+- ✅ Retry mechanism jika media belum ready
+- ✅ Console logging untuk debugging
+- ✅ Fallback ke HTML5 jika Media plugin gagal
+- ✅ Global deviceready flag untuk sinkronisasi
+
+File: `www/assets/js/cordova-audio-wrapper.js`
+
+**Dokumentasi**: Lihat `www/AUDIO-FIX-README.md` untuk panduan lengkap debugging dan build Cordova.
 
 ### Cordova Setup
 For building as a mobile app, see `www/CORDOVA-SETUP.md` for detailed instructions on:

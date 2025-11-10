@@ -709,6 +709,16 @@
     <!-- Cordova JS (akan di-inject otomatis saat build Cordova) -->
     <script src="cordova.js"></script>
     
+    <!-- Cordova deviceready handler -->
+    <script>
+        // Set global flag when Cordova is ready
+        window.cordovaReady = false;
+        document.addEventListener('deviceready', function() {
+            console.log('[Cordova] Device ready event fired');
+            window.cordovaReady = true;
+        }, false);
+    </script>
+    
     <script src="https://code.jquery.com/jquery-3.2.1.js"
         integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
