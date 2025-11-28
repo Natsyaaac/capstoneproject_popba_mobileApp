@@ -1,18 +1,32 @@
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="com.ummet.balloonpop" version="1.0.0">
-<name>Balloon Pop Maths</name>
-<description>Game matematika interaktif untuk anak SD - Belajar sambil bermain!</description>
-<author email="ilkom@ummetro.ac.id">Universitas Muhammadiyah Metro</author>
-<platform name="android">
-<!--  Icon  -->
-<icon src="www/assets/images/icon.png"/>
-<!--  Splash API baru  -->
-<preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/assets/images/splash.png"/>
-<preference name="AndroidWindowSplashScreenBackground" value="#ffffff"/>
-<preference name="AndroidPersistentFileLocation" value="Compatibility" />
-</platform>
-<!--  Global preferences  -->
-<preference name="SplashMaintainAspectRatio" value="true"/>
-<preference name="ShowSplashScreen" value="true"/>
-<preference name="ShowSplashScreenSpinner" value="false"/>
-<preference name="SplashScreenDelay" value="0"/>
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.balloonpopmaths.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets">
+    <name>Balloon Pop Maths</name>
+    <description>Game matematika interaktif untuk anak SD - Belajar sambil bermain!</description>
+    <author email="ilkom@ummetro.ac.id">Universitas Muhammadiyah Metro</author>
+    <content src="index.html" />
+    <platform name="android">
+        <icon src="www/assets/images/icon.png" />
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/assets/images/splash.png" />
+        <preference name="AndroidWindowSplashScreenBackground" value="#ffffff" />
+        <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+        <preference name="AndroidInsecureFileModeEnabled" value="true" />
+    </platform>
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="ShowSplashScreen" value="true" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="SplashScreenDelay" value="0" />
+    <preference name="Orientation" value="portrait" />
+    <preference name="BackgroundColor" value="0xffffffff" />
+    <plugin name="cordova-plugin-splashscreen" spec="^6.0.1" />
+    <plugin name="cordova-plugin-device" spec="^2.1.0" />
+    <plugin name="cordova-plugin-vibration" spec="^3.1.1" />
+    <plugin name="cordova-plugin-file" spec="^7.0.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^5.0.0" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-navigation href="https://*.firebaseapp.com/*" />
+    <allow-navigation href="https://*.googleapis.com/*" />
+    <allow-navigation href="https://*.gstatic.com/*" />
+    <meta content="&#xD;&#xA;            default-src 'self' data: blob: https:;&#xD;&#xA;            img-src 'self' data: blob: https://*.firebasestorage.googleapis.com;&#xD;&#xA;            script-src 'self' 'unsafe-inline' 'unsafe-eval' https:;&#xD;&#xA;            style-src 'self' 'unsafe-inline' https:;&#xD;&#xA;            connect-src 'self' https:;&#xD;&#xA;        " http-equiv="Content-Security-Policy" />
 </widget>

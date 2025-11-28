@@ -196,6 +196,7 @@ function modeExam() {
 
     $("#btn-exam-1").html("Essay");
     $("#btn-exam-2").html("Pilihan Ganda");
+    $("#btn-exam-3").html("Visual");
 }
 /**
 * [Function to return an array of button id strings, given button prefix]
@@ -553,8 +554,22 @@ function setQuestion(qCurrent) {
     // Set question string from current question array
     let qString = qCurrent[0];
     
-    // Check if this is multiple choice exam mode (has choices in qCurrent[2])
-    if (qCurrent.length > 2 && qCurrent[2]) {
+    // Check if this is visual mode (has imageData in qCurrent[3])
+    if (qCurrent.length > 3 && qCurrent[3]) {
+        // Visual mode - display image as the question with pinch-to-zoom
+        let imageData = qCurrent[3];
+        let visualHtml = '<div id="question-image-container" class="visual-zoom-container">';
+        visualHtml += '<div class="zoom-hint"><i class="fas fa-search-plus"></i> Sentuh gambar untuk memperbesar</div>';
+        visualHtml += '<img id="visual-question-img" src="' + imageData + '" alt="Soal Visual" class="visual-question-image">';
+        visualHtml += '</div>';
+        if (qString && qString !== 'Soal Visual') {
+            visualHtml += '<div class="visual-question-desc" style="font-size: 1.4rem; margin-top: 8px; color: #A2529A;">' + qString + '</div>';
+        }
+        $("#question").html(visualHtml);
+        
+        // Initialize zoom functionality for visual question
+        initVisualZoom();
+    } else if (qCurrent.length > 2 && qCurrent[2]) {
         // For multiple choice, display question + choices in the question box
         let choices = qCurrent[2];
         let choicesHtml = '<div class="mc-question-text">' + qString + '</div>';
@@ -656,6 +671,15 @@ $("#play").on("click", function () {
                     showNotification('Silakan input soal Pilihan Ganda terlebih dahulu sebelum memulai ujian! 📋');
                     return;
                 }
+            } else if (subModeText === 'Visual') {
+                const visualQuestions = getVisualQuestions();
+                hasQuestions = visualQuestions && visualQuestions.length > 0;
+                
+                if (!hasQuestions) {
+                    // Tampilkan notifikasi
+                    showNotification('Silakan input soal Visual terlebih dahulu sebelum memulai ujian! 🖼️');
+                    return;
+                }
             }
         }
     }
@@ -696,7 +720,167 @@ document.addEventListener("DOMContentLoaded", () => {
             $("#options-add-up").hide(400);
             $("#options-add-operator").hide(400);
             $("#options-add-exam").hide(400);
-            // aktifkan class untuk tampil
         }
     });
 });
+
+/**
+ * Visual zoom state - shared across function calls
+ */
+let visualZoomState = {
+    overlay: null,
+    scale: 1,
+    lastScale: 1,
+    initialDistance: 0,
+    keydownHandler: null,
+    initialized: false
+};
+
+/**
+ * Initialize visual zoom functionality for question images
+ * Supports pinch-to-zoom on touch devices and click to zoom on desktop
+ * Reuses a single overlay element to prevent memory leaks
+ */
+function initVisualZoom() {
+    const container = document.getElementById('question-image-container');
+    const img = document.getElementById('visual-question-img');
+    
+    if (!container || !img) return;
+    
+    // Remove existing overlay if present to prevent duplicates
+    const existingOverlay = document.getElementById('visual-zoom-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+    
+    // Remove previous keydown handler if exists
+    if (visualZoomState.keydownHandler) {
+        document.removeEventListener('keydown', visualZoomState.keydownHandler);
+        visualZoomState.keydownHandler = null;
+    }
+    
+    // Reset scale
+    visualZoomState.scale = 1;
+    visualZoomState.lastScale = 1;
+    
+    // Create fullscreen overlay for zoomed view
+    const overlay = document.createElement('div');
+    overlay.id = 'visual-zoom-overlay';
+    overlay.className = 'visual-zoom-overlay';
+    overlay.innerHTML = `
+        <div class="zoom-controls">
+            <button class="zoom-btn zoom-in" title="Perbesar"><i class="fas fa-plus"></i></button>
+            <button class="zoom-btn zoom-out" title="Perkecil"><i class="fas fa-minus"></i></button>
+            <button class="zoom-btn zoom-close" title="Tutup"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="zoom-image-wrapper">
+            <img src="${img.src}" alt="Soal Visual" class="zoomed-image">
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    visualZoomState.overlay = overlay;
+    
+    const zoomedImg = overlay.querySelector('.zoomed-image');
+    const zoomIn = overlay.querySelector('.zoom-in');
+    const zoomOut = overlay.querySelector('.zoom-out');
+    const zoomClose = overlay.querySelector('.zoom-close');
+    
+    function openZoomOverlay() {
+        visualZoomState.scale = 1;
+        zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeZoomOverlay() {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        visualZoomState.scale = 1;
+        zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+    }
+    
+    // Click on image to open fullscreen zoom
+    img.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openZoomOverlay();
+    });
+    
+    container.addEventListener('click', function(e) {
+        if (e.target === img) {
+            openZoomOverlay();
+        }
+    });
+    
+    // Zoom controls
+    zoomIn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (visualZoomState.scale < 3) {
+            visualZoomState.scale += 0.5;
+            zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+        }
+    });
+    
+    zoomOut.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (visualZoomState.scale > 0.5) {
+            visualZoomState.scale -= 0.5;
+            zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+        }
+    });
+    
+    zoomClose.addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeZoomOverlay();
+    });
+    
+    // Click overlay background to close
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay || e.target.classList.contains('zoom-image-wrapper')) {
+            closeZoomOverlay();
+        }
+    });
+    
+    // Pinch to zoom on touch devices
+    overlay.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 2) {
+            visualZoomState.initialDistance = getDistance(e.touches[0], e.touches[1]);
+            visualZoomState.lastScale = visualZoomState.scale;
+        }
+    }, { passive: true });
+    
+    overlay.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const currentDistance = getDistance(e.touches[0], e.touches[1]);
+            const newScale = visualZoomState.lastScale * (currentDistance / visualZoomState.initialDistance);
+            visualZoomState.scale = Math.min(Math.max(0.5, newScale), 3);
+            zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+        }
+    }, { passive: false });
+    
+    function getDistance(touch1, touch2) {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+    
+    // Keyboard support - store reference for cleanup
+    visualZoomState.keydownHandler = function(e) {
+        if (overlay.classList.contains('active')) {
+            if (e.key === 'Escape') {
+                closeZoomOverlay();
+            } else if (e.key === '+' || e.key === '=') {
+                if (visualZoomState.scale < 3) {
+                    visualZoomState.scale += 0.5;
+                    zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+                }
+            } else if (e.key === '-') {
+                if (visualZoomState.scale > 0.5) {
+                    visualZoomState.scale -= 0.5;
+                    zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+                }
+            }
+        }
+    };
+    document.addEventListener('keydown', visualZoomState.keydownHandler);
+}

@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
 }
-
 #wrapper {
   position: fixed;        /* sebelumnya relative */
   bottom: 0;              /* tempel di bawah layar */
@@ -15,7 +14,6 @@
   pointer-events: none;   /* biar tidak ganggu tombol di atasnya */
 }
 
-
 /* === SVG === */
 svg {
   position: absolute;
@@ -27,6 +25,9 @@ svg {
   z-index: -1000;
 }
 
+.night-mode svg {
+ background: radial-gradient(ellipse at 30% 30%, #1a1a3e 0%, #0f0f23 50%, #0a0a15 100%);
+}
 
 
 /* horizontal flip */
@@ -34,16 +35,73 @@ svg #cloud2 {
   transform: scale(-1, 1);
   transform-origin: 50% 50%;
 }
+/* === DAY MODE (default) === */
+
+#clouds-night {
+  display: none;
+}
+
+#sun {
+  display: block;
+}
+
+#moon {
+  display: none;
+}
+
+#stars {
+  display: none;
+}
 
 
+body.night-mode #sun {
+  display: none !important;
+}
 
+body.night-mode #moon {
+  display: block !important;
+}
 
+body.night-mode #stars {
+  display: block !important;
+}
 
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
 
+@keyframes twinkle-delay1 {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.2; }
+}
 
+@keyframes twinkle-delay2 {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.1; }
+}
 
+.star-twinkle {
+  animation: twinkle 2s ease-in-out infinite;
+}
 
+.star-twinkle-delay1 {
+  animation: twinkle-delay1 2.5s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
 
+.star-twinkle-delay2 {
+  animation: twinkle-delay2 3s ease-in-out infinite;
+  animation-delay: 1s;
+}
 
+@keyframes moon-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.6; }
+}
 
-/* === ANIMATIONS === */
+body.night-mode #moon-glow {
+  animation: moon-glow 4s ease-in-out infinite;
+}
+
+/* === NIGHT CLOUD FLOATING ANIMATIONS === */

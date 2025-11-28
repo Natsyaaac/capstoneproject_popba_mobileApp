@@ -1,31 +1,50 @@
 {
   "name": "com.ummet.balloonpop",
   "displayName": "Balloon Pop Maths",
-  "version": "1.0.0",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "version": "2.0.0",
+  "description": "Balloon Pop Maths - Interactive Educational Math Game (Mobile Version)",
   "main": "index.js",
+  "author": "Kelompok 14 - Universitas Muhammadiyah Metro",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "cordova prepare",
+    "build:android": "cordova build android",
+    "run:android": "cordova run android",
+    "clean": "cordova clean"
   },
   "keywords": [
-    "ecosystem:cordova"
+    "cordova",
+    "education",
+    "math",
+    "game",
+    "kids"
   ],
-  "author": "Apache Cordova Team",
-  "license": "Apache-2.0",
-  "devDependencies": {
-    "cordova-android": "^14.0.1",
+  "dependencies": {
     "cordova-plugin-device": "^3.0.0",
     "cordova-plugin-file": "^8.1.3",
+    "cordova-plugin-inappbrowser": "^5.0.0",
+    "cordova-plugin-network-information": "^3.0.0",
+    "cordova-plugin-splashscreen": "^6.0.1",
+    "cordova-plugin-vibration": "^3.1.1"
+  },
+  "devDependencies": {
+    "cordova": "^12.0.0",
+    "cordova-android": "^14.0.1",
     "cordova-plugin-media": "^7.0.0"
   },
   "cordova": {
-    "plugins": {
-      "cordova-plugin-device": {},
-      "cordova-plugin-media": {},
-      "cordova-plugin-file": {}
-    },
+    "id": "com.ummet.balloonpop",
     "platforms": [
       "android"
-    ]
+    ],
+    "plugins": {
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-vibration": {},
+      "cordova-plugin-file": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-media": {}
+    }
   }
 }

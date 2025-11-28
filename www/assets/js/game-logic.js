@@ -28,10 +28,11 @@ function playGame() {
     bpmQCurrent = setQuestion(bpmQArray[bpmCQ]);
     bpmAnswerArray = answerArray(bpmGameMode, bpmQCurrent);
     
-    // Check if this is exam mode with multiple choice
+    // Check if this is exam mode with multiple choice or visual
     const isMultipleChoice = bpmGameMode === "exam" && bpmOptionArray[0] === "Pilihan Ganda";
+    const isVisualMode = bpmGameMode === "exam" && bpmOptionArray[0] === "Visual";
     
-    if (isMultipleChoice) {
+    if (isMultipleChoice || isVisualMode) {
         // Multiple choice mode - use balloons for answers
         // Rearrange array for proper balloon positions: A, B, empty, C, D, empty
         // This maps to: left-1, left-2, left-3(hidden), right-1, right-2, right-3(hidden)
@@ -111,6 +112,7 @@ function playGame() {
     console.log("✅ Answers:", bpmAnswerArray);
     console.log("🏆 Score:", bpmScoreArray);
     console.log("🎲 Is Multiple Choice:", isMultipleChoice);
+    console.log("🖼️ Is Visual Mode:", isVisualMode);
    
     $("#heading-section").hide(400);
     $("#options-section").hide(400);
@@ -138,21 +140,32 @@ function checkSelectedAnswer() {
     // Initialise current score
     let currentScore;
     
-    // For multiple choice, check if selected letter maps to correct answer
+    // For multiple choice or visual, check if selected letter maps to correct answer
     let actualAnswer = sAnswer;
     const isMultipleChoice = bpmGameMode === "exam" && bpmOptionArray[0] === "Pilihan Ganda";
+    const isVisualMode = bpmGameMode === "exam" && bpmOptionArray[0] === "Visual";
     
-    if (isMultipleChoice && bpmMultipleChoiceMapping[sAnswer]) {
-        // Get the actual answer text from the letter (A, B, C, D)
+    // Determine correct answer for comparison
+    let correctAnswer = bpmQCurrent[1];
+    
+    if (isVisualMode) {
+        // For Visual mode: correct answer is stored as letter (A, B, C, D)
+        // User clicks balloon with letter (A, B, C, D)
+        // Compare letter to letter directly
+        console.log("🎯 Selected Letter:", sAnswer);
+        console.log("✅ Correct Answer Letter:", correctAnswer);
+        actualAnswer = sAnswer; // Keep as letter for comparison
+    } else if (isMultipleChoice && bpmMultipleChoiceMapping[sAnswer]) {
+        // For Pilihan Ganda: correct answer is the text, mapping letter to text
         actualAnswer = bpmMultipleChoiceMapping[sAnswer];
         console.log("🎯 Selected Letter:", sAnswer);
         console.log("📝 Actual Answer:", actualAnswer);
-        console.log("✅ Correct Answer:", bpmQCurrent[1]);
+        console.log("✅ Correct Answer:", correctAnswer);
     }
     
     // Check selected answer against correct answer from current question array
     // If answer is correct
-    if (actualAnswer == bpmQCurrent[1]) {
+    if (actualAnswer == correctAnswer) {
         // Play balloon popping sound
         soundPop.play();
         // Show balloon popping animation
@@ -175,8 +188,9 @@ function checkSelectedAnswer() {
             // Check if next question is exam mode
             const isNextExamMode = bpmGameMode === "exam";
             const isNextMultipleChoice = isNextExamMode && bpmOptionArray[0] === "Pilihan Ganda";
+            const isNextVisualMode = isNextExamMode && bpmOptionArray[0] === "Visual";
             
-            if (isNextMultipleChoice) {
+            if (isNextMultipleChoice || isNextVisualMode) {
                 // Multiple choice - rearrange array for proper balloon positions
                 let rearrangedArray = [
                     bpmAnswerArray[0],  // A -> left-1

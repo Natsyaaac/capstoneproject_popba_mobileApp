@@ -19,13 +19,17 @@ imgBalloonGreen.src = "assets/images/balloon-green-sprite.png";
 const imgBalloonYellow = new Image();
 imgBalloonYellow.src = "assets/images/balloon-yellow-sprite.png";
 
-// Buffer sound effects dengan Cordova compatibility
-// Gunakan createAudio dari cordova-audio-wrapper.js
-const soundPop = createAudio("assets/sounds/pop.mp3", 0.5);
-const soundDeflate = createAudio("assets/sounds/deflate.mp3", 0.5);
-const soundHighScore = createAudio("assets/sounds/high-score.mp3", 0.5);
-const soundUnlucky = createAudio("assets/sounds/unlucky.mp3", 0.5);
-const soundWellDone = createAudio("assets/sounds/well-done.mp3", 0.5);
+// Buffer sound effects, set volume to 0.6 //
+const soundPop = new Audio("assets/sounds/pop.mp3");
+soundPop.volume = 0.5;
+const soundDeflate = new Audio("assets/sounds/deflate.mp3");
+soundDeflate.volume = 0.5;
+const soundHighScore = new Audio("assets/sounds/high-score.mp3");
+soundHighScore.volume = 0.5;
+const soundUnlucky = new Audio("assets/sounds/unlucky.mp3");
+soundUnlucky.volume = 0.5;
+const soundWellDone = new Audio("assets/sounds/well-done.mp3");
+soundWellDone.volume = 0.5;
 
 // Initialise global variables //
 let bpmSoundEffectsMuted = false;
