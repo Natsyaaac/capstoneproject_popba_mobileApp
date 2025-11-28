@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <!-- X-UA-Compatible meta tag, to render web pages in older versions of Internet Explorer-->
@@ -679,11 +680,12 @@
     <div class="modal" id="modal-tambah-visual" style="display: none;">
         <div class="modal-inner modal-visual-upload" style="max-width: 700px;">
             <h3 style="color: #A2529A; text-align: center; margin-bottom: 15px;">🖼️ Tambah Soal Visual</h3>
-            
+
             <!-- Important Note -->
             <div class="visual-upload-note">
                 <i class="fas fa-info-circle"></i>
-                <span><strong>Penting:</strong> Gambar harus berisi soal pilihan ganda yang sudah di-crop dengan rapi. Format yang diterima: JPG, JPEG, PNG (maks 5MB)</span>
+                <span><strong>Penting:</strong> Gambar harus berisi soal pilihan ganda yang sudah di-crop dengan rapi.
+                    Format yang diterima: JPG, JPEG, PNG (maks 5MB)</span>
             </div>
 
             <form id="form-tambah-visual">
@@ -716,30 +718,36 @@
 
                 <!-- Deskripsi Soal (Opsional) -->
                 <div class="form-group">
-                    <label for="input-pertanyaan-visual" style="color: #A2529A; font-weight: bold;">Deskripsi Soal (Opsional):</label>
+                    <label for="input-pertanyaan-visual" style="color: #A2529A; font-weight: bold;">Deskripsi Soal
+                        (Opsional):</label>
                     <textarea id="input-pertanyaan-visual" class="form-control" rows="2"
                         placeholder="Tambahkan deskripsi atau catatan untuk soal ini..."></textarea>
                 </div>
 
                 <!-- Pilihan Jawaban -->
                 <div class="form-group">
-                    <label style="color: #A2529A; font-weight: bold;">Pilihan Jawaban (untuk ditampilkan di balon):</label>
+                    <label style="color: #A2529A; font-weight: bold;">Pilihan Jawaban (untuk ditampilkan di
+                        balon):</label>
                     <div class="visual-choices-grid">
                         <div class="visual-choice-input">
                             <span class="choice-label">A</span>
-                            <input type="text" id="input-pilihan-visual-1" class="form-control" placeholder="Jawaban A" required>
+                            <input type="text" id="input-pilihan-visual-1" class="form-control" placeholder="Jawaban A"
+                                required>
                         </div>
                         <div class="visual-choice-input">
                             <span class="choice-label">B</span>
-                            <input type="text" id="input-pilihan-visual-2" class="form-control" placeholder="Jawaban B" required>
+                            <input type="text" id="input-pilihan-visual-2" class="form-control" placeholder="Jawaban B"
+                                required>
                         </div>
                         <div class="visual-choice-input">
                             <span class="choice-label">C</span>
-                            <input type="text" id="input-pilihan-visual-3" class="form-control" placeholder="Jawaban C" required>
+                            <input type="text" id="input-pilihan-visual-3" class="form-control" placeholder="Jawaban C"
+                                required>
                         </div>
                         <div class="visual-choice-input">
                             <span class="choice-label">D</span>
-                            <input type="text" id="input-pilihan-visual-4" class="form-control" placeholder="Jawaban D" required>
+                            <input type="text" id="input-pilihan-visual-4" class="form-control" placeholder="Jawaban D"
+                                required>
                         </div>
                     </div>
                 </div>
@@ -775,7 +783,8 @@
                         style="width: 48%;">Batal</button>
                     <button type="submit" id="btn-submit-visual" class="btn btn-lg btn-info" style="width: 48%;">
                         <span id="submit-text">Simpan Soal</span>
-                        <span id="submit-loading" style="display: none;"><i class="fas fa-spinner fa-spin"></i> Menyimpan...</span>
+                        <span id="submit-loading" style="display: none;"><i class="fas fa-spinner fa-spin"></i>
+                            Menyimpan...</span>
                     </button>
                 </div>
             </form>
@@ -897,7 +906,7 @@
 
             <animateTransform xlink:href="#cloud3" attributeName="transform" type="translate" dur="5s" begin="0.6"
                 repeatCount="indefinite" values="0 0 ; -15 -5 ; 0 0" />
-            
+
         </svg>
 
     </div>
@@ -929,26 +938,29 @@
     <script src="assets/js/background.js"></script>
     <!-- Service Worker Registration -->
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
+        // REGISTER SERVICE WORKER (web / PWA mode)
+        if (!window.cordova && 'serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('sw.js')
+                    .then(function (registration) {
                         console.log('ServiceWorker registered:', registration.scope);
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         console.log('ServiceWorker registration failed:', error);
                     });
             });
         }
-        
+
+        // CORDOVA INITIALIZATION
         if (window.cordova) {
-            document.addEventListener('deviceready', function() {
+            document.addEventListener('deviceready', function () {
                 console.log('Cordova is ready');
                 if (window.PlatformService) {
                     window.PlatformService.init();
                 }
             }, false);
         }
+
     </script>
 </body>
 
