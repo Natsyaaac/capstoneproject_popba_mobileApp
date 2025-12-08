@@ -31,11 +31,16 @@ svg {
 
 
 /* horizontal flip */
-svg #cloud2 {
+svg #cloud2,
+svg #cloud2-night {
   transform: scale(-1, 1);
   transform-origin: 50% 50%;
 }
 /* === DAY MODE (default) === */
+
+#clouds-day {
+  display: block;
+}
 
 #clouds-night {
   display: none;
@@ -53,6 +58,14 @@ svg #cloud2 {
   display: none;
 }
 
+/* === NIGHT MODE === */
+body.night-mode #clouds-day {
+  display: none !important;
+}
+
+body.night-mode #clouds-night {
+  display: block !important;
+}
 
 body.night-mode #sun {
   display: none !important;

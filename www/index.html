@@ -26,13 +26,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
     <!-- Link to Email JS -->
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#7CC0FF">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Balloon Pop Maths">
-    <link rel="apple-touch-icon" href="assets/images/icon.png">
     <title>Balloon Pop Maths</title>
 </head>
 
@@ -827,13 +820,41 @@
                     <stop offset="1" stop-color="#ded7e5" />
                 </linearGradient>
 
+                <linearGradient id="gradient_cloud_night1" x1="658.39" y1="-55.99" x2="646.49" y2="574.71"
+                    gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#3d4a5c" />
+                    <stop offset="0.2" stop-color="#354258" />
+                    <stop offset="0.38" stop-color="#2d3a52" />
+                    <stop offset="0.56" stop-color="#26334d" />
+                    <stop offset="0.73" stop-color="#1f2c47" />
+                    <stop offset="0.91" stop-color="#182540" />
+                    <stop offset="1" stop-color="#141f38" />
+                </linearGradient>
+
+                <linearGradient id="gradient_cloud_night2" x1="623.27" y1="84.56" x2="628.08" y2="789.71"
+                    xlink:href="#gradient_cloud_night1" />
+
+                <linearGradient id="gradient_cloud_night3" x1="624.83" y1="567.32" x2="624.83" y2="818.88"
+                    gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#4a5a70" />
+                    <stop offset="1" stop-color="#2a3548" />
+                </linearGradient>
+
                 <path id="cloud"
                     d="M1429.3,399.4a98.2,98.2,0,0,0-97.1-98.2,42.6,42.6,0,0,0-81.6,17,43.7,43.7,0,0,0,4.5,19.1,97.8,97.8,0,0,0-22.1,62.1,92.3,92.3,0,0,0,.7,11.8,98.2,98.2,0,0,0-82,59.1,41.8,41.8,0,0,0-16.6-3.4,42.6,42.6,0,0,0-42.6,42.6,40.7,40.7,0,0,0,2.3,13.5,76,76,0,0,0-69,57,44,44,0,0,0-8.3-.9A39.5,39.5,0,0,0,987,593.5a113.1,113.1,0,0,0-81.7-34.8h-4.1a42.4,42.4,0,0,0-74.8-5.9,39.3,39.3,0,0,0-45.1,6.4,98.2,98.2,0,0,0-167.4-49.2A75.8,75.8,0,0,0,559,534.7a94,94,0,0,0-16.9-1.5A97.5,97.5,0,0,0,471.8,563a39.5,39.5,0,0,0-68,12.5,116.8,116.8,0,0,0-28.2-12.4c.3-2.2,8.4-50.1-42-49.4a43,43,0,0,0-40.8,30.5,96.3,96.3,0,0,0-10.8-.7,87.8,87.8,0,0,0-40.9,10.1,87.8,87.8,0,0,0-138-68A98.3,98.3,0,0,0,16,411.2a115,115,0,0,0,.7-11.8A98.1,98.1,0,0,0-45,308.2V591.8c.6.4,0,63.2,0,63.2H1314.5a113.3,113.3,0,0,0-21.5-62.1c28.2-17.3,46.8-91.8,46.3-95.7A98.2,98.2,0,0,0,1429.3,399.4Z" />
             </defs>
 
-            <use xlink:href="#cloud" id="cloud1" fill="url(#gradient_cloud1)" x="-40" y="-100" />
-            <use xlink:href="#cloud" id="cloud2" fill="url(#gradient_cloud2)" x="40" y="-60" />
-            <use xlink:href="#cloud" id="cloud3" fill="url(#gradient_cloud3)" x="0" y="0" />
+            <g id="clouds-day">
+                <use xlink:href="#cloud" id="cloud1" fill="url(#gradient_cloud1)" x="-40" y="-100" />
+                <use xlink:href="#cloud" id="cloud2" fill="url(#gradient_cloud2)" x="40" y="-60" />
+                <use xlink:href="#cloud" id="cloud3" fill="url(#gradient_cloud3)" x="0" y="0" />
+            </g>
+
+            <g id="clouds-night" style="display: none;">
+                <use xlink:href="#cloud" id="cloud1-night" fill="url(#gradient_cloud_night1)" x="-40" y="-100" />
+                <use xlink:href="#cloud" id="cloud2-night" fill="url(#gradient_cloud_night2)" x="40" y="-60" />
+                <use xlink:href="#cloud" id="cloud3-night" fill="url(#gradient_cloud_night3)" x="0" y="0" />
+            </g>
 
             <g id="sun" transform="translate(-90, 110)">
                 <circle id="shine" filter="url(#filter_sunBlur)" fill="rgba(255,206,44,0.6)" cx="332" cy="32" r="183" />
@@ -907,6 +928,15 @@
             <animateTransform xlink:href="#cloud3" attributeName="transform" type="translate" dur="5s" begin="0.6"
                 repeatCount="indefinite" values="0 0 ; -15 -5 ; 0 0" />
 
+            <animateTransform xlink:href="#cloud1-night" attributeName="transform" type="translate" dur="12s" begin="0"
+                repeatCount="indefinite" values="0 0 ; 30 20 ; 0 0" />
+
+            <animateTransform xlink:href="#cloud2-night" attributeName="transform" type="translate" dur="6s" begin="1"
+                repeatCount="indefinite" values="0 0 ; 20 12 ; 0 0" />
+
+            <animateTransform xlink:href="#cloud3-night" attributeName="transform" type="translate" dur="8s" begin="0.5"
+                repeatCount="indefinite" values="0 0 ; -12 -4 ; 0 0" />
+
         </svg>
 
     </div>
@@ -919,14 +949,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
-    <!-- Platform and Offline Services (load first) -->
-    <script src="assets/js/platform-service.js"></script>
-    <script src="assets/js/offline-service.js"></script>
-    <!-- Core Application Scripts -->
     <script src="assets/js/firebase-config.js"></script>
     <script src="assets/js/initialisation.js"></script>
     <script src="assets/js/audio.js"></script>
     <script src="assets/js/animation.js"></script>
+    <script src="assets/js/platform-service.js"></script>
+    <script src="assets/js/offline-service.js"></script>
     <script src="assets/js/display.js"></script>
     <script src="assets/js/input-soal.js"></script>
     <script src="assets/js/game-logic.js"></script>
@@ -936,7 +964,8 @@
     <script src="assets/js/events.js"></script>
     <script src="assets/js/nightMode.js"></script>
     <script src="assets/js/background.js"></script>
-    <!-- Service Worker Registration -->
+
+
     <script>
         // REGISTER SERVICE WORKER (web / PWA mode)
         if (!window.cordova && 'serviceWorker' in navigator) {
