@@ -149,10 +149,6 @@ function modeUp() {
     $("#btn-up-2").html("Volume Bangun Ruang");
     $("#btn-up-3").html("Luas Permukaan Bangun Ruang");
     $("#btn-up-4").html("Perbandingan Bangun");
-    $("#btn-up-5").html("Perkiraan Volume");
-    $("#btn-up-6").html("Bangun Campuran");
-    $("#btn-up-7").html("Hubungan Luas dan Volume");
-    $("#btn-up-8").html("Keliling Bangun Datar");
 }
 
 
