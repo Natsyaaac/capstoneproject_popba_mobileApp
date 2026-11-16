@@ -22,9 +22,9 @@ const firebaseConfig = {
 };
 
 function isFirebaseConfigured() {
-    return firebaseConfig.apiKey && 
-           firebaseConfig.storageBucket && 
-           firebaseConfig.projectId;
+    return firebaseConfig.apiKey &&
+        firebaseConfig.storageBucket &&
+        firebaseConfig.projectId;
 }
 
 function getCurrentPlatform() {
@@ -45,7 +45,7 @@ function isOnline() {
 
 async function loadFirebaseSDK() {
     const platform = getCurrentPlatform();
-    
+
     if (platform === 'electron') {
         try {
             if (window.firebaseModules) {
@@ -90,28 +90,28 @@ async function loadFirebaseSDK() {
 
 async function initializeFirebase() {
     if (firebaseInitialized) return true;
-    
+
     if (!isFirebaseConfigured()) {
         console.warn('Firebase not configured. Visual questions will use local storage only.');
         return false;
     }
-    
+
     try {
         const sdk = await loadFirebaseSDK();
         if (!sdk) {
             console.warn('Firebase SDK not available for this platform');
             return false;
         }
-        
+
         firebaseApp = sdk.initializeApp(firebaseConfig);
         firebaseStorage = sdk.getStorage(firebaseApp);
         firebaseInitialized = true;
-        
+
         console.log('Firebase initialized successfully');
-        
+
         loadPendingDeletions();
         processPendingDeletions();
-        
+
         return true;
     } catch (error) {
         console.error('Firebase initialization failed:', error);
@@ -155,15 +155,15 @@ async function processPendingDeletions() {
     if (!isOnline() || pendingDeletions.length === 0) {
         return;
     }
-    
+
     console.log('Processing', pendingDeletions.length, 'pending Firebase deletions...');
-    
+
     const toProcess = [...pendingDeletions];
     const stillPending = [];
-    
+
     for (const deletion of toProcess) {
         deletion.attempts++;
-        
+
         try {
             const success = await deleteFromFirebaseStorage(deletion.storagePath);
             if (success) {
@@ -182,7 +182,7 @@ async function processPendingDeletions() {
             }
         }
     }
-    
+
     pendingDeletions = stillPending;
     savePendingDeletions();
 }
@@ -192,11 +192,11 @@ async function deleteFromFirebaseStorage(storagePath) {
         const initialized = await initializeFirebase();
         if (!initialized) return false;
     }
-    
+
     try {
         const sdk = await loadFirebaseSDK();
         if (!sdk) return false;
-        
+
         const storageRef = sdk.ref(firebaseStorage, storagePath);
         await sdk.deleteObject(storageRef);
         return true;
@@ -213,7 +213,7 @@ function extractStoragePathFromUrl(imageUrl) {
     if (!imageUrl || !imageUrl.includes('firebase')) {
         return null;
     }
-    
+
     try {
         const match = imageUrl.match(/\/o\/([^?]+)/);
         if (match && match[1]) {
@@ -222,7 +222,7 @@ function extractStoragePathFromUrl(imageUrl) {
     } catch (e) {
         console.error('Error extracting storage path:', e);
     }
-    
+
     return null;
 }
 
@@ -231,7 +231,7 @@ async function uploadImageToFirebase(file, questionId) {
         console.log('Offline: Using local storage for image');
         return null;
     }
-    
+
     if (!firebaseInitialized) {
         const initialized = await initializeFirebase();
         if (!initialized) {
@@ -239,16 +239,16 @@ async function uploadImageToFirebase(file, questionId) {
             return null;
         }
     }
-    
+
     try {
         const sdk = await loadFirebaseSDK();
         if (!sdk) return null;
-        
+
         const timestamp = Date.now();
         const safeFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
         const fileName = `visual-questions/${questionId}_${timestamp}_${safeFileName}`;
         const storageRef = sdk.ref(firebaseStorage, fileName);
-        
+
         const metadata = {
             contentType: file.type,
             customMetadata: {
@@ -257,10 +257,10 @@ async function uploadImageToFirebase(file, questionId) {
                 'platform': getCurrentPlatform()
             }
         };
-        
+
         const snapshot = await sdk.uploadBytes(storageRef, file, metadata);
         const downloadURL = await sdk.getDownloadURL(snapshot.ref);
-        
+
         console.log('Image uploaded to Firebase:', downloadURL);
         return downloadURL;
     } catch (error) {
@@ -273,19 +273,19 @@ async function deleteImageFromFirebase(imageUrl) {
     if (!imageUrl) {
         return false;
     }
-    
+
     const storagePath = extractStoragePathFromUrl(imageUrl);
     if (!storagePath) {
         console.log('Not a Firebase URL, skipping deletion');
         return false;
     }
-    
+
     if (!isOnline()) {
         console.log('Offline: Queuing Firebase deletion for later');
         addPendingDeletion(imageUrl, storagePath);
         return true;
     }
-    
+
     if (!firebaseInitialized) {
         const initialized = await initializeFirebase();
         if (!initialized) {
@@ -293,7 +293,7 @@ async function deleteImageFromFirebase(imageUrl) {
             return true;
         }
     }
-    
+
     try {
         const success = await deleteFromFirebaseStorage(storagePath);
         if (success) {
@@ -311,9 +311,9 @@ async function deleteMultipleImagesFromFirebase(imageUrls) {
     if (!Array.isArray(imageUrls) || imageUrls.length === 0) {
         return { success: 0, failed: 0, queued: 0 };
     }
-    
+
     const results = { success: 0, failed: 0, queued: 0 };
-    
+
     for (const url of imageUrls) {
         try {
             const deleted = await deleteImageFromFirebase(url);
@@ -331,7 +331,7 @@ async function deleteMultipleImagesFromFirebase(imageUrls) {
             results.failed++;
         }
     }
-    
+
     return results;
 }
 
@@ -347,21 +347,21 @@ function convertFileToBase64(file) {
 function validateImageFile(file) {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     const maxSize = 5 * 1024 * 1024;
-    
+
     if (!allowedTypes.includes(file.type)) {
         return {
             valid: false,
             error: 'Format file tidak didukung. Gunakan JPG, JPEG, PNG, GIF, atau WebP.'
         };
     }
-    
+
     if (file.size > maxSize) {
         return {
             valid: false,
             error: 'Ukuran file terlalu besar. Maksimal 5MB.'
         };
     }
-    
+
     return { valid: true };
 }
 
@@ -384,7 +384,7 @@ function getStorageStats() {
 }
 
 if (window.OfflineService) {
-    window.OfflineService.addListener(function(status) {
+    window.OfflineService.addListener(function (status) {
         if (status === 'online') {
             processPendingDeletions();
         }

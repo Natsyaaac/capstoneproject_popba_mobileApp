@@ -4,30 +4,13 @@
 * @version 1.1.1
 */
 /*jshint esversion: 6 */
-/* globals $, imgBalloonBlue, imgBalloonOrange, imgBalloonPurple, imgBalloonYellow */
+/* globals $, imgBalloonBlue, imgBalloonOrange, imgBalloonPurple */
 /* globals imgBalloonRed, imgBalloonGreen, imgBalloonYellow */
-/* globals getCanvasSize, returnCanvasID, animateBalloon, initialiseBalloons */
-
-/**
-* [Function to return an array of canvas width and height, given canvas element ID]
-* @param  {[string]}   canvasID     [Canvas ID]
-* @return {[array]}                 [Array of canvas width and height]
-*/
-function getCanvasSize(canvasID) {
-    // Check if canvasID starts with #, otherwise add it
-    if (canvasID.substr(0, 1) != "#") {
-        canvasID = "#" + canvasID;
-    }
-    // Get canvas width and height
-    let cW = $(canvasID).width();
-    let cH = $(canvasID).height();
-    // Add to array
-    let cArray = [cW, cH];
-    return cArray;
-}
 
 /**
 * [Function to draw balloon image on the canvas, given canvasID, image and frame number]
+* [Ukuran gambar mengikuti ukuran canvas (atribut width/height), jadi balon tetap tajam
+*  baik canvas lama 300x150 maupun canvas baru 512x512]
 * @param  {[string]}   canvasID     [Canvas ID]
 * @param  {[object]}   img          [Image object]
 * @param  {[number]}   fno          [Frame number]
@@ -45,9 +28,9 @@ function drawBalloonImage(canvasID, img, fno) {
     // Get canvas context
     let canvasContext = canvasElement.getContext('2d');
     // Clear canvas
-    canvasContext.clearRect(0, 0, 300, 150);
+    canvasContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
     // Draw balloon image frame
-    canvasContext.drawImage(img, beginX, 0, 512, 512, 0, 0, 300, 150);
+    canvasContext.drawImage(img, beginX, 0, 512, 512, 0, 0, canvasElement.width, canvasElement.height);
     return(canvasContext);
 }
 
@@ -93,14 +76,14 @@ function animateBalloon(canvasID) {
     } else if (canvasID == "#canvas-balloon-right-3") {
         img = imgBalloonYellow;
     }
-    let balloonTimeout; 
+    let balloonTimeout;
     // Animate balloon image by drawing 6 frames using setTimeout, then return to frame 1
-    balloonTimeout = setTimeout(drawBalloonImage, 25, canvasID, img, 1);        
+    balloonTimeout = setTimeout(drawBalloonImage, 25, canvasID, img, 1);
     balloonTimeout = setTimeout(drawBalloonImage, 50, canvasID, img, 2);
     balloonTimeout = setTimeout(drawBalloonImage, 75, canvasID, img, 3);
     balloonTimeout = setTimeout(drawBalloonImage, 200, canvasID, img, 4);
     balloonTimeout = setTimeout(drawBalloonImage, 300, canvasID, img, 5);
-    balloonTimeout = setTimeout(drawBalloonImage, 400, canvasID, img, 6); 
+    balloonTimeout = setTimeout(drawBalloonImage, 400, canvasID, img, 6);
     balloonTimeout = setTimeout(drawBalloonImage, 500, canvasID, img, 1);
     return(balloonTimeout);
 }

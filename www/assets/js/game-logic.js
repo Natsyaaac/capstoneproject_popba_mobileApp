@@ -9,14 +9,18 @@
 /* globals returnGameMode, returnQuestions, returnDifficulty, returnActiveButtons, returnOptionArray, returnQuestionArray */
 /* globals initialiseHealthBar, setQuestion, answerArray, setBalloons, setScore, returnCanvasID, getHighScore, soundPop */
 /* globals animateBalloon, checkHighScore, setHighScore, soundHighScore, soundUnlucky, soundWellDone, returnToMenu, setHealthBar */
-/* globals soundDeflate */
+/* globals soundDeflate, catatRiwayatPermainan, resetPencatatanRiwayat, bpmMultipleChoiceMapping */
 
 /**
 * [Function to launch game]
-* @return {[array]}                     [Score array - array of 2 numbers, score and number of questions]          
+* @return {[array]}                     [Score array - array of 2 numbers, score and number of questions]
 */
 function playGame() {
-    // Set global variables 
+    // Permainan baru dimulai: izinkan pencatatan riwayat skor lagi
+    if (typeof resetPencatatanRiwayat === "function") {
+        resetPencatatanRiwayat();
+    }
+    // Set global variables
     bpmGameMode = returnGameMode();
     bpmQno = returnQuestions();
     bpmDifficulty = returnDifficulty();
@@ -27,11 +31,14 @@ function playGame() {
     bpmCQ = 0;
     bpmQCurrent = setQuestion(bpmQArray[bpmCQ]);
     bpmAnswerArray = answerArray(bpmGameMode, bpmQCurrent);
-    
+
     // Check if this is exam mode with multiple choice or visual
     const isMultipleChoice = bpmGameMode === "exam" && bpmOptionArray[0] === "Pilihan Ganda";
     const isVisualMode = bpmGameMode === "exam" && bpmOptionArray[0] === "Visual";
-    
+
+    // Tata letak balon: kelas "mode-four" dipakai popba-game.css untuk susunan 4 balon (A, B, C, D)
+    $("#game-section").toggleClass("mode-four", isMultipleChoice || isVisualMode);
+
     if (isMultipleChoice || isVisualMode) {
         // Multiple choice mode - use balloons for answers
         // Rearrange array for proper balloon positions: A, B, empty, C, D, empty
@@ -45,7 +52,7 @@ function playGame() {
             ""                  // empty -> right-3 (hidden)
         ];
         bpmAnswerArray = rearrangedArray;
-        
+
         // Show 4 balloons for A, B, C, D with balanced layout: left-1 (A), left-2 (B), right-1 (C), right-2 (D)
         $("#canvas-balloon-left-1").show();
         $("#canvas-balloon-left-2").show();
@@ -60,8 +67,6 @@ function playGame() {
         $("#balloon-answer-text-right-1").show();
         $("#balloon-answer-text-right-2").show();
         $("#balloon-answer-text-right-3").hide();
-        // Hide multiple choice button container
-        $("#multiple-choice-container").addClass("d-none");
         // Show balloons
         $(".game-section-balloons").show();
         // Set balloons with answers
@@ -81,8 +86,6 @@ function playGame() {
         $("#balloon-answer-text-right-1").show();
         $("#balloon-answer-text-right-2").show();
         $("#balloon-answer-text-right-3").show();
-        // Hide multiple choice container
-        $("#multiple-choice-container").addClass("d-none");
         // Show balloons
         $(".game-section-balloons").show();
         bpmAnswerArray = setBalloons(bpmAnswerArray);
@@ -92,41 +95,26 @@ function playGame() {
         $("[id^=canvas-balloon]").show();
         // Show all balloon text elements
         $("[id^=balloon-answer-text]").show();
-        // Hide multiple choice container
-        $("#multiple-choice-container").addClass("d-none");
         // Show balloons
         $(".game-section-balloons").show();
         bpmAnswerArray = setBalloons(bpmAnswerArray);
     }
-    
+
     bpmScoreArray = setScore([0, bpmQno]);
-  
-    console.log("🎮 Game Mode:", bpmGameMode);
-    console.log("📊 Questions:", bpmQno);
-    console.log("⚙️ Difficulty:", bpmDifficulty);
-    console.log("🔘 Active Buttons:", bpmActiveButtons);
-    console.log("📋 Options:", bpmOptionArray);
-    console.log("❓ Questions Array:", bpmQArray);
-    console.log("❤️ Health:", bpmHealthArray);
-    console.log("🎯 Current Question:", bpmQCurrent);
-    console.log("✅ Answers:", bpmAnswerArray);
-    console.log("🏆 Score:", bpmScoreArray);
-    console.log("🎲 Is Multiple Choice:", isMultipleChoice);
-    console.log("🖼️ Is Visual Mode:", isVisualMode);
-   
+
     $("#heading-section").hide(400);
     $("#options-section").hide(400);
     $("#information-section").hide(400);
     // Show game section
     $("#game-section").hide();
     $("#game-section").removeClass("d-none");
-    $("#game-section").show(1000);     
+    $("#game-section").show(1000);
     // Return score array
     return bpmScoreArray;
 }
 
 /**
-* [Function to check selected answer on click of balloon]   
+* [Function to check selected answer on click of balloon]
 */
 function checkSelectedAnswer() {
     // Add "#" to ID
@@ -139,30 +127,18 @@ function checkSelectedAnswer() {
     let highScore = getHighScore();
     // Initialise current score
     let currentScore;
-    
-    // For multiple choice or visual, check if selected letter maps to correct answer
-    let actualAnswer = sAnswer;
-    const isMultipleChoice = bpmGameMode === "exam" && bpmOptionArray[0] === "Pilihan Ganda";
-    const isVisualMode = bpmGameMode === "exam" && bpmOptionArray[0] === "Visual";
-    
+
     // Determine correct answer for comparison
     let correctAnswer = bpmQCurrent[1];
-    
-    if (isVisualMode) {
-        // For Visual mode: correct answer is stored as letter (A, B, C, D)
-        // User clicks balloon with letter (A, B, C, D)
-        // Compare letter to letter directly
-        console.log("🎯 Selected Letter:", sAnswer);
-        console.log("✅ Correct Answer Letter:", correctAnswer);
-        actualAnswer = sAnswer; // Keep as letter for comparison
-    } else if (isMultipleChoice && bpmMultipleChoiceMapping[sAnswer]) {
-        // For Pilihan Ganda: correct answer is the text, mapping letter to text
+    let actualAnswer = sAnswer;
+    const isMultipleChoice = bpmGameMode === "exam" && bpmOptionArray[0] === "Pilihan Ganda";
+
+    // Pilihan Ganda: balloon shows a letter (A-D) but the correct answer is stored as text, so map letter -> text.
+    // Visual: correct answer is stored as a letter too, so the selected letter is compared directly.
+    if (isMultipleChoice && bpmMultipleChoiceMapping[sAnswer]) {
         actualAnswer = bpmMultipleChoiceMapping[sAnswer];
-        console.log("🎯 Selected Letter:", sAnswer);
-        console.log("📝 Actual Answer:", actualAnswer);
-        console.log("✅ Correct Answer:", correctAnswer);
     }
-    
+
     // Check selected answer against correct answer from current question array
     // If answer is correct
     if (actualAnswer == correctAnswer) {
@@ -170,8 +146,6 @@ function checkSelectedAnswer() {
         soundPop.play();
         // Show balloon popping animation
         let balloonTimeout = animateBalloon(canvasID);
-        // Log to console for debugging
-        // console.log("Correct!");
         // Set current score
         currentScore = bpmScoreArray[0];
         // Update global score array variable bpmScoreArray
@@ -184,12 +158,12 @@ function checkSelectedAnswer() {
             bpmQCurrent = setQuestion(bpmQArray[bpmCQ]);
             // Get answer array, store in bpmAnswerArray global variable
             bpmAnswerArray = answerArray(bpmGameMode, bpmQCurrent);
-            
+
             // Check if next question is exam mode
             const isNextExamMode = bpmGameMode === "exam";
             const isNextMultipleChoice = isNextExamMode && bpmOptionArray[0] === "Pilihan Ganda";
             const isNextVisualMode = isNextExamMode && bpmOptionArray[0] === "Visual";
-            
+
             if (isNextMultipleChoice || isNextVisualMode) {
                 // Multiple choice - rearrange array for proper balloon positions
                 let rearrangedArray = [
@@ -201,7 +175,7 @@ function checkSelectedAnswer() {
                     ""                  // empty -> right-3 (hidden)
                 ];
                 bpmAnswerArray = rearrangedArray;
-                
+
                 // Show 4 balloons: left-1 (A), left-2 (B), right-1 (C), right-2 (D)
                 $("#canvas-balloon-left-1").fadeIn("fast");
                 $("#canvas-balloon-left-2").fadeIn("fast");
@@ -234,12 +208,10 @@ function checkSelectedAnswer() {
                 $("[id^=canvas-balloon]").fadeIn("fast");
                 $("[id^=balloon-answer-text]").fadeIn("fast");
             }
-            
+
             // Set balloon text using answer array
             bpmAnswerArray = setBalloons(bpmAnswerArray);
         } else {
-            // Log to console for debugging
-            // console.log("Well Done! - you scored " +  bpmScoreArray[0] + " out of " + bpmScoreArray[1] + "!") //
             // Check if score is a new high score
             if (checkHighScore(highScore, bpmScoreArray)) {
                 // Set high score
@@ -248,8 +220,8 @@ function checkSelectedAnswer() {
                 $("#modal-feedback-heading-text").text("Awesome - New High Score!!!");
                 // Play high score sound
                 soundHighScore.play();
-            } else { 
-                // If score is less than 4               
+            } else {
+                // If score is less than 4
                 if ((bpmScoreArray[0]) < 4) {
                     // Set modal heading to unlucky
                     $("#modal-feedback-heading-text").text("Unlucky - try again!!");
@@ -266,13 +238,15 @@ function checkSelectedAnswer() {
             $("#modal-feedback-body-text").text("You scored " +  bpmScoreArray[0] + " out of " + bpmScoreArray[1] + "!");
             // Display feedback modal
             $('#modal-feedback').modal();
+            // Catat hasil permainan ke riwayat skor
+            if (typeof catatRiwayatPermainan === "function") {
+                catatRiwayatPermainan();
+            }
             // Return to menu
             returnToMenu();
         }
     } else {
         // Answer is incorrect
-        // Log to console for debugging
-        // console.log("Wrong!")
         // Get current health
         let cHealth = bpmHealthArray[0];
         // If current health is greater than 0
@@ -297,7 +271,7 @@ function checkSelectedAnswer() {
                 // Play high score sound
                 soundHighScore.play();
             } else {
-                // If score is less than 4  
+                // If score is less than 4
                 if ((bpmScoreArray[0]) < 4) {
                     // Set modal heading to unlucky
                     $("#modal-feedback-heading-text").text("Unlucky - try again!!");
@@ -314,6 +288,10 @@ function checkSelectedAnswer() {
             $("#modal-feedback-body-text").text("You scored " +  bpmScoreArray[0] + " out of " + bpmScoreArray[1] + "!");
             // Display feedback modal
             $('#modal-feedback').modal();
+            // Catat hasil permainan ke riwayat skor
+            if (typeof catatRiwayatPermainan === "function") {
+                catatRiwayatPermainan();
+            }
             // Return to menu
             returnToMenu();
         }

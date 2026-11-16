@@ -1,0 +1,259 @@
+/* ==========================================================================
+   POPBA – scene background (siang & malam)
+   Dimuat DI DALAM Shadow DOM oleh assets/js/popba-scene.js, jadi aturan CSS
+   lama (style.css / style_cloud.css) tidak bisa mengubah isinya.
+
+   Ukuran semua elemen dihitung dari lebar/tinggi layar (clamp + vw/vh),
+   jadi satu aturan yang sama berlaku untuk HP, tablet, dan desktop.
+   Mau menyetel cepat? Ubah variabel di blok :host di bawah.
+   ========================================================================== */
+
+:host {
+  display: block;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint style;
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1;
+
+  /* ---- tinggi tiap lapis awan di bawah layar ---- */
+  --bank-back:  clamp(110px, 26vh, 300px);
+  --bank-mid:   clamp(84px,  19vh, 220px);
+  --bank-front: clamp(58px,  12vh, 150px);
+
+  /* ---- ukuran matahari / bulan ---- */
+  --sun: clamp(128px, min(25vw, 46vh), 360px);
+
+  /* ---- ukuran pelangi / aurora ---- */
+  --arc-w: clamp(340px, 62vw, 900px);
+}
+
+.layer { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+
+/* --------------------------------------------------------------------------
+   Pergantian siang <-> malam (crossfade). Atribut data-theme dipasang JS.
+   -------------------------------------------------------------------------- */
+.sky-day, .sky-night, .banks-day, .banks-night {
+  transition: opacity .9s ease, visibility 0s linear 0s;
+}
+:host(:not([data-theme="night"])) .sky-night,
+:host(:not([data-theme="night"])) .banks-night,
+:host([data-theme="night"]) .sky-day,
+:host([data-theme="night"]) .banks-day {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .9s ease, visibility 0s linear .9s;
+}
+/* lapisan yang tersembunyi tidak perlu bergerak */
+:host(:not([data-theme="night"])) .sky-night *,
+:host(:not([data-theme="night"])) .banks-night,
+:host([data-theme="night"]) .sky-day *,
+:host([data-theme="night"]) .banks-day { animation-play-state: paused !important; }
+
+/* --------------------------------------------------------------------------
+   Pencahayaan langit
+   -------------------------------------------------------------------------- */
+.glow, .haze { position: absolute; pointer-events: none; }
+.sky-day .glow {
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(ellipse 70vmax 55vmax at 6% 4%, rgba(255, 224, 140, .42), rgba(255, 224, 140, 0) 62%);
+}
+.sky-night .glow {
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(ellipse 70vmax 55vmax at 8% 6%, rgba(160, 175, 255, .20), rgba(160, 175, 255, 0) 62%);
+}
+.haze { left: 0; right: 0; bottom: 0; height: 58%; }
+.sky-day .haze   { background: linear-gradient(to top, rgba(255, 244, 255, .60), rgba(255, 244, 255, .20) 46%, rgba(255, 244, 255, 0)); }
+.sky-night .haze { background: linear-gradient(to top, rgba(88, 100, 170, .38), rgba(88, 100, 170, .12) 46%, rgba(88, 100, 170, 0)); }
+
+/* --------------------------------------------------------------------------
+   Matahari & bulan
+   -------------------------------------------------------------------------- */
+.sun, .moon {
+  position: absolute;
+  left: clamp(-24px, 1.2vw, 24px);
+  top: clamp(14px, 2.6vh, 36px);
+  width: var(--sun);
+  height: var(--sun);
+}
+.moon { width: calc(var(--sun) * .8); height: calc(var(--sun) * .8); left: clamp(-6px, 2.4vw, 40px); }
+.sun svg, .moon svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.sun svg  { transform-origin: 50% 50%; animation: pb-breathe 7s ease-in-out infinite; }
+.moon svg { transform-origin: 50% 50%; animation: pb-breathe 9s ease-in-out infinite; }
+@keyframes pb-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.045); } }
+
+/* --------------------------------------------------------------------------
+   Pelangi (siang) & aurora (malam)
+   -------------------------------------------------------------------------- */
+.rainbow {
+  position: absolute;
+  right: -9vw;
+  bottom: calc(var(--bank-back) * .48);
+  width: var(--arc-w);
+  height: calc(var(--arc-w) * .5);
+  opacity: .72;
+}
+.rainbow svg, .aurora svg { display: block; width: 100%; height: 100%; }
+
+.aurora {
+  position: absolute;
+  left: -8%; right: -8%;
+  top: 22%;
+  height: 40%;
+  opacity: .55;
+  animation: pb-sway 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes pb-sway { from { transform: translate3d(-2.5%, 0, 0); } to { transform: translate3d(2.5%, 0, 0); } }
+
+/* --------------------------------------------------------------------------
+   Bintang, bintang jatuh, kunang-kunang (malam)
+   -------------------------------------------------------------------------- */
+.stars { position: absolute; top: 0; left: 0; width: 100%; height: 72%; }
+.tw { animation: pb-twinkle 4.2s ease-in-out infinite; }
+.tw.b { animation-duration: 5.4s; animation-delay: -1.4s; }
+.tw.c { animation-duration: 3.4s; animation-delay: -2.6s; }
+@keyframes pb-twinkle { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+
+.shoot {
+  position: absolute;
+  top: 9%; left: 22%;
+  width: clamp(80px, 11vw, 160px);
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff);
+  opacity: 0;
+  transform: rotate(26deg);
+  animation: pb-shoot 13s linear 4s infinite;
+}
+@keyframes pb-shoot {
+  0%   { opacity: 0; transform: translate3d(0, 0, 0) rotate(26deg); }
+  1.5% { opacity: 1; }
+  8%   { opacity: 0; transform: translate3d(34vw, 17vh, 0) rotate(26deg); }
+  100% { opacity: 0; transform: translate3d(34vw, 17vh, 0) rotate(26deg); }
+}
+
+.ff {
+  position: absolute;
+  left: var(--x); top: var(--y);
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff7b8 0, #fff7b8 28%, rgba(255, 240, 150, 0) 70%);
+  animation: pb-ff var(--t) ease-in-out var(--d) infinite alternate;
+}
+@keyframes pb-ff {
+  0%   { opacity: .15; transform: translate3d(0, 0, 0) scale(.8); }
+  50%  { opacity: 1; }
+  100% { opacity: .25; transform: translate3d(var(--dx), var(--dy), 0) scale(1.2); }
+}
+
+/* --------------------------------------------------------------------------
+   Awan kecil yang melayang pelan
+   -------------------------------------------------------------------------- */
+.dc { position: absolute; left: 0; will-change: transform; }
+.dc svg { display: block; width: 100%; height: auto; }
+.dc1 { top: 15%; width: clamp(96px, 13vw, 200px); animation: pb-drift 130s linear -42s infinite; }
+.dc2 { top: 33%; width: clamp(72px, 10vw, 150px); animation: pb-drift 170s linear -120s infinite; opacity: .85; }
+.dc3 { top: 5%;  width: clamp(64px, 9vw, 130px);  animation: pb-drift 150s linear -8s infinite;  opacity: .8; }
+@keyframes pb-drift { from { transform: translate3d(-28vw, 0, 0); } to { transform: translate3d(128vw, 0, 0); } }
+
+/* --------------------------------------------------------------------------
+   Burung (siang)
+   -------------------------------------------------------------------------- */
+.birds { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: opacity .5s ease; }
+.bird { position: absolute; left: 0; will-change: transform; }
+.bird svg { display: block; width: 100%; height: auto; overflow: visible; }
+.bird.b1 { top: 10%; width: clamp(22px, 2.6vw, 40px); animation: pb-fly 52s linear -14s infinite; }
+.bird.b2 { top: 17%; width: clamp(16px, 2vw, 30px);   animation: pb-fly 70s linear -46s infinite; }
+.bird.b3 { top: 23%; width: clamp(14px, 1.7vw, 26px); animation: pb-fly 88s linear -6s infinite; }
+@keyframes pb-fly { from { transform: translate3d(-10vw, 0, 0); } 50% { transform: translate3d(50vw, -2.5vh, 0); } to { transform: translate3d(112vw, 1vh, 0); } }
+
+/* --------------------------------------------------------------------------
+   Gelembung simbol matematika (tema game: berhitung)
+   -------------------------------------------------------------------------- */
+.bubbles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: opacity .5s ease; }
+.mb {
+  position: absolute;
+  left: var(--x); top: var(--y);
+  width: var(--s); height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  animation: pb-bob var(--t) ease-in-out var(--d) infinite alternate;
+  will-change: transform;
+}
+.mb svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.mb .halo  { fill: var(--c); fill-opacity: 0; }
+.mb .disc  { fill: var(--c); fill-opacity: .80; stroke: #fff; stroke-opacity: .9; stroke-width: 2.4; }
+.mb .shine { fill: none; stroke: #fff; stroke-opacity: .75; stroke-width: 3.4; stroke-linecap: round; }
+.mb .glyph { fill: #fff; font-weight: 800; font-size: 34px; font-family: inherit; }
+:host([data-theme="night"]) .mb .halo  { fill-opacity: .20; }
+:host([data-theme="night"]) .mb .disc  { fill-opacity: .62; stroke-opacity: .7; }
+:host([data-theme="night"]) .mb .shine { stroke-opacity: .6; }
+@keyframes pb-bob {
+  from { transform: translate3d(0, 0, 0) rotate(var(--r)); }
+  to   { transform: translate3d(0, -14px, 0) rotate(calc(var(--r) * -1)); }
+}
+
+/* saat game berjalan: sembunyikan hiasan yang mirip balon jawaban */
+:host([data-view="game"]) .bubbles,
+:host([data-view="game"]) .birds { opacity: 0; }
+
+/* --------------------------------------------------------------------------
+   Bank awan di dasar layar (3 lapis, bergeser pelan, bisa disambung)
+   Tile SVG berukuran 960x280  =>  lebar tile = tinggi x 3.4286
+   -------------------------------------------------------------------------- */
+.bank {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: var(--h);
+  --tile: calc(var(--h) * 3.4286);
+  width: calc(100% + var(--tile));
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  background-size: var(--tile) 100%;
+  animation: pb-bank var(--dur) linear infinite;
+  will-change: transform;
+}
+@keyframes pb-bank { to { transform: translate3d(calc(var(--tile) * -1), 0, 0); } }
+
+.bank.back  { --h: var(--bank-back);  --dur: 160s; }
+.bank.mid   { --h: var(--bank-mid);   --dur: 115s; }
+.bank.front { --h: var(--bank-front); --dur: 85s; }
+
+.banks-day .back    { background-image: url("../images/bg/cloud-day-back.svg"); }
+.banks-day .mid     { background-image: url("../images/bg/cloud-day-mid.svg"); }
+.banks-day .front   { background-image: url("../images/bg/cloud-day-front.svg"); }
+.banks-night .back  { background-image: url("../images/bg/cloud-night-back.svg"); }
+.banks-night .mid   { background-image: url("../images/bg/cloud-night-mid.svg"); }
+.banks-night .front { background-image: url("../images/bg/cloud-night-front.svg"); }
+
+/* --------------------------------------------------------------------------
+   Layar kecil (HP): kurangi hiasan agar tetap rapi & ringan
+   -------------------------------------------------------------------------- */
+@media (max-width: 700px) {
+  .mb:not(.keep) { display: none; }
+  .mb { left: var(--xm, var(--x)); top: var(--ym, var(--y)); }
+  .dc3 { display: none; }
+  .rainbow { right: -26vw; opacity: .5; }
+  .sun  { top: clamp(22px, 3vh, 40px); }
+  .moon { top: clamp(26px, 3.4vh, 44px); }
+}
+
+/* HP posisi landscape / layar sangat pendek */
+@media (max-height: 460px) {
+  .rainbow, .dc2 { display: none; }
+  .bank.back  { --h: clamp(70px, 22vh, 120px); }
+  .bank.mid   { --h: clamp(52px, 16vh, 90px); }
+  .bank.front { --h: clamp(36px, 10vh, 64px); }
+}
+
+/* --------------------------------------------------------------------------
+   Hormati pengaturan "kurangi gerakan"
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .birds, .shoot, .ff { display: none !important; }
+}

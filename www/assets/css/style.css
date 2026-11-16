@@ -1,4 +1,4 @@
-     @import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chewy&display=swap');
 
      @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
 
@@ -1529,16 +1529,38 @@
      }
 
      .zoom-hint {
-         font-size: 1.2rem;
-         color: var(--purplemed);
-         margin-bottom: 8px;
-         text-align: center;
-         opacity: 0.8;
+         position: absolute;
+         bottom: 15px;
+         left: 50%;
+         transform: translateX(-50%);
+         background: rgba(0, 0, 0, 0.7);
+         color: white;
+         padding: 8px 16px;
+         border-radius: 20px;
+         font-size: 12px;
+         opacity: 0.9;
+         backdrop-filter: blur(4px);
+         pointer-events: none;
+         z-index: 1001;
      }
 
      .zoom-hint i {
          margin-right: 5px;
      }
+
+     .zoomed-image.grabbable {
+         cursor: grab;
+     }
+
+     .zoomed-image.grabbing {
+         cursor: grabbing;
+     }
+
+     /* Optional: Shadow effect saat drag */
+     .zoomed-image.dragging {
+         box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+     }
+
 
      /* Fullscreen Zoom Overlay */
      .visual-zoom-overlay {
@@ -1620,6 +1642,7 @@
          transition: transform 0.3s ease;
          user-select: none;
          -webkit-user-drag: none;
+         will-change: transform;
      }
 
      /* Mobile Zoom Instructions */
@@ -2440,4 +2463,480 @@
      body.night-mode .alert-danger {
          background: #4a2a2a !important;
          border-color: #8a4a4a !important;
+     }
+
+
+     /* ============================================================= */
+     /* ===== TAMPILAN LAPTOP / DESKTOP - MENU UTAMA (>= 992px) ===== */
+     /* ============================================================= */
+     /* Hanya mengatur SUSUNAN. Warna, font, dan ID elemen tidak      */
+     /* diubah. Layar HP / tablet (< 992px) tampil seperti sebelumnya.*/
+     /*                                                               */
+     /*   [ Kartu mode (3 kolom) ]  [ High Score                  ]   */
+     /*   [                      ]  [ PLAY                        ]   */
+     /*   [                      ]  [ Audio    | Siang-Malam      ]   */
+     /*   [                      ]  [ Pilihan  | Input Soal       ]   */
+     /*   [ Ujian (lebar penuh)  ]  [ Bagaimana Cara Bermain?     ]   */
+     /*   [ Panel Pilihan (muncul saat tombol Pilihan ditekan)    ]   */
+     /* ============================================================= */
+
+     @media (min-width: 992px) {
+
+         /* Wadah menu dibuat lebih lebar */
+         #options-section {
+             max-width: 1180px;
+         }
+
+         /* Kolom kosong bawaan Bootstrap tidak dipakai di desktop */
+         #options-section .menu-spacer {
+             display: none;
+         }
+
+         /* Isi menu menjadi grid: 1 kolom lebar (mode) + 2 kolom setengah (kontrol) */
+         #options-section .menu-main {
+             flex: 0 0 100%;
+             max-width: 100%;
+             display: grid;
+             grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+             column-gap: 1.6rem;
+             row-gap: 0;
+             align-items: stretch;
+             align-content: start;
+         }
+
+         /* Penempatan tiap bagian di grid */
+         #options-section .menu-main > .menu-modes {
+             grid-column: 1;
+             grid-row: 1 / span 5;
+         }
+
+         #options-section .menu-main > .menu-highscore {
+             grid-column: 2 / 4;
+             grid-row: 1;
+         }
+
+         #options-section .menu-main > .menu-play {
+             grid-column: 2 / 4;
+             grid-row: 2;
+         }
+
+         #options-section .menu-main > .menu-audio {
+             grid-column: 2;
+             grid-row: 3;
+         }
+
+         #options-section .menu-main > .menu-theme {
+             grid-column: 3;
+             grid-row: 3;
+         }
+
+         #options-section .menu-main > .menu-btn-options {
+             grid-column: 2;
+             grid-row: 4;
+         }
+
+         #options-section .menu-main > .menu-btn-input {
+             grid-column: 3;
+             grid-row: 4;
+         }
+
+         #options-section .menu-main > .menu-info {
+             grid-column: 2 / 4;
+             grid-row: 5;
+         }
+
+         #options-section .menu-main > .menu-options-panel {
+             grid-column: 1 / -1;
+             grid-row: 6;
+         }
+
+         /* Kartu mode: tinggi mengikuti kolom kanan, teks di tengah */
+         #options-section .menu-modes {
+             max-width: none;
+             margin: 0;
+             gap: 1.2rem;
+             grid-template-rows: repeat(3, minmax(9rem, 1fr));
+         }
+
+         #options-section .menu-modes .btn {
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             padding: 0;
+             font-size: 2.2rem;
+             border-radius: 1.2rem !important;
+         }
+
+         /* Ujian: kartu selebar penuh di baris terakhir */
+         #options-section .menu-modes .grid-7 {
+             grid-column: 1 / -1;
+             grid-row: 3;
+         }
+
+         /* Panel Pilihan: dua kolom (umum | khusus mode) */
+         .menu-options-panel .options-inner {
+             display: grid;
+             grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+             column-gap: 1.6rem;
+             align-items: start;
+             padding-top: 1rem;
+         }
+
+         /* Judul: jarak atas-bawah lebih rapat agar menu muat satu layar */
+         .container-heading-main-large {
+             padding-top: 2.4rem;
+             padding-bottom: 2rem;
+         }
+     }
+
+     /* Judul sedikit lebih besar di layar yang cukup tinggi */
+     @media (min-width: 992px) and (min-height: 681px) {
+         .container-heading-main-large .heading-main {
+             font-size: 6.4rem;
+         }
+     }
+
+     /* Layar lebar (monitor besar) */
+     @media (min-width: 1400px) {
+         #options-section {
+             max-width: 1320px;
+         }
+
+         #options-section .menu-main {
+             column-gap: 2rem;
+         }
+
+         #options-section .menu-modes .btn {
+             font-size: 2.6rem;
+         }
+     }
+
+     /* ============================================= */
+     /* ===== RIWAYAT PERMAINAN (HALAMAN SKOR) ====== */
+     /* ============================================= */
+     /*
+        Tombol High Score di menu membuka halaman ini.
+        Baris 1-3 = skor tertinggi Hard (permanen), baris 4-10 = permainan terakhir.
+        Susunan baris:
+          lebar (>= 576px) : # | Skor | Hati | Mode | Soal   (satu baris)
+          HP (< 576px)     : kartu dua baris (mode + skor / hati + jumlah soal)
+     */
+
+     /* --- Tombol High Score di menu utama (dulu <span>, sekarang tombol) --- */
+     .btn-riwayat {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 0.9rem;
+         border-width: 2px;
+         /* sama tebal dengan kotak High Score lama, supaya tinggi menu tidak bergeser */
+     }
+
+     .btn-riwayat #highscore {
+         white-space: nowrap;
+     }
+
+     .btn-riwayat .btn-riwayat-arrow {
+         font-size: 1.3rem;
+         opacity: 0.85;
+         transition: transform 0.2s ease-in-out;
+     }
+
+     .btn-riwayat:hover .btn-riwayat-arrow {
+         transform: translateX(0.4rem);
+     }
+
+     /* --- Halaman --- */
+     #riwayat-section {
+         --rw-pad: 1.2rem;
+         padding-top: 0.5rem;
+         padding-bottom: 3rem;
+     }
+
+     .riwayat-judul {
+         font-size: 2rem;
+         padding: 0.8rem 1rem;
+     }
+
+     .riwayat-judul i {
+         margin-right: 0.6rem;
+     }
+
+     .riwayat-tabel {
+         margin-top: 0.4rem;
+     }
+
+     .riwayat-list {
+         list-style: none;
+         margin: 0;
+         padding: 0;
+     }
+
+     .riwayat-head,
+     .riwayat-row {
+         display: grid;
+         grid-template-columns: 4.8rem minmax(0, 1.1fr) minmax(0, 1.7fr) minmax(0, 1.8fr) minmax(0, 1fr);
+         align-items: center;
+         column-gap: 1rem;
+     }
+
+     .riwayat-head {
+         padding: 0 calc(var(--rw-pad) + 2px) 0.4rem;
+         color: var(--purpledark);
+         font-size: 1.3rem;
+         font-weight: 700;
+         text-transform: uppercase;
+         letter-spacing: 0.06em;
+     }
+
+     .riwayat-label {
+         margin: 1rem 0 0.6rem;
+         padding-left: 0.4rem;
+         color: var(--purpledark);
+         font-size: 1.5rem;
+         font-weight: 700;
+     }
+
+     .riwayat-row {
+         margin-bottom: 0.6rem;
+         padding: 0.7rem var(--rw-pad);
+         background-color: var(--purplelight);
+         border: 2px solid var(--bluemed);
+         border-radius: 1rem;
+         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+         color: var(--bluevlight);
+         font-size: 1.6rem;
+         font-weight: 700;
+     }
+
+     .riwayat-row.is-podium {
+         background-color: var(--purpledark);
+         border-color: #FFCC33;
+     }
+
+     .riwayat-row.is-empty {
+         background-color: transparent;
+         border-style: dashed;
+         border-color: var(--purplemed);
+         box-shadow: none;
+         color: var(--purpledark);
+         font-weight: 600;
+     }
+
+     .riwayat-row.is-empty .c-kosong {
+         grid-column: 2 / -1;
+     }
+
+     .riwayat-c {
+         min-width: 0;
+     }
+
+     .riwayat-row .c-rank {
+         display: flex;
+         align-items: center;
+         gap: 0.6rem;
+     }
+
+     .riwayat-row .c-rank i {
+         font-size: 1.5rem;
+     }
+
+     .riwayat-row.rank-1 .c-rank i {
+         color: #FFCC33;
+     }
+
+     .riwayat-row.rank-2 .c-rank i {
+         color: #D5DAE6;
+     }
+
+     .riwayat-row.rank-3 .c-rank i {
+         color: #E39A5B;
+     }
+
+     .riwayat-row.is-empty .c-rank i {
+         color: var(--purplelight);
+     }
+
+     .riwayat-row .c-hati {
+         display: flex;
+         align-items: center;
+         flex-wrap: wrap;
+     }
+
+     .riwayat-row .hati-ikon i {
+         margin-right: 0.25rem;
+         font-size: 1.4rem;
+         color: var(--redlight);
+     }
+
+     .riwayat-row .hati-angka {
+         margin-left: 0.3rem;
+         font-size: 1.2rem;
+         opacity: 0.9;
+     }
+
+     .riwayat-row .mode-nama {
+         overflow-wrap: anywhere;
+     }
+
+     .riwayat-row .mode-level {
+         display: inline-block;
+         margin-left: 0.6rem;
+         padding: 0.1rem 0.7rem;
+         border-radius: 99px;
+         background: rgba(255, 255, 255, 0.22);
+         font-size: 1.1rem;
+         font-weight: 700;
+         letter-spacing: 0.02em;
+         vertical-align: middle;
+     }
+
+     .riwayat-row .mode-level.level-hard {
+         background: #FFCC33;
+         color: #4a3200;
+     }
+
+     .riwayat-kosong {
+         padding: 1.2rem;
+         border: 2px dashed var(--purplelight);
+         border-radius: 1rem;
+         color: var(--purpledark);
+         font-size: 1.5rem;
+         font-weight: 600;
+         text-align: center;
+     }
+
+     /* --- Animasi: baris muncul bergantian (kelas is-in ditambahkan oleh riwayat-skor.js) --- */
+     #riwayat-section .riwayat-anim {
+         opacity: 0;
+         transform: translateY(14px);
+         transition: opacity 0.35s ease, transform 0.35s ease;
+     }
+
+     #riwayat-section .riwayat-anim.is-in {
+         opacity: 1;
+         transform: none;
+     }
+
+     @media (prefers-reduced-motion: reduce) {
+         #riwayat-section .riwayat-anim {
+             opacity: 1;
+             transform: none;
+             transition: none;
+         }
+
+         .btn-riwayat .btn-riwayat-arrow {
+             transition: none;
+         }
+     }
+
+     /* --- Layar lebar: halaman memakai seluruh lebar (spacer kolom disembunyikan) --- */
+     @media (min-width: 768px) {
+         #riwayat-section .riwayat-spacer {
+             display: none;
+         }
+
+         #riwayat-section .riwayat-main {
+             flex: 0 0 100%;
+             max-width: 100%;
+         }
+     }
+
+     @media (min-width: 992px) {
+         #riwayat-section {
+             --rw-pad: 1.4rem;
+             max-width: 1040px;
+         }
+
+         .riwayat-judul {
+             font-size: 2.2rem;
+         }
+
+         .riwayat-row {
+             padding-top: 0.6rem;
+             padding-bottom: 0.6rem;
+             font-size: 1.7rem;
+         }
+     }
+
+     /* --- HP: kartu dua baris --- */
+     @media (max-width: 575.98px) {
+         .riwayat-head {
+             display: none;
+         }
+
+         .riwayat-row {
+             grid-template-columns: 3.6rem minmax(0, 1fr) auto;
+             grid-template-areas: "rank mode skor" "rank hati soal";
+             column-gap: 0.8rem;
+             row-gap: 0.3rem;
+             padding: 0.7rem 1rem;
+             font-size: 1.5rem;
+         }
+
+         .riwayat-row .c-rank {
+             grid-area: rank;
+         }
+
+         .riwayat-row .c-mode {
+             grid-area: mode;
+         }
+
+         .riwayat-row .c-skor {
+             grid-area: skor;
+             text-align: right;
+         }
+
+         .riwayat-row .c-hati {
+             grid-area: hati;
+         }
+
+         .riwayat-row .c-soal {
+             grid-area: soal;
+             text-align: right;
+             font-size: 1.3rem;
+             opacity: 0.9;
+         }
+
+         .riwayat-row.is-empty .c-kosong {
+             grid-area: 1 / 2 / 3 / 4;
+         }
+     }
+
+     /* --- Night mode --- */
+     body.night-mode .riwayat-head,
+     body.night-mode .riwayat-label,
+     body.night-mode .riwayat-kosong {
+         color: #a89cc8;
+     }
+
+     body.night-mode .riwayat-kosong {
+         border-color: #5a5a8a;
+     }
+
+     body.night-mode .riwayat-row {
+         background: linear-gradient(145deg, #3d3d6b, #2d2d5a);
+         border-color: #5a5a8a;
+         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+         color: #e8e6f0;
+     }
+
+     body.night-mode .riwayat-row.is-podium {
+         background: linear-gradient(145deg, #5a4a84, #4a3d7a);
+         border-color: #ffd700;
+     }
+
+     body.night-mode .riwayat-row.is-empty {
+         background: transparent;
+         border-color: #5a5a8a;
+         box-shadow: none;
+         color: #8b7bb5;
+     }
+
+     body.night-mode .riwayat-row .hati-ikon i {
+         color: #ff7b7b;
+     }
+
+     body.night-mode .riwayat-row.is-empty .c-rank i {
+         color: #5a5a8a;
      }

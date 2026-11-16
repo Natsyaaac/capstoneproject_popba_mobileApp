@@ -4,7 +4,7 @@
 * @version 1.1.1
 */
 /*jshint esversion: 6 */
-/* globals $ */
+/* globals $, playGame, showNotification, getEssayQuestions, getPilganQuestions, getVisualQuestions */
 
 /**
 * [Function to return to menu - hides game section and shows heading and options]
@@ -25,8 +25,6 @@ function modeAljabar() {
     $("#options-add-time").hide(400);
     $("#options-add-operator").hide(400);
     $("#options-add-exam").hide(400);
-    $("#options-add-subtract").hide(400);
-    $("#options-multiply-divide").hide(400);
     $("#options-add-heavy").hide(400);
     // Tampilkan opsi untuk Aljabar
     $("#options-add-aljabar").show(400);
@@ -78,8 +76,6 @@ function modeHeavy() {
 
     $("#options-add-time").hide(400);
     $("#options-add-aljabar").hide(400);
-    $("#options-add-subtract").hide(400);
-    $("#options-multiply-divide").hide(400);
     $("#options-add-up").hide(400);
     $("#options-add-exam").hide(400);
     $("#options-add-operator").hide(400);
@@ -102,8 +98,6 @@ function modeHeavy() {
 
 function modeVolume() {
     $("#options-add-time").hide(400);
-    $("#options-add-subtract").hide(400);
-    $("#options-multiply-divide").hide(400);
     $("#options-add-aljabar").hide(400);
     $("#options-add-up").hide(400);
     $("#options-add-exam").hide(400);
@@ -129,8 +123,6 @@ function modeUp() {
     $("#options-add-time").hide(400);
     $("#options-add-aljabar").hide(400);
     $("#options-add-heavy").hide(400);
-    $("#options-add-subtract").hide(400);
-    $("#options-multiply-divide").hide(400);
     $("#options-add-operator").hide(400);
     $("#options-add-volume").hide(400);
     $("#options-add-exam").hide(400);
@@ -212,20 +204,11 @@ function returnBtnIdArray(btnPrefix) {
 }
 
 /**
- * [Function to make the passed button active, and all other buttons not active]
+ * [Function to make the passed button active]
  * @param  {[string]} btnId  [Button ID]
  * @return {[string]}        [Button ID]
  */
 function makeActive(btnId) {
-    // Set button ID array
-    let btnIdArray = [
-        "#btn-mul-div-1", "#btn-mul-div-2", "#btn-mul-div-3", "#btn-mul-div-4",
-        "#btn-mul-div-5", "#btn-mul-div-6", "#btn-mul-div-7", "#btn-mul-div-8",
-        "#btn-mul-div-9", "#btn-mul-div-10", "#btn-mul-div-11", "#btn-mul-div-12",
-        "#btn-mul-div-13", "#btn-mul-div-14",
-    ];
-    // Make all buttons in button ID array not active
-    makeNotActive(btnIdArray);
     // Make passed button active
     $(btnId).addClass("active").attr("aria-pressed", "true");
     return btnId;
@@ -241,26 +224,7 @@ function makeNotActive(btnIdArray) {
     for (let btnId of btnIdArray) {
         $(btnId).removeClass("active").removeClass("focus").attr("aria-pressed", "false");
     }
-    // console.log("Reset tombol:", btnIdArray);
     return (btnIdArray);
-}
-
-/**
-* [Function to check if any other buttons with the .btn-mul-div-sticky class are selected]
-* @param  {[string]}   btnId            [Button ID]
-* @return {[boolean]}                   [Boolean indicating if any other buttons with the .btn-mul-div-sticky class are selected]
-*/
-function checkOtherStickyButtons(btnId) {
-    let mdbtnIdArray = $(".btn-mul-div-sticky");
-    let activeFlag = false;
-    let i = 0;
-    while ((activeFlag == false) && (i < mdbtnIdArray.length)) {
-        if (((mdbtnIdArray[i].id) !== btnId) && (mdbtnIdArray[i].classList.contains("active"))) {
-            activeFlag = true;
-        }
-        i++;
-    }
-    return (activeFlag);
 }
 
 /**
@@ -549,7 +513,7 @@ function setScore(scoreArray) {
 function setQuestion(qCurrent) {
     // Set question string from current question array
     let qString = qCurrent[0];
-    
+
     // Check if this is visual mode (has imageData in qCurrent[3])
     if (qCurrent.length > 3 && qCurrent[3]) {
         // Visual mode - display image as the question with pinch-to-zoom
@@ -562,7 +526,7 @@ function setQuestion(qCurrent) {
             visualHtml += '<div class="visual-question-desc" style="font-size: 1.4rem; margin-top: 8px; color: #A2529A;">' + qString + '</div>';
         }
         $("#question").html(visualHtml);
-        
+
         // Initialize zoom functionality for visual question
         initVisualZoom();
     } else if (qCurrent.length > 2 && qCurrent[2]) {
@@ -580,7 +544,7 @@ function setQuestion(qCurrent) {
         // For regular questions, just show the question
         $("#question").html(qString);
     }
-    
+
     return (qCurrent);
 }
 /**
@@ -599,36 +563,6 @@ function setBalloons(answerArray) {
     return (answerArray);
 }
 
-/**
-* [Function to set multiple choice options for exam mode]
-* @param  {[array]}   choicesArray      [Array of 4 choices for multiple choice]
-* @return {[array]}                     [Array of choices]
-*/
-function setMultipleChoiceOptions(choicesArray) {
-    // Ensure we have exactly 4 choices
-    if (choicesArray.length !== 4) {
-        console.error("Multiple choice needs exactly 4 options, got:", choicesArray.length);
-        return choicesArray;
-    }
-    
-    // Set choice text for A, B, C, D
-    $("#choice-a .choice-text").html(choicesArray[0]);
-    $("#choice-b .choice-text").html(choicesArray[1]);
-    $("#choice-c .choice-text").html(choicesArray[2]);
-    $("#choice-d .choice-text").html(choicesArray[3]);
-    
-    // Remove any previous correct/incorrect classes
-    $(".choice-option").removeClass("correct incorrect");
-    
-    // Show multiple choice container
-    $("#multiple-choice-container").removeClass("d-none");
-    
-    // Hide balloons for multiple choice mode
-    $(".game-section-balloons").hide();
-    
-    return choicesArray;
-}
-
 $("#play").on("click", function () {
     const selected = document.querySelector('input[name="game-mode"]:checked');
 
@@ -643,16 +577,16 @@ $("#play").on("click", function () {
     if (selectedMode === 'exam') {
         // Ambil sub mode yang aktif (Essay atau Pilihan Ganda)
         const examSubMode = document.querySelector('.btn-exam-toggle.active');
-        
+
         if (examSubMode) {
             const subModeText = examSubMode.textContent.trim();
             let hasQuestions = false;
-            
+
             // Cek apakah ada soal di localStorage
             if (subModeText === 'Essay') {
                 const essayQuestions = getEssayQuestions();
                 hasQuestions = essayQuestions && essayQuestions.length > 0;
-                
+
                 if (!hasQuestions) {
                     // Tampilkan notifikasi
                     showNotification('Silakan input soal Essay terlebih dahulu sebelum memulai ujian! 📝');
@@ -661,7 +595,7 @@ $("#play").on("click", function () {
             } else if (subModeText === 'Pilihan Ganda') {
                 const pilganQuestions = getPilganQuestions();
                 hasQuestions = pilganQuestions && pilganQuestions.length > 0;
-                
+
                 if (!hasQuestions) {
                     // Tampilkan notifikasi
                     showNotification('Silakan input soal Pilihan Ganda terlebih dahulu sebelum memulai ujian! 📋');
@@ -670,7 +604,7 @@ $("#play").on("click", function () {
             } else if (subModeText === 'Visual') {
                 const visualQuestions = getVisualQuestions();
                 hasQuestions = visualQuestions && visualQuestions.length > 0;
-                
+
                 if (!hasQuestions) {
                     // Tampilkan notifikasi
                     showNotification('Silakan input soal Visual terlebih dahulu sebelum memulai ujian! 🖼️');
@@ -692,7 +626,11 @@ $("#closeModal").on("click", function () {
 
 // Tombol "How To Play"
 $('#information').on("click", function () {
-    document.querySelector('#infoBox').classList.add('show');
+    if (window.PopbaTutorial) {
+        window.PopbaTutorial.start();
+    } else {
+        document.querySelector('#infoBox').classList.add('show');
+    }
 });
 
 // Tombol "Close"
@@ -729,7 +667,12 @@ let visualZoomState = {
     lastScale: 1,
     initialDistance: 0,
     keydownHandler: null,
-    initialized: false
+    // FITUR TAMBAHAN: State untuk drag
+    isDragging: false,
+    startX: 0,
+    startY: 0,
+    translateX: 0,
+    translateY: 0
 };
 
 /**
@@ -755,9 +698,14 @@ function initVisualZoom() {
         visualZoomState.keydownHandler = null;
     }
     
-    // Reset scale
+    // Reset semua state (termasuk fitur tambahan)
     visualZoomState.scale = 1;
     visualZoomState.lastScale = 1;
+    visualZoomState.isDragging = false;
+    visualZoomState.startX = 0;
+    visualZoomState.startY = 0;
+    visualZoomState.translateX = 0;
+    visualZoomState.translateY = 0;
     
     // Create fullscreen overlay for zoomed view
     const overlay = document.createElement('div');
@@ -783,7 +731,9 @@ function initVisualZoom() {
     
     function openZoomOverlay() {
         visualZoomState.scale = 1;
-        zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+        visualZoomState.translateX = 0;
+        visualZoomState.translateY = 0;
+        zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(0px, 0px)`;
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
@@ -792,7 +742,10 @@ function initVisualZoom() {
         overlay.classList.remove('active');
         document.body.style.overflow = '';
         visualZoomState.scale = 1;
-        zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+        visualZoomState.translateX = 0;
+        visualZoomState.translateY = 0;
+        zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(0px, 0px)`;
+        visualZoomState.isDragging = false; // Reset drag state
     }
     
     // Click on image to open fullscreen zoom
@@ -812,7 +765,7 @@ function initVisualZoom() {
         e.stopPropagation();
         if (visualZoomState.scale < 3) {
             visualZoomState.scale += 0.5;
-            zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+            zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(${visualZoomState.translateX}px, ${visualZoomState.translateY}px)`;
         }
     });
     
@@ -820,7 +773,7 @@ function initVisualZoom() {
         e.stopPropagation();
         if (visualZoomState.scale > 0.5) {
             visualZoomState.scale -= 0.5;
-            zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+            zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(${visualZoomState.translateX}px, ${visualZoomState.translateY}px)`;
         }
     });
     
@@ -841,6 +794,9 @@ function initVisualZoom() {
         if (e.touches.length === 2) {
             visualZoomState.initialDistance = getDistance(e.touches[0], e.touches[1]);
             visualZoomState.lastScale = visualZoomState.scale;
+        } else if (e.touches.length === 1) {
+            // Reset drag saat mulai touch baru
+            visualZoomState.isDragging = false;
         }
     }, { passive: true });
     
@@ -850,7 +806,21 @@ function initVisualZoom() {
             const currentDistance = getDistance(e.touches[0], e.touches[1]);
             const newScale = visualZoomState.lastScale * (currentDistance / visualZoomState.initialDistance);
             visualZoomState.scale = Math.min(Math.max(0.5, newScale), 3);
-            zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+            zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(${visualZoomState.translateX}px, ${visualZoomState.translateY}px)`;
+        } else if (e.touches.length === 1 && visualZoomState.isDragging) {
+            // Handle drag untuk touch
+            e.preventDefault();
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - visualZoomState.startX;
+            const deltaY = touch.clientY - visualZoomState.startY;
+            
+            visualZoomState.translateX += deltaX / visualZoomState.scale;
+            visualZoomState.translateY += deltaY / visualZoomState.scale;
+            
+            visualZoomState.startX = touch.clientX;
+            visualZoomState.startY = touch.clientY;
+            
+            zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(${visualZoomState.translateX}px, ${visualZoomState.translateY}px)`;
         }
     }, { passive: false });
     
@@ -868,15 +838,139 @@ function initVisualZoom() {
             } else if (e.key === '+' || e.key === '=') {
                 if (visualZoomState.scale < 3) {
                     visualZoomState.scale += 0.5;
-                    zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+                    zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(${visualZoomState.translateX}px, ${visualZoomState.translateY}px)`;
                 }
             } else if (e.key === '-') {
                 if (visualZoomState.scale > 0.5) {
                     visualZoomState.scale -= 0.5;
-                    zoomedImg.style.transform = `scale(${visualZoomState.scale})`;
+                    zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(${visualZoomState.translateX}px, ${visualZoomState.translateY}px)`;
                 }
             }
         }
     };
     document.addEventListener('keydown', visualZoomState.keydownHandler);
+    
+    // ============================================
+    // FITUR TAMBAHAN 1: DOUBLE-CLICK RESET ZOOM
+    // ============================================
+    zoomedImg.addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        // Reset zoom scale ke 100%
+        visualZoomState.scale = 1;
+        
+        // Reset posisi drag ke tengah
+        visualZoomState.translateX = 0;
+        visualZoomState.translateY = 0;
+        
+        // Apply transform dengan animasi halus
+        zoomedImg.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(0px, 0px)`;
+        
+        // Beri efek bounce kecil (opsional)
+        setTimeout(() => {
+            zoomedImg.style.transition = 'transform 0.15s ease';
+            zoomedImg.style.transform = `scale(${visualZoomState.scale * 1.05}) translate(0px, 0px)`;
+            
+            setTimeout(() => {
+                zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(0px, 0px)`;
+                
+                // Hapus transisi setelah animasi selesai
+                setTimeout(() => {
+                    zoomedImg.style.transition = '';
+                }, 150);
+            }, 150);
+        }, 300);
+    });
+    
+    // ============================================
+    // FITUR TAMBAHAN 2: DRAG GAMBAR SAAT ZOOM
+    // ============================================
+    
+    // Fungsi untuk memulai drag (mouse)
+    function startDrag(e) {
+        // Hanya aktif jika zoom > 100% dan overlay aktif
+        if (visualZoomState.scale > 1 && overlay.classList.contains('active')) {
+            visualZoomState.isDragging = true;
+            
+            // Simpan posisi awal mouse
+            if (e.type === 'mousedown') {
+                visualZoomState.startX = e.clientX;
+                visualZoomState.startY = e.clientY;
+                e.preventDefault(); // Mencegah seleksi teks
+            } 
+            // Simpan posisi awal touch
+            else if (e.type === 'touchstart' && e.touches.length === 1) {
+                visualZoomState.startX = e.touches[0].clientX;
+                visualZoomState.startY = e.touches[0].clientY;
+                visualZoomState.isDragging = true;
+            }
+            
+            // Ubah kursor saat drag
+            zoomedImg.style.cursor = 'grabbing';
+        }
+    }
+    
+    // Fungsi untuk menggerakkan drag (mouse)
+    function doDrag(e) {
+        if (!visualZoomState.isDragging) return;
+        
+        let clientX, clientY;
+        
+        if (e.type === 'mousemove') {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        } else if (e.type === 'touchmove' && e.touches.length === 1) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+            e.preventDefault(); // Mencegah scroll
+        } else {
+            return;
+        }
+        
+        // Hitung pergerakan mouse/touch
+        const deltaX = clientX - visualZoomState.startX;
+        const deltaY = clientY - visualZoomState.startY;
+        
+        // Update posisi translate (dibagi scale agar gerakan proporsional)
+        visualZoomState.translateX += deltaX / visualZoomState.scale;
+        visualZoomState.translateY += deltaY / visualZoomState.scale;
+        
+        // Update posisi awal untuk gerakan berikutnya
+        visualZoomState.startX = clientX;
+        visualZoomState.startY = clientY;
+        
+        // Apply transform
+        zoomedImg.style.transform = `scale(${visualZoomState.scale}) translate(${visualZoomState.translateX}px, ${visualZoomState.translateY}px)`;
+    }
+    
+    // Fungsi untuk menghentikan drag
+    function stopDrag() {
+        visualZoomState.isDragging = false;
+        zoomedImg.style.cursor = visualZoomState.scale > 1 ? 'grab' : 'default';
+    }
+    
+    // Event listeners untuk drag (MOUSE)
+    zoomedImg.addEventListener('mousedown', startDrag);
+    overlay.addEventListener('mousemove', doDrag);
+    overlay.addEventListener('mouseup', stopDrag);
+    overlay.addEventListener('mouseleave', stopDrag);
+    
+    // Event listeners untuk drag (TOUCH)
+    zoomedImg.addEventListener('touchstart', function(e) {
+        if (e.touches.length === 1) {
+            startDrag(e);
+        }
+    }, { passive: true });
+    
+    // Atur kursor awal
+    zoomedImg.style.cursor = visualZoomState.scale > 1 ? 'grab' : 'default';
+    
+    // Update kursor saat zoom berubah (listener ini jalan setelah listener zoom di atas)
+    function updateCursor() {
+        zoomedImg.style.cursor = visualZoomState.scale > 1 ? 'grab' : 'default';
+    }
+    zoomIn.addEventListener('click', updateCursor);
+    zoomOut.addEventListener('click', updateCursor);
 }

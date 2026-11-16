@@ -1,12 +1,12 @@
-(function() {
+(function () {
     'use strict';
-    
+
     const NIGHT_MODE_KEY = 'balloonPopMaths_nightMode';
-    
+
     function isNightMode() {
         return localStorage.getItem(NIGHT_MODE_KEY) === 'true';
     }
-    
+
     function setNightMode(enabled) {
         localStorage.setItem(NIGHT_MODE_KEY, enabled);
         if (enabled) {
@@ -16,13 +16,13 @@
         }
         updateButtons(enabled);
     }
-    
+
     function updateButtons(isNight) {
         const dayBtn = document.getElementById('day-mode');
         const nightBtn = document.getElementById('night-mode');
         const dayRadio = document.getElementById('theme-day');
         const nightRadio = document.getElementById('theme-night');
-        
+
         if (dayBtn && nightBtn) {
             if (isNight) {
                 dayBtn.classList.remove('active');
@@ -37,38 +37,38 @@
             }
         }
     }
-    
+
     function initNightMode() {
         if (isNightMode()) {
             setNightMode(true);
         }
-        
+
         const dayBtn = document.getElementById('day-mode');
         const nightBtn = document.getElementById('night-mode');
-        
+
         if (dayBtn) {
-            dayBtn.addEventListener('click', function() {
+            dayBtn.addEventListener('click', function () {
                 setNightMode(false);
             });
         }
-        
+
         if (nightBtn) {
-            nightBtn.addEventListener('click', function() {
+            nightBtn.addEventListener('click', function () {
                 setNightMode(true);
             });
         }
     }
-    
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initNightMode);
     } else {
         initNightMode();
     }
-    
+
     window.NightMode = {
-        enable: function() { setNightMode(true); },
-        disable: function() { setNightMode(false); },
-        toggle: function() { setNightMode(!isNightMode()); },
+        enable: function () { setNightMode(true); },
+        disable: function () { setNightMode(false); },
+        toggle: function () { setNightMode(!isNightMode()); },
         isEnabled: isNightMode
     };
 })();

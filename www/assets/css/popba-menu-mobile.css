@@ -1,0 +1,169 @@
+/* =====================================================================
+   PopBA - susunan TOMBOL menu utama untuk layar HP (< 768px)
+   Hanya tombol yang dipindah / diperkecil / dikelompokkan.
+   Logo, background, warna, teks, dan ID tombol tidak diubah.
+   Dimuat SETELAH style.css. Laptop / desktop (>= 992px) tidak terpengaruh.
+
+   Susunan di HP:
+     [ Aljabar | Waktu | Massa | Volume ]
+     [ Bangunan  |  Operasi  |  Ujian  ]
+     [ High Score                      ]
+     [ PLAY                            ]
+     [ Suara  (on|off) | Tema (siang|malam) ]
+     [ Pilihan         | Input Soal     ]
+     [ (panel Pilihan, muncul saat ditekan) ]
+     [ Bagaimana Cara Bermain?          ]
+   ===================================================================== */
+
+@media (max-width: 767.98px) {
+
+    /* Kolom kosong bawaan Bootstrap tidak dipakai */
+    #options-section .menu-spacer {
+        display: none;
+    }
+
+    /* Isi menu jadi grid 2 kolom supaya tombol bisa berpasangan */
+    #options-section .menu-main {
+        flex: 0 0 100%;
+        max-width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 0.8rem;
+        row-gap: 0;
+        align-content: start;
+    }
+
+    #options-section .menu-main > * {
+        min-width: 0;
+    }
+
+    #options-section .menu-main > .container-button-group {
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+    }
+
+    /* Baris yang selebar penuh */
+    #options-section .menu-main > .menu-modes,
+    #options-section .menu-main > .menu-highscore,
+    #options-section .menu-main > .menu-play,
+    #options-section .menu-main > .menu-options-panel,
+    #options-section .menu-main > .menu-info {
+        grid-column: 1 / -1;
+    }
+
+    /* Pasangan: Suara + Tema, lalu Pilihan + Input Soal */
+    #options-section .menu-main > .menu-audio,
+    #options-section .menu-main > .menu-btn-options {
+        grid-column: 1;
+    }
+
+    #options-section .menu-main > .menu-theme,
+    #options-section .menu-main > .menu-btn-input {
+        grid-column: 2;
+    }
+
+    /* Ukuran umum tombol dikecilkan */
+    #options-section .menu-main .btn-xl {
+        min-height: 3.8rem;
+        padding: 0.5rem 0.4rem;
+        font-size: 1.45rem;
+        line-height: 1.15;
+    }
+
+    /* ---- Tombol mode: 4 di baris pertama, 3 di baris kedua ---- */
+    #options-section .menu-modes {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 0.5rem;
+        max-width: none;
+    }
+
+    #options-section .menu-modes .btn {
+        grid-column: span 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3.8rem;
+        padding: 0.4rem 0.2rem;
+        font-size: 1.35rem;
+        white-space: nowrap;
+    }
+
+    #options-section .menu-modes .btn:nth-child(n+5),
+    #options-section .menu-modes .grid-7 {
+        grid-column: span 4;
+        grid-row: auto;
+    }
+
+    /* ---- High Score ---- */
+    #options-section .menu-highscore .btn-riwayat {
+        gap: 0.7rem;
+        font-size: 1.45rem;
+    }
+
+    /* ---- PLAY: tetap paling menonjol, tapi tidak setinggi dulu ---- */
+    #options-section .menu-play .btn-xxl {
+        min-height: 0;
+        padding: 0.9rem 0.5rem;
+        font-size: 3.4rem;
+        line-height: 1.1;
+        letter-spacing: 0.1em;
+    }
+
+    /* ---- Suara & Tema: dua tombol ikon per kelompok ---- */
+    #options-section .menu-audio .btn-xl,
+    #options-section .menu-theme .btn-xl {
+        padding: 0.5rem 0;
+        font-size: 1.6rem;
+    }
+
+    /* ---- Panel "Pilihan": tombol lebih ringkas ---- */
+    #options-section .menu-options-panel .options-inner {
+        padding-top: 0.2rem;
+    }
+
+    #options-section .menu-options-panel .container-button-group {
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+    }
+
+    /* Baris tombol di dalam panel tidak lagi lebih lebar dari tombol menu lainnya */
+    #options-section .menu-options-panel .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    #options-section .menu-options-panel .container-button {
+        padding: 0.2rem;
+    }
+
+    #options-section .menu-options-panel .btn-xl {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3.6rem;
+        padding: 0.4rem 0.3rem;
+        font-size: 1.3rem;
+        line-height: 1.15;
+        white-space: normal;
+    }
+
+    /* ---- Cara Bermain ---- */
+    #options-section .menu-info .btn-xl {
+        font-size: 1.45rem;
+    }
+}
+
+/* HP sangat sempit (<= 360px) */
+@media (max-width: 360px) {
+    #options-section .menu-modes .btn {
+        font-size: 1.2rem;
+    }
+
+    #options-section .menu-main .btn-xl {
+        font-size: 1.35rem;
+    }
+
+    #options-section .menu-options-panel .btn-xl {
+        font-size: 1.2rem;
+    }
+}

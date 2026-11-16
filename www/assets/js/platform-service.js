@@ -5,7 +5,7 @@
  */
 /*jshint esversion: 8 */
 
-const PlatformService = (function() {
+const PlatformService = (function () {
     'use strict';
 
     let currentPlatform = 'web';
@@ -113,13 +113,13 @@ const PlatformService = (function() {
     }
 
     function isMobile() {
-        return currentPlatform === 'cordova' || 
-               /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        return currentPlatform === 'cordova' ||
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     }
 
     function isDesktop() {
-        return currentPlatform === 'electron' || 
-               (!isMobile() && currentPlatform === 'web');
+        return currentPlatform === 'electron' ||
+            (!isMobile() && currentPlatform === 'web');
     }
 
     function getCapabilities() {
@@ -170,12 +170,12 @@ const PlatformService = (function() {
                 return true;
             }
         }
-        
+
         if ('Notification' in window && Notification.permission === 'granted') {
             new Notification(title, options);
             return true;
         }
-        
+
         return false;
     }
 
@@ -249,7 +249,7 @@ const PlatformService = (function() {
 window.PlatformService = PlatformService;
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         PlatformService.init();
     });
 } else {

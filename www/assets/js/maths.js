@@ -19,18 +19,18 @@ let useStoryMode = true;
 */
 function returnQuestionArray(gameMode, optionArray, qno) {
     let questionArray = [];
-    
+
     const storyModes = ['aljabar', 'time', 'heavy', 'volume', 'up', 'operator'];
-    
+
     if (useStoryMode && storyModes.includes(gameMode) && typeof getStoryQuestionArray === 'function') {
         const difficulty = typeof bpmDifficulty !== 'undefined' ? bpmDifficulty : 'medium';
         const subMode = optionArray.length > 0 ? optionArray[0] : null;
-        
+
         console.log(`🎮 Story Mode Request: gameMode=${gameMode}, subMode=${subMode}, difficulty=${difficulty}, qno=${qno}`);
-        
+
         try {
             questionArray = getStoryQuestionArray(gameMode, difficulty, subMode, qno);
-            
+
             if (questionArray && questionArray.length >= qno) {
                 console.log(`✅ Story Mode: Generated ${questionArray.length} questions for ${gameMode} - ${subMode}`);
                 return questionArray;
@@ -41,9 +41,9 @@ function returnQuestionArray(gameMode, optionArray, qno) {
             console.warn('Story Mode error, falling back to standard questions:', error);
         }
     }
-    
+
     console.log(`📝 Using standard question generator for ${gameMode}`);
-    
+
     if (gameMode == 'aljabar') {
         questionArray = returnAljabarQuestionArray(optionArray, qno);
     } else if (gameMode == 'time') {
@@ -554,7 +554,7 @@ function returnExamQuestionArray(optionArray, qno) {
 
     for (let i = 0; i < numQuestions; i++) {
         let q = sourceQuestions[i];
-        
+
         // For multiple choice, store choices in question object for later use
         if (examType === "Pilihan Ganda" && q.choices) {
             // Format: [question, answer, choices]
@@ -579,16 +579,16 @@ function returnExamQuestionArray(optionArray, qno) {
 * @return {[array]}     qArray          [Question array, array of 2 item arrays to check]
 */
 function checkQuestionArray(nq, qArray) {
-                let i = 0;
-                let qCheck = false;
-                while ((qCheck == false) && (i < qArray.length)) {
-                    if (qArray[i][0] == nq[0]) {
-                        qCheck = true;
-                    }
-                    i++;
-                }
-                return (qCheck);
-            }
+    let i = 0;
+    let qCheck = false;
+    while ((qCheck == false) && (i < qArray.length)) {
+        if (qArray[i][0] == nq[0]) {
+            qCheck = true;
+        }
+        i++;
+    }
+    return (qCheck);
+}
 
 /**
 * [Function to generate array of 5 wrong answers and the correct answer, given game mode and current question]
@@ -597,243 +597,243 @@ function checkQuestionArray(nq, qArray) {
 * @return {[array]}                     [Array of 2 item arrays, 5 wrong answers and 1 correct answer]
 */
 function answerArray(gameMode, qCurrent) {
-            // Initialise answer array
-            let answerArray = [];
-            // Check game mode, run relevant wrong answer function to add wrong answers to answer array
-            if (gameMode == 'aljabar') {
-                answerArray = wrongAnswerAljabarQuestion(qCurrent);
-            } else if (gameMode == 'time') {
-                answerArray = wrongAnswerTimeQuestion(qCurrent);
-            } else if (gameMode == 'heavy') {
-                answerArray = wrongAnswerHeavyQuestion(qCurrent);
-            } else if (gameMode == 'volume') {
-                answerArray = wrongAnswerVolumeQuestion(qCurrent);
-            } else if (gameMode == 'up') {
-                answerArray = wrongAnswerUpQuestion(qCurrent);
-            } else if (gameMode == 'operator') {
-                answerArray = wrongAnswerOperatorQuestion(qCurrent);
-            } else if (gameMode == 'exam') {
-                // For exam mode, check if it's multiple choice (has choices) or essay
-                if (qCurrent.length > 2 && qCurrent[2]) {
-                    // Pilihan Ganda - return letters A, B, C, D as balloon answers
-                    // and create mapping from letters to actual answers
-                    let choices = qCurrent[2];
-                    let correctAnswer = qCurrent[1];
-                    
-                    // Create mapping from letter to choice
-                    bpmMultipleChoiceMapping = {};
-                    for (let i = 0; i < choices.length; i++) {
-                        let letter = String.fromCharCode(65 + i); // A, B, C, D
-                        bpmMultipleChoiceMapping[letter] = choices[i];
-                    }
-                    
-                    // Return array of letters A, B, C, D (4 items only for 4 balloons)
-                    answerArray = ["A", "B", "C", "D"];
-                    
-                    console.log("🔤 Multiple Choice Mapping:", bpmMultipleChoiceMapping);
-                    console.log("✅ Correct Answer:", correctAnswer);
-                    
-                    return answerArray;
-                } else {
-                    // Essay - generate wrong answers based on correct answer
-                    answerArray = wrongAnswerExamQuestion(qCurrent);
-                }
-            }
-            // Add correct answer to answer array
-            answerArray.push(qCurrent[1]);
-            // Shuffle answer array to randomise order
-            answerArray = shuffleArray(answerArray);
-            return (answerArray);
-        }
+    // Initialise answer array
+    let answerArray = [];
+    // Check game mode, run relevant wrong answer function to add wrong answers to answer array
+    if (gameMode == 'aljabar') {
+        answerArray = wrongAnswerAljabarQuestion(qCurrent);
+    } else if (gameMode == 'time') {
+        answerArray = wrongAnswerTimeQuestion(qCurrent);
+    } else if (gameMode == 'heavy') {
+        answerArray = wrongAnswerHeavyQuestion(qCurrent);
+    } else if (gameMode == 'volume') {
+        answerArray = wrongAnswerVolumeQuestion(qCurrent);
+    } else if (gameMode == 'up') {
+        answerArray = wrongAnswerUpQuestion(qCurrent);
+    } else if (gameMode == 'operator') {
+        answerArray = wrongAnswerOperatorQuestion(qCurrent);
+    } else if (gameMode == 'exam') {
+        // For exam mode, check if it's multiple choice (has choices) or essay
+        if (qCurrent.length > 2 && qCurrent[2]) {
+            // Pilihan Ganda - return letters A, B, C, D as balloon answers
+            // and create mapping from letters to actual answers
+            let choices = qCurrent[2];
+            let correctAnswer = qCurrent[1];
 
-
-        /**
-         * [Function to generate array of 5 wrong answers for algebra questions]
-         * @param  {[array]} qCurrent [Current question array: [question, correctAnswer]]
-         * @return {[array]}          [Array of 5 wrong answers]
-         */
-        function wrongAnswerAljabarQuestion(qCurrent) {
-            let cA = qCurrent[1];
-            return generateSmartWrongAnswers(cA, 5);
-        }
-
-        function generateSmartWrongAnswers(correctAnswer, count) {
-            let cA = Number(correctAnswer);
-            if (isNaN(cA)) cA = 0;
-            
-            let wrongAnswerArray = [];
-            let magnitude = Math.max(1, Math.abs(cA));
-            
-            let offsets;
-            if (magnitude <= 10) {
-                offsets = [1, 2, 3, -1, -2, -3];
-            } else if (magnitude <= 100) {
-                offsets = [1, 2, 5, 10, -1, -2, -5, -10];
-            } else if (magnitude <= 1000) {
-                offsets = [1, 5, 10, 50, 100, -1, -5, -10, -50, -100];
-            } else {
-                let step = Math.pow(10, Math.floor(Math.log10(magnitude)) - 1);
-                offsets = [step, step*2, step*5, -step, -step*2, -step*5];
-            }
-            
-            for (let offset of offsets) {
-                let wrong = cA + offset;
-                if (wrong >= 0 && wrong !== cA && !wrongAnswerArray.includes(wrong)) {
-                    wrongAnswerArray.push(wrong);
-                    if (wrongAnswerArray.length >= count) break;
-                }
-            }
-            
-            let maxAttempts = 50;
-            let attempts = 0;
-            while (wrongAnswerArray.length < count && attempts < maxAttempts) {
-                attempts++;
-                let variance = Math.max(5, Math.floor(magnitude * 0.3));
-                let rand = cA + Math.floor(Math.random() * variance * 2) - variance;
-                if (rand >= 0 && rand !== cA && !wrongAnswerArray.includes(rand)) {
-                    wrongAnswerArray.push(rand);
-                }
-            }
-            
-            wrongAnswerArray = wrongAnswerArray.sort(() => Math.random() - 0.5);
-            return wrongAnswerArray.slice(0, count);
-        }
-
-        function wrongAnswerTimeQuestion(qCurrent) {
-            let cA = qCurrent[1];
-            return generateSmartWrongAnswers(cA, 5);
-        }
-
-        function wrongAnswerHeavyQuestion(qCurrent) {
-            let cA = qCurrent[1];
-            return generateSmartWrongAnswers(cA, 5);
-        }
-
-        function wrongAnswerVolumeQuestion(qCurrent) {
-            let cA = qCurrent[1];
-            return generateSmartWrongAnswers(cA, 5);
-        }
-
-        function wrongAnswerUpQuestion(qCurrent) {
-            let cA = qCurrent[1];
-            return generateSmartWrongAnswers(cA, 5);
-        }
-
-        function wrongAnswerOperatorQuestion(qCurrent) {
-            let cA = qCurrent[1];
-            return generateSmartWrongAnswers(cA, 5);
-        }
-
-        /**
-         * [Function to generate array of 5 wrong answers for exam essay questions]
-         * @param  {[array]} qCurrent [Current question array: [question, correctAnswer]]
-         * @return {[array]}          [Array of 5 wrong answers]
-         */
-        function wrongAnswerExamQuestion(qCurrent) {
-            let cA = qCurrent[1]; // Correct answer
-            let wrongAnswerArray = [];
-
-            // Check if answer is numeric
-            if (!isNaN(cA) && cA !== null && cA !== '') {
-                // Generate wrong answers for numeric answers
-                let numAnswer = Number(cA);
-                let offsets = [1, 2, -1, -2];
-                
-                offsets.forEach(offset => {
-                    let wrong = numAnswer + offset;
-                    if (wrong >= 0) { // Avoid negative numbers unless meaningful
-                        wrongAnswerArray.push(wrong);
-                    }
-                });
-
-                // Add one more random number if needed
-                while (wrongAnswerArray.length < 5) {
-                    let rand = Math.floor(Math.random() * 100);
-                    if (!wrongAnswerArray.includes(rand) && rand !== numAnswer) {
-                        wrongAnswerArray.push(rand);
-                    }
-                }
-            } else {
-                // For text answers, generate variations
-                // This is tricky - for now, add some placeholder wrong answers
-                // Teachers should use multiple choice for text-based questions
-                wrongAnswerArray = [
-                    "Jawaban A",
-                    "Jawaban B", 
-                    "Jawaban C",
-                    "Jawaban D",
-                    "Jawaban E"
-                ];
+            // Create mapping from letter to choice
+            bpmMultipleChoiceMapping = {};
+            for (let i = 0; i < choices.length; i++) {
+                let letter = String.fromCharCode(65 + i); // A, B, C, D
+                bpmMultipleChoiceMapping[letter] = choices[i];
             }
 
-            // Shuffle wrong answers
-            wrongAnswerArray = wrongAnswerArray.sort(() => Math.random() - 0.5);
+            // Return array of letters A, B, C, D (4 items only for 4 balloons)
+            answerArray = ["A", "B", "C", "D"];
 
-            // Return exactly 5 wrong answers
-            return wrongAnswerArray.slice(0, 5);
-        }
+            console.log("🔤 Multiple Choice Mapping:", bpmMultipleChoiceMapping);
+            console.log("✅ Correct Answer:", correctAnswer);
 
-        /**
-        * [Function to populate wrong answer array with two randomly generated integers between the two integers given. 
-          Generates random integers until a random integer not already in the array and not equal to the correct answer is found.
-          Returns completed wrong answer array]
-        * @param  {[array]}     wrongAnswerArray    [Array of 2 item arrays]
-        * @param  {[number]}    cA                  [Correct answer]
-        * @param  {[number]}    minInt              [Minimum integer]
-        * @param  {[number]}    maxInt              [Maximum integer]
-        * @return {[array]}                         [Array of 2 item arrays]
-        */
-        function wrongAnswerArrayComplete(wrongAnswerArray, cA, minInt, maxInt) {
-            if ((maxInt - minInt) < 6) {
-                maxInt = minInt + 6;
-            }
-            // Get random integer between 2 integers given
-            let randomInt;
-            randomInt = getRandomIntInclusive(minInt, maxInt);
-            // Check if random integer is in wrong answer array, generate another random integer if it is
-            while ((wrongAnswerArray.includes(randomInt)) || (randomInt == cA)) {
-                randomInt = getRandomIntInclusive(minInt, maxInt);
-            }
-            // Add random integer to wrong answer array
-            wrongAnswerArray.push(randomInt);
-            // Get random integer between 2 integers given
-            randomInt = getRandomIntInclusive(minInt, maxInt);
-            // Check if random integer is in wrong answer array, generate another random integer if it is
-            while ((wrongAnswerArray.includes(randomInt)) || (randomInt == cA)) {
-                randomInt = getRandomIntInclusive(minInt, maxInt);
-            }
-            // Add random integer to wrong answer array
-            wrongAnswerArray.push(randomInt);
-            return (wrongAnswerArray);
+            return answerArray;
+        } else {
+            // Essay - generate wrong answers based on correct answer
+            answerArray = wrongAnswerExamQuestion(qCurrent);
         }
+    }
+    // Add correct answer to answer array
+    answerArray.push(qCurrent[1]);
+    // Shuffle answer array to randomise order
+    answerArray = shuffleArray(answerArray);
+    return (answerArray);
+}
 
-        /**
-        * [Function to generate a random integer between the two integers given. 
-          Function referenced from MDN Web Docs link below:
-          https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random]
-        * @param  {[number]}    min             [Minimum integer]
-        * @param  {[number]}    max             [Maximum integer]
-        * @return {[number]}                    [Integer]
-        */
-        function getRandomIntInclusive(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            // The maximum is inclusive and the minimum is inclusive
-            return Math.floor(Math.random() * (max - min + 1) + min);
-        }
 
-        /**
-        * [Function to randomize an array in place using the Durstenfeld shuffle algorithm. 
-          Function referenced from stack overflow link below, many thanks to Laurens Holst:
-          https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array]
-        * @param  {[array]}     arrayToShuffle  [Array to shuffle]
-        * @return {[array]}                     [Shuffled array]
-        */
-        function shuffleArray(arrayToShuffle) {
-            let j;
-            for (let i = arrayToShuffle.length - 1; i > 0; i--) {
-                j = Math.floor(Math.random() * (i + 1));
-                [arrayToShuffle[i], arrayToShuffle[j]] = [arrayToShuffle[j], arrayToShuffle[i]];
-            }
-            return (arrayToShuffle);
+/**
+ * [Function to generate array of 5 wrong answers for algebra questions]
+ * @param  {[array]} qCurrent [Current question array: [question, correctAnswer]]
+ * @return {[array]}          [Array of 5 wrong answers]
+ */
+function wrongAnswerAljabarQuestion(qCurrent) {
+    let cA = qCurrent[1];
+    return generateSmartWrongAnswers(cA, 5);
+}
+
+function generateSmartWrongAnswers(correctAnswer, count) {
+    let cA = Number(correctAnswer);
+    if (isNaN(cA)) cA = 0;
+
+    let wrongAnswerArray = [];
+    let magnitude = Math.max(1, Math.abs(cA));
+
+    let offsets;
+    if (magnitude <= 10) {
+        offsets = [1, 2, 3, -1, -2, -3];
+    } else if (magnitude <= 100) {
+        offsets = [1, 2, 5, 10, -1, -2, -5, -10];
+    } else if (magnitude <= 1000) {
+        offsets = [1, 5, 10, 50, 100, -1, -5, -10, -50, -100];
+    } else {
+        let step = Math.pow(10, Math.floor(Math.log10(magnitude)) - 1);
+        offsets = [step, step * 2, step * 5, -step, -step * 2, -step * 5];
+    }
+
+    for (let offset of offsets) {
+        let wrong = cA + offset;
+        if (wrong >= 0 && wrong !== cA && !wrongAnswerArray.includes(wrong)) {
+            wrongAnswerArray.push(wrong);
+            if (wrongAnswerArray.length >= count) break;
         }
+    }
+
+    let maxAttempts = 50;
+    let attempts = 0;
+    while (wrongAnswerArray.length < count && attempts < maxAttempts) {
+        attempts++;
+        let variance = Math.max(5, Math.floor(magnitude * 0.3));
+        let rand = cA + Math.floor(Math.random() * variance * 2) - variance;
+        if (rand >= 0 && rand !== cA && !wrongAnswerArray.includes(rand)) {
+            wrongAnswerArray.push(rand);
+        }
+    }
+
+    wrongAnswerArray = wrongAnswerArray.sort(() => Math.random() - 0.5);
+    return wrongAnswerArray.slice(0, count);
+}
+
+function wrongAnswerTimeQuestion(qCurrent) {
+    let cA = qCurrent[1];
+    return generateSmartWrongAnswers(cA, 5);
+}
+
+function wrongAnswerHeavyQuestion(qCurrent) {
+    let cA = qCurrent[1];
+    return generateSmartWrongAnswers(cA, 5);
+}
+
+function wrongAnswerVolumeQuestion(qCurrent) {
+    let cA = qCurrent[1];
+    return generateSmartWrongAnswers(cA, 5);
+}
+
+function wrongAnswerUpQuestion(qCurrent) {
+    let cA = qCurrent[1];
+    return generateSmartWrongAnswers(cA, 5);
+}
+
+function wrongAnswerOperatorQuestion(qCurrent) {
+    let cA = qCurrent[1];
+    return generateSmartWrongAnswers(cA, 5);
+}
+
+/**
+ * [Function to generate array of 5 wrong answers for exam essay questions]
+ * @param  {[array]} qCurrent [Current question array: [question, correctAnswer]]
+ * @return {[array]}          [Array of 5 wrong answers]
+ */
+function wrongAnswerExamQuestion(qCurrent) {
+    let cA = qCurrent[1]; // Correct answer
+    let wrongAnswerArray = [];
+
+    // Check if answer is numeric
+    if (!isNaN(cA) && cA !== null && cA !== '') {
+        // Generate wrong answers for numeric answers
+        let numAnswer = Number(cA);
+        let offsets = [1, 2, -1, -2];
+
+        offsets.forEach(offset => {
+            let wrong = numAnswer + offset;
+            if (wrong >= 0) { // Avoid negative numbers unless meaningful
+                wrongAnswerArray.push(wrong);
+            }
+        });
+
+        // Add one more random number if needed
+        while (wrongAnswerArray.length < 5) {
+            let rand = Math.floor(Math.random() * 100);
+            if (!wrongAnswerArray.includes(rand) && rand !== numAnswer) {
+                wrongAnswerArray.push(rand);
+            }
+        }
+    } else {
+        // For text answers, generate variations
+        // This is tricky - for now, add some placeholder wrong answers
+        // Teachers should use multiple choice for text-based questions
+        wrongAnswerArray = [
+            "Jawaban A",
+            "Jawaban B",
+            "Jawaban C",
+            "Jawaban D",
+            "Jawaban E"
+        ];
+    }
+
+    // Shuffle wrong answers
+    wrongAnswerArray = wrongAnswerArray.sort(() => Math.random() - 0.5);
+
+    // Return exactly 5 wrong answers
+    return wrongAnswerArray.slice(0, 5);
+}
+
+/**
+* [Function to populate wrong answer array with two randomly generated integers between the two integers given. 
+  Generates random integers until a random integer not already in the array and not equal to the correct answer is found.
+  Returns completed wrong answer array]
+* @param  {[array]}     wrongAnswerArray    [Array of 2 item arrays]
+* @param  {[number]}    cA                  [Correct answer]
+* @param  {[number]}    minInt              [Minimum integer]
+* @param  {[number]}    maxInt              [Maximum integer]
+* @return {[array]}                         [Array of 2 item arrays]
+*/
+function wrongAnswerArrayComplete(wrongAnswerArray, cA, minInt, maxInt) {
+    if ((maxInt - minInt) < 6) {
+        maxInt = minInt + 6;
+    }
+    // Get random integer between 2 integers given
+    let randomInt;
+    randomInt = getRandomIntInclusive(minInt, maxInt);
+    // Check if random integer is in wrong answer array, generate another random integer if it is
+    while ((wrongAnswerArray.includes(randomInt)) || (randomInt == cA)) {
+        randomInt = getRandomIntInclusive(minInt, maxInt);
+    }
+    // Add random integer to wrong answer array
+    wrongAnswerArray.push(randomInt);
+    // Get random integer between 2 integers given
+    randomInt = getRandomIntInclusive(minInt, maxInt);
+    // Check if random integer is in wrong answer array, generate another random integer if it is
+    while ((wrongAnswerArray.includes(randomInt)) || (randomInt == cA)) {
+        randomInt = getRandomIntInclusive(minInt, maxInt);
+    }
+    // Add random integer to wrong answer array
+    wrongAnswerArray.push(randomInt);
+    return (wrongAnswerArray);
+}
+
+/**
+* [Function to generate a random integer between the two integers given. 
+  Function referenced from MDN Web Docs link below:
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random]
+* @param  {[number]}    min             [Minimum integer]
+* @param  {[number]}    max             [Maximum integer]
+* @return {[number]}                    [Integer]
+*/
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    // The maximum is inclusive and the minimum is inclusive
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+/**
+* [Function to randomize an array in place using the Durstenfeld shuffle algorithm. 
+  Function referenced from stack overflow link below, many thanks to Laurens Holst:
+  https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array]
+* @param  {[array]}     arrayToShuffle  [Array to shuffle]
+* @return {[array]}                     [Shuffled array]
+*/
+function shuffleArray(arrayToShuffle) {
+    let j;
+    for (let i = arrayToShuffle.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        [arrayToShuffle[i], arrayToShuffle[j]] = [arrayToShuffle[j], arrayToShuffle[i]];
+    }
+    return (arrayToShuffle);
+}

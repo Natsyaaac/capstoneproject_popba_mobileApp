@@ -164,13 +164,13 @@ function deletePilganQuestion(questionId) {
  */
 async function deleteVisualQuestion(questionId) {
     let questions = getVisualQuestions();
-    
+
     const questionToDelete = questions.find(q => q.id === questionId);
-    
+
     if (questionToDelete && questionToDelete.imageData) {
         if (window.firebaseUtils && window.firebaseUtils.isFirebaseUrl) {
             const isFirebaseImage = window.firebaseUtils.isFirebaseUrl(questionToDelete.imageData);
-            
+
             if (isFirebaseImage) {
                 try {
                     console.log('Deleting image from Firebase Storage...');
@@ -186,7 +186,7 @@ async function deleteVisualQuestion(questionId) {
             }
         }
     }
-    
+
     questions = questions.filter(q => q.id !== questionId);
     saveVisualQuestions(questions);
     displayVisualQuestions();
@@ -199,16 +199,16 @@ function displayEssayQuestions() {
     const questions = getEssayQuestions();
     const questionList = $('#essay-list');
     const noQuestionsMessage = $('#no-essay-message');
-    
+
     questionList.empty();
-    
+
     if (questions.length === 0) {
         noQuestionsMessage.show();
         return;
     }
-    
+
     noQuestionsMessage.hide();
-    
+
     questions.forEach((question, index) => {
         const questionHtml = `
             <div class="question-item essay-item" data-id="${question.id}">
@@ -237,16 +237,16 @@ function displayPilganQuestions() {
     const questions = getPilganQuestions();
     const questionList = $('#pilgan-list');
     const noQuestionsMessage = $('#no-pilgan-message');
-    
+
     questionList.empty();
-    
+
     if (questions.length === 0) {
         noQuestionsMessage.show();
         return;
     }
-    
+
     noQuestionsMessage.hide();
-    
+
     questions.forEach((question, index) => {
         const questionHtml = `
             <div class="question-item pilgan-item" data-id="${question.id}">
@@ -283,16 +283,16 @@ function displayVisualQuestions() {
     const questions = getVisualQuestions();
     const questionList = $('#visual-list');
     const noQuestionsMessage = $('#no-visual-message');
-    
+
     questionList.empty();
-    
+
     if (questions.length === 0) {
         noQuestionsMessage.show();
         return;
     }
-    
+
     noQuestionsMessage.hide();
-    
+
     questions.forEach((question, index) => {
         const questionHtml = `
             <div class="question-item visual-item" data-id="${question.id}">
@@ -382,12 +382,12 @@ function showInputSoalSection() {
     $('#options-section').hide(400);
     $('#information-section').hide(400);
     $('#game-section').hide(400);
-    
+
     // Show Input Soal section with fade in effect
     $('#input-soal-section').hide();
     $('#input-soal-section').removeClass('d-none');
     $('#input-soal-section').show(1000);
-    
+
     displayEssayQuestions();
     displayPilganQuestions();
     displayVisualQuestions();
@@ -399,9 +399,9 @@ function showInputSoalSection() {
 function hideInputSoalSection() {
     // Hide Input Soal section with fade out effect
     $('#input-soal-section').hide(400);
-    
+
     // Show main sections with fade in effect after delay
-    setTimeout(function() {
+    setTimeout(function () {
         $('#heading-section').show(400);
         $('#options-section').show(400);
         $('#information-section').show(400);
@@ -479,17 +479,17 @@ let currentVisualBase64 = null;
  */
 function handleVisualFileSelect(file) {
     if (!file) return;
-    
+
     const validation = window.firebaseUtils.validateImageFile(file);
     if (!validation.valid) {
         showNotification(validation.error);
         return;
     }
-    
+
     currentVisualFile = file;
-    
+
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         currentVisualBase64 = e.target.result;
         $('#img-preview-visual').attr('src', e.target.result);
         $('#dropzone-content').hide();
@@ -532,20 +532,20 @@ function hideUploadProgress() {
  */
 function handleAddEssay(event) {
     event.preventDefault();
-    
+
     const question = $('#input-pertanyaan-essay').val().trim();
     const answer = $('#input-jawaban-essay').val().trim();
-    
+
     if (!question || !answer) {
         showNotification('Pertanyaan dan jawaban harus diisi!');
         return;
     }
-    
+
     const questionObj = {
         question: question,
         answer: answer
     };
-    
+
     addEssayQuestion(questionObj);
     hideAddEssayModal();
     showNotification('Soal essay berhasil ditambahkan!');
@@ -556,7 +556,7 @@ function handleAddEssay(event) {
  */
 function handleAddPilgan(event) {
     event.preventDefault();
-    
+
     const question = $('#input-pertanyaan-pilgan').val().trim();
     const answer = $('#input-jawaban-pilgan').val().trim();
     const choices = [
@@ -565,23 +565,23 @@ function handleAddPilgan(event) {
         $('#input-pilihan-3').val().trim(),
         $('#input-pilihan-4').val().trim()
     ];
-    
+
     if (!question || !answer) {
         showNotification('Pertanyaan dan jawaban harus diisi!');
         return;
     }
-    
+
     if (choices.some(choice => choice === '')) {
         showNotification('Semua pilihan jawaban harus diisi untuk soal pilihan ganda!');
         return;
     }
-    
+
     const questionObj = {
         question: question,
         answer: answer,
         choices: choices
     };
-    
+
     addPilganQuestion(questionObj);
     hideAddPilganModal();
     showNotification('Soal pilihan ganda berhasil ditambahkan!');
@@ -592,7 +592,7 @@ function handleAddPilgan(event) {
  */
 async function handleAddVisual(event) {
     event.preventDefault();
-    
+
     const question = $('#input-pertanyaan-visual').val().trim() || 'Soal Visual';
     const selectedAnswer = $('input[name="jawaban-benar-visual"]:checked').val();
     const choices = [
@@ -601,32 +601,32 @@ async function handleAddVisual(event) {
         $('#input-pilihan-visual-3').val().trim(),
         $('#input-pilihan-visual-4').val().trim()
     ];
-    
+
     if (!currentVisualBase64) {
         showNotification('Gambar harus di-upload untuk soal visual!');
         return;
     }
-    
+
     if (choices.some(choice => choice === '')) {
         showNotification('Semua pilihan jawaban (A, B, C, D) harus diisi!');
         return;
     }
-    
+
     if (!selectedAnswer) {
         showNotification('Pilih jawaban yang benar (A, B, C, atau D)!');
         return;
     }
-    
+
     $('#submit-text').hide();
     $('#submit-loading').show();
     $('#btn-submit-visual').prop('disabled', true);
-    
+
     let imageUrl = currentVisualBase64;
     const questionId = Date.now();
-    
+
     if (currentVisualFile && window.firebaseUtils.isFirebaseConfigured()) {
         showUploadProgress(30, 'Mengunggah ke Firebase...');
-        
+
         try {
             const uploadedUrl = await window.firebaseUtils.uploadImageToFirebase(currentVisualFile, questionId);
             if (uploadedUrl) {
@@ -642,12 +642,12 @@ async function handleAddVisual(event) {
     } else {
         showUploadProgress(100, 'Menyimpan...');
     }
-    
+
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     const answerIndex = selectedAnswer.charCodeAt(0) - 65;
     const correctAnswerText = choices[answerIndex];
-    
+
     const questionObj = {
         id: questionId,
         question: question,
@@ -657,18 +657,18 @@ async function handleAddVisual(event) {
         choices: choices,
         isFirebaseImage: imageUrl.includes('firebase')
     };
-    
+
     const questions = getVisualQuestions();
     questionObj.type = 'visual';
     questions.push(questionObj);
     saveVisualQuestions(questions);
     displayVisualQuestions();
-    
+
     hideUploadProgress();
     $('#submit-text').show();
     $('#submit-loading').hide();
     $('#btn-submit-visual').prop('disabled', false);
-    
+
     hideAddVisualModal();
     showNotification('Soal visual berhasil ditambahkan!');
 }
@@ -684,36 +684,36 @@ function handleImagePreview(event) {
 }
 
 // Event Handlers - will be initialized when document is ready
-$(document).ready(function() {
+$(document).ready(function () {
     // Button to show Input Soal section
     $('#btn-input-soal').on('click', showInputSoalSection);
-    
+
     // Button to return to main menu from Input Soal section
     $('#btn-input-soal-home').on('click', hideInputSoalSection);
-    
+
     // Buttons to show add question modals
     $('#btn-tambah-essay').on('click', showAddEssayModal);
     $('#btn-tambah-pilgan').on('click', showAddPilganModal);
     $('#btn-tambah-visual').on('click', showAddVisualModal);
-    
+
     // Buttons to cancel/close modals
     $('#btn-batal-essay').on('click', hideAddEssayModal);
     $('#btn-batal-pilgan').on('click', hideAddPilganModal);
     $('#btn-batal-visual').on('click', hideAddVisualModal);
-    
+
     // Button to close notification modal
     $('#btn-close-notification').on('click', hideNotification);
-    
+
     // Form submissions
     $('#form-tambah-essay').on('submit', handleAddEssay);
     $('#form-tambah-pilgan').on('submit', handleAddPilgan);
     $('#form-tambah-visual').on('submit', handleAddVisual);
-    
+
     // Image preview for visual question (file input)
     $('#input-gambar-visual').on('change', handleImagePreview);
-    
+
     // Visual Dropzone - Click to select file (using native click for better mobile support)
-    $('#visual-dropzone').on('click', function(e) {
+    $('#visual-dropzone').on('click', function (e) {
         if (e.target.id !== 'btn-remove-image' && !$(e.target).closest('#btn-remove-image').length) {
             // Use native click() for better mobile/cross-browser support
             var fileInput = document.getElementById('input-gambar-visual');
@@ -722,9 +722,9 @@ $(document).ready(function() {
             }
         }
     });
-    
+
     // Also add touchend for mobile devices
-    $('#visual-dropzone').on('touchend', function(e) {
+    $('#visual-dropzone').on('touchend', function (e) {
         if (e.target.id !== 'btn-remove-image' && !$(e.target).closest('#btn-remove-image').length) {
             e.preventDefault();
             var fileInput = document.getElementById('input-gambar-visual');
@@ -733,70 +733,70 @@ $(document).ready(function() {
             }
         }
     });
-    
+
     // Visual Dropzone - Drag and Drop
     const dropzone = document.getElementById('visual-dropzone');
-    
+
     if (dropzone) {
-        dropzone.addEventListener('dragover', function(e) {
+        dropzone.addEventListener('dragover', function (e) {
             e.preventDefault();
             e.stopPropagation();
             $(this).addClass('dragover');
         });
-        
-        dropzone.addEventListener('dragleave', function(e) {
+
+        dropzone.addEventListener('dragleave', function (e) {
             e.preventDefault();
             e.stopPropagation();
             $(this).removeClass('dragover');
         });
-        
-        dropzone.addEventListener('drop', function(e) {
+
+        dropzone.addEventListener('drop', function (e) {
             e.preventDefault();
             e.stopPropagation();
             $(this).removeClass('dragover');
-            
+
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 handleVisualFileSelect(files[0]);
             }
         });
     }
-    
+
     // Remove image button
-    $('#btn-remove-image').on('click', function(e) {
+    $('#btn-remove-image').on('click', function (e) {
         e.stopPropagation();
         removeVisualImage();
     });
-    
+
     // Close modals when clicking outside
-    $('#modal-tambah-essay').on('click', function(e) {
+    $('#modal-tambah-essay').on('click', function (e) {
         if (e.target.id === 'modal-tambah-essay') {
             hideAddEssayModal();
         }
     });
-    
-    $('#modal-tambah-pilgan').on('click', function(e) {
+
+    $('#modal-tambah-pilgan').on('click', function (e) {
         if (e.target.id === 'modal-tambah-pilgan') {
             hideAddPilganModal();
         }
     });
-    
-    $('#modal-tambah-visual').on('click', function(e) {
+
+    $('#modal-tambah-visual').on('click', function (e) {
         if (e.target.id === 'modal-tambah-visual') {
             hideAddVisualModal();
         }
     });
-    
+
     // Close notification modal when clicking outside
-    $('#notification-modal').on('click', function(e) {
+    $('#notification-modal').on('click', function (e) {
         if (e.target.id === 'notification-modal') {
             hideNotification();
         }
     });
-    
+
     // Initialize Firebase when page loads
     if (window.firebaseUtils && window.firebaseUtils.isFirebaseConfigured()) {
-        window.firebaseUtils.initializeFirebase().then(function(success) {
+        window.firebaseUtils.initializeFirebase().then(function (success) {
             if (success) {
                 console.log('🔥 Firebase ready for visual uploads');
             }
